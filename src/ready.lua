@@ -210,6 +210,12 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
+    if primarySource ~= secondarySource then
+        for i = 1, 4 do
+            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "AxeArmCastAspect_Secondary"
+        end
+    end
+
     game.SetupRunData()
 end
 
@@ -228,4 +234,34 @@ end
 modutil.mod.Path.Wrap("SetupMap", function(base, ...)
     game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit"}})
     return base(...)
+end)
+
+modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
+    local val = base(hero, args)
+    args = args or {}
+	local currentWeaponName = game.GetEquippedWeapon()
+	local currentWeaponData = game.WeaponData[currentWeaponName]
+	local traitName = game.GameState.LastWeaponUpgradeName[currentWeaponName]
+    if traitName then
+        local traitData = game.TraitData[traitName]
+        local aspectTraitName = traitData[_PLUGIN.guid .. "SecondaryAspect"]
+        print("equipping minor aspect", aspectTraitName)
+        if traitData and aspectTraitName and (not game.HeroHasTrait( aspectTraitName )) then
+            print("adding secondary aspect trait")
+            game.AddTraitToHero({ TraitName = traitData[_PLUGIN.guid .. "SecondaryAspect"], SkipUIUpdate = true, SkipPriorityTray = true})
+        end
+    end
+    return val
+end)
+
+modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
+    for traitName, _ in pairs(mod.AspectTraitData) do
+        print("unequipping minor aspect")
+        local traitData = game.TraitData[traitName]
+        while game.HeroHasTrait( traitName ) do
+            game.RemoveTrait( game.CurrentRun.Hero, traitName )
+        end
+    end
+    local val = base(args)
+    return val
 end)
