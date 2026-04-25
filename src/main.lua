@@ -44,12 +44,15 @@ local function on_ready()
     mod = modutil.mod.Mod.Register(_PLUGIN.guid)
 
     import 'ready.lua'
+    import 'powers.lua'
 end
 
 local function on_reload()
     -- what to do when we are ready, but also again on every reload.
     -- only do things that are safe to run over and over.
     if config.enabled == false then return end
+
+    import 'imgui.lua'
 end
 
 local function on_ready_late()

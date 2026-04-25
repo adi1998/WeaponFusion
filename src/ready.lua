@@ -1,3 +1,19 @@
+function mod.dump(o, depth)
+    depth = depth or 0
+    if type(o) == 'table' then
+        local s = "\n" .. string.rep("\t", depth) .. '{\n'
+        for k,v in pairs(o) do
+            if type(k) ~= 'number' then k = '"'..k..'"' end
+            s = s .. string.rep("\t",(depth+1)) .. '['..k..'] = ' .. mod.dump(v, depth + 1) .. ',\n'
+        end
+        return s .. string.rep("\t", depth) .. '}'
+    elseif type(o) == "string" then
+        return "\"" .. o .. "\""
+    else
+        return tostring(o)
+    end
+end
+
 mod.WeaponData = {
     WeaponStaffSwing = {
         Primary = {
@@ -38,7 +54,6 @@ mod.WeaponData = {
             "DaggerAttackFinisherTrait",
             "DaggerFinalHitTrait",
             "DaggerBackstabTrait",
-
         },
         SecondaryHammers = {
             "DaggerSpecialLineTrait",
@@ -49,6 +64,112 @@ mod.WeaponData = {
             "DaggerSpecialReturnTrait",
 
         }
+    },
+
+    WeaponAxe = {
+        Primary = {
+            "WeaponAxe2", "WeaponAxe3", "WeaponAxeDash", "WeaponAxeSpin"
+        },
+        Secondary = {
+            "WeaponAxeSpecial", "WeaponAxeSpecialSwing"
+        },
+        PrimaryHammers = {
+            "AxeSturdyTrait",
+            "AxeDashAttackTrait",
+            "AxeFreeSpinTrait",
+            "AxeRangedWhirlwindTrait",
+            "AxeSpinSpeedTrait",
+            "AxeAttackRecoveryTrait",
+            "AxeThirdStrikeTrait",
+            "AxeMassiveThirdStrikeTrait",
+        },
+        SecondaryHammers = {
+            "AxeSecondStageTrait",
+            "AxeBlockEmpowerTrait",
+            "AxeArmorTrait",
+            "AxeChargedSpecialTrait",
+        },
+    },
+
+    WeaponTorch = {
+        Primary = {
+
+        },
+        Secondary = {
+            "WeaponTorchSpecial"
+        },
+        PrimaryHammers = {
+            "TorchEnhancedAttackTrait",
+            "TorchDiscountExAttackTrait",
+            "TorchSplitAttackTrait",
+            "TorchSpinAttackTrait",
+            "TorchMoveSpeedTrait",
+            "TorchAttackSpeedTrait",
+
+        },
+        SecondaryHammers = {
+            "TorchSpecialImpactTrait",
+            "TorchExSpecialCountTrait",
+            "TorchSpecialSpeedTrait",
+            "TorchLongevityTrait",
+            "TorchOrbitPointTrait",
+            "TorchSpecialLineTrait",
+
+        },
+    },
+
+    -- WeaponLob = {
+    --     Primary = {
+    --         "WeaponLobChargedPulse",
+    --     },
+    --     Secondary = {
+    --         "WeaponLobSpecial", "WeaponSkullImpulse"
+    --     },
+    --     PrimaryHammers = {
+    --         "LobAmmoTrait",
+    --         "LobAmmoMagnetismTrait",
+    --         "LobSpreadShotTrait",
+    --         "LobPulseAmmoCollectTrait",
+    --         "LobPulseAmmoTrait",
+    --         "LobGrowthTrait",
+    --         "LobStraightShotTrait",
+
+    --     },
+    --     SecondaryHammers = {
+    --         "LobRushArmorTrait",
+    --         "LobOneSideTrait",
+    --         "LobSturdySpecialTrait",
+    --         "LobSpecialSpeedTrait",
+    --         "LobInOutSpecialExTrait",
+
+    --     }
+    -- },
+
+    WeaponSuit = {
+        Primary = {
+            "WeaponSuit2", "WeaponSuitDouble", "WeaponSuitCharged", "WeaponSuitDash",
+        },
+        Secondary = {
+            "WeaponSuitRanged"
+        },
+        PrimaryHammers = {
+            "SuitArmorTrait",
+            "SuitAttackSpeedTrait",
+            "SuitAttackSizeTrait",
+            "SuitAttackRangeTrait",
+            "SuitFullChargeTrait",
+            "SuitDashAttackTrait",
+            "SuitSpecialBlockTrait",
+
+        },
+        SecondaryHammers = {
+            "SuitSpecialJumpTrait",
+            "SuitSpecialStartUpTrait",
+            "SuitSpecialAutoTrait",
+            "SuitSpecialDiscountTrait",
+            "SuitSpecialConsecutiveHitTrait",
+
+        },
     }
 }
 
@@ -76,52 +197,22 @@ function mod.PatchHeroWeaponSets(primarySource, secondarySource)
     game.WeaponSets.HeroWeaponSets[secondarySource] = game.CombineTablesIPairs(secondaryData.Primary, primaryData.Secondary)
 end
 
-function FuseWeapon(primarySource, secondarySource)
+function FuseWeapon(primarySource, secondarySource, secondaryAspect)
     mod.PatchHeroWeaponSets(primarySource, secondarySource)
 
-    game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = game.WeaponData[secondarySource].SecondaryWeapon, game.WeaponData[primarySource].SecondaryWeapon
+    game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
+
+    game.SetupRunData()
 end
 
-FuseWeapon("WeaponDagger", "WeaponStaffSwing")
-
-game.SetupRunData()
-
-
-modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionArgs, triggerArgs )
-    if game.Contains({"WeaponDaggerThrow"}, weaponData.Name) then
-        if IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) or triggerArgs.DisjointExCast then
-            local playerLocation = GetLocation({ Id = CurrentRun.Hero.ObjectId })
-            local startX = triggerArgs.ProjectileX or playerLocation.X
-            local startY = triggerArgs.ProjectileY or playerLocation.Y
-            local weaponName = weaponData.Name
-            if game.Contains({"WeaponDaggerThrow"}, weaponData.Name) then
-                SessionMapState.OriginMarkers = SessionMapState.OriginMarkers or {}
-                if SessionMapState.OriginMarkers[weaponName] then
-                    Destroy({ Id = SessionMapState.OriginMarkers[weaponName] })
-                end
-            end
-            if  game.Contains({"WeaponDaggerThrow"}, weaponData.Name) then
-                local threadName = "RepeatSpecialThread"
-                if HasThread( threadName ) then
-                    killTaggedThreads( threadName )
-                    waitUnmodified(0.1)
-                    local id = SessionMapState.OriginMarkers.WeaponCast
-                    SessionMapState.OriginMarkers.WeaponCast = nil
-                    SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
-                    thread( DestroyOnDelay, {id} , functionArgs.DestroyDelay )
-                end
-                thread(StartSpecialRepeatThread, startX, startY, GetAngle({Id = CurrentRun.Hero.ObjectId}), functionArgs, triggerArgs )
-            end
-            local zOffset = 90
-            if HeroHasTrait("SelfCastBoon") and weaponName == "WeaponCast" then
-                zOffset = 160
-            end
-            local originMarkerId = SpawnObstacle({ Name = "BlankObstacle", Group = "FX_Standing", LocationX = startX, LocationY = startY, OffsetZ = zOffset })
-            SetAngle({ Id = originMarkerId, Angle = GetAngle({Id = CurrentRun.Hero.ObjectId}) })
-            SetAnimation({ Name = functionArgs.AnimationName, DestinationId = originMarkerId })
-            SessionMapState.OriginMarkers[weaponName] = originMarkerId
-        end
-    else
-        base(weaponData, functionArgs, triggerArgs)
+function UnfuseWeapons()
+    for weapon, _ in pairs(mod.WeaponData) do
+        FuseWeapon(weapon, weapon)
     end
-end)
+end
+
+UnfuseWeapons()
+
+if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary] then
+    FuseWeapon(config.last_primary, config.last_secondary)
+end
