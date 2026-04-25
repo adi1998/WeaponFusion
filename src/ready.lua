@@ -182,7 +182,6 @@ mod.WeaponData = {
     }
 }
 
-
 function PatchHammerRequirements(hammerName, weaponName)
     local hammerData = game.TraitData[hammerName]
     hammerData.GameStateRequirements[1] =
@@ -225,3 +224,8 @@ UnfuseWeapons()
 if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary] then
     FuseWeapon(config.last_primary, config.last_secondary)
 end
+
+modutil.mod.Path.Wrap("SetupMap", function(base, ...)
+    game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit"}})
+    return base(...)
+end)
