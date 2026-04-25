@@ -1,6 +1,6 @@
 ## Weapon Fusion
 
-Hades II mod allowing you to select a dress for Melinoe from one of Arachne's boons and some custom skins by burn and Aunuch.
+Hades II mod allowing you to fuse any 2 weapons into one.
 
 ## Installation
 
