@@ -265,3 +265,7 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     local val = base(args)
     return val
 end)
+
+modutil.mod.Path.Override("BiomeMapPresentation", function (base, ...)
+    return
+end)

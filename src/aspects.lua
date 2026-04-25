@@ -47,10 +47,6 @@ mod.AspectTraitData = {
 				Animation = "CharonAspectDetonateFx",
 			},
 		},
-        StatLines =
-		{
-			"AxeArmStatDisplay1",
-		},
         ExtractValues =
 		{
 			{
