@@ -30,6 +30,10 @@ mod.WeaponData = {
             "StaffAttackRecoveryTrait",
             "StaffExAoETrait",
             "StaffOneWayAttackTrait",
+            "StaffRaiseDeadBigTrait",
+            "StaffRaiseDeadDoubleTrait",
+            "StaffLoneShadeRespawnTrait",
+
         },
         SecondaryHammers = {
             "StaffSecondStageTrait",
@@ -82,6 +86,8 @@ mod.WeaponData = {
             "AxeAttackRecoveryTrait",
             "AxeThirdStrikeTrait",
             "AxeMassiveThirdStrikeTrait",
+            "AxeRallyFirstStrikeTrait",
+            "AxeRallyFrenzyTrait",
         },
         SecondaryHammers = {
             "AxeSecondStageTrait",
@@ -160,6 +166,9 @@ mod.WeaponData = {
             "SuitFullChargeTrait",
             "SuitDashAttackTrait",
             "SuitSpecialBlockTrait",
+            "SuitComboBlockBuffTrait",
+            "SuitComboDashAttackTrait",
+            "SuitPowershotTrait",
 
         },
         SecondaryHammers = {
