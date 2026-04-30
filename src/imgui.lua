@@ -29,7 +29,7 @@ end
 
 function DrawMenu()
     if game.CurrentHubRoom then
-        rom.Imgui.Text("Try to not have either of the\ntwo weapons equipped while fusing.")
+        rom.ImGui.Text("Try to not have either of the\ntwo weapons equipped while fusing.")
 
         rom.ImGui.Text("Primary")
         rom.ImGui.Text("Weapon"); rom.ImGui.SameLine()
@@ -79,7 +79,7 @@ function DrawMenu()
             FuseWeapon(config.last_primary, config.last_secondary)
         end
 
-        rom.Imgui.SameLine(); clicked = rom.ImGui.Button("Unfuse")
+        rom.ImGui.SameLine(); clicked = rom.ImGui.Button("Unfuse")
         if clicked then
             UnfuseWeapons()
         end

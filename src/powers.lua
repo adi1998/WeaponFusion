@@ -1,7 +1,77 @@
+function OffsetCoordinate(N, angle, axis, offset)
+	if axis == "X" then
+		return N+math.cos(math.rad(angle))*offset
+	else
+		return N-math.sin(math.rad(angle))*offset
+	end
+end
+
+function mod.StartAxeSpecialRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileAxeBlock2"
+	local threadName = "RepeatSpecialThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+
+	local logProjectileIdForMagicCrit = false
+	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
+		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
+		logProjectileIdForMagicCrit = true
+	end
+
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		local offset = 90
+		local dropLocation1 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
+		offset = offset + 460
+		local dropLocation2 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
+		offset = offset + 460
+		local dropLocation3 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation1, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+		game.wait(0.2)
+		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation2, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+		game.wait(0.2)
+		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation3, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+		game.Destroy({Id = dropLocation1 })
+		game.Destroy({Id = dropLocation2 })
+		game.Destroy({Id = dropLocation3 })
+		repeats = repeats + 1
+	end
+	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
+local weaponThreadMap = {
+	["WeaponAxeSpecialSwing"] = mod.StartAxeSpecialRepeatThread
+}
+
+local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", }
 
 modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionArgs, triggerArgs )
-    if game.Contains({"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", }, weaponData.Name) then
-        if IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) or triggerArgs.DisjointExCast then
+    if game.Contains(dropOriginWeapons, weaponData.Name) then
+        if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) or triggerArgs.DisjointExCast then
             -- print(mod.dump(weaponData))
             -- print(mod.dump(triggerArgs))
             local playerLocation = GetLocation({ Id = CurrentRun.Hero.ObjectId })
@@ -14,26 +84,24 @@ modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionAr
                     Destroy({ Id = SessionMapState.OriginMarkers[weaponName] })
                 end
             end
-            if  game.Contains({"WeaponDaggerThrow"}, weaponData.Name) then
+            if  game.Contains(dropOriginWeapons, weaponData.Name) then
                 local threadName = "RepeatSpecialThread"
                 if HasThread( threadName ) then
                     killTaggedThreads( threadName )
                     waitUnmodified(0.1)
-                    local id = SessionMapState.OriginMarkers.WeaponCast
-                    SessionMapState.OriginMarkers.WeaponCast = nil
+                    local id = SessionMapState.OriginMarkers[weaponName]
+                    SessionMapState.OriginMarkers[weaponName] = nil
                     SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
                     thread( DestroyOnDelay, {id} , functionArgs.DestroyDelay )
                 end
-                thread(mod.StartSpecialRepeatThread, startX, startY, GetAngle({Id = CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName, projectileName} )
+                game.thread(weaponThreadMap[weaponName] or mod.StartSpecialRepeatThread, startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
             end
             local zOffset = 90
-            if HeroHasTrait("SelfCastBoon") and weaponName == "WeaponCast" then
-                zOffset = 160
-            end
-            local originMarkerId = SpawnObstacle({ Name = "BlankObstacle", Group = "FX_Standing", LocationX = startX, LocationY = startY, OffsetZ = zOffset })
-            SetAngle({ Id = originMarkerId, Angle = GetAngle({Id = CurrentRun.Hero.ObjectId}) })
-            SetAnimation({ Name = functionArgs.AnimationName, DestinationId = originMarkerId })
-            SessionMapState.OriginMarkers[weaponName] = originMarkerId
+
+            local originMarkerId = game.SpawnObstacle({ Name = "BlankObstacle", Group = "FX_Standing", LocationX = startX, LocationY = startY, OffsetZ = zOffset })
+            game.SetAngle({ Id = originMarkerId, Angle = game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}) })
+            game.SetAnimation({ Name = functionArgs.AnimationName, DestinationId = originMarkerId })
+            game.SessionMapState.OriginMarkers[weaponName] = originMarkerId
         end
     else
         base(weaponData, functionArgs, triggerArgs)
