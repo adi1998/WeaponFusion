@@ -63,8 +63,90 @@ function mod.StartAxeSpecialRepeatThread(startX, startY, angle, args)
 	game.SessionMapState.OriginMarkers[weaponName] = nil
 end
 
+function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileDaggerThrowCharged"
+	local threadName = "RepeatSpecialThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+	local numProjectiles = triggerArgs.NumProjectiles
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+
+	local daggerProjectileInterval = 0.08
+	if game.HeroHasTrait("DaggerSpecialFanTrait") then
+		daggerProjectileInterval = 0.04
+	end
+
+	local angelIncrement = 12
+	if game.HeroHasTrait("DaggerSpecialLineTrait") then
+		angelIncrement = 0
+	end
+
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		local centerOffset = 0
+
+		if numProjectiles % 2 == 0 then
+			centerOffset = angelIncrement/2
+		end
+
+		local start = 1
+		if numProjectiles % 2 == 1 then
+			game.CreateProjectileFromUnit({ WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				FireFromTarget = true,
+				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle
+			})
+			print(angle)
+			game.wait(daggerProjectileInterval)
+			start = 2
+		end
+
+		for i = start, numProjectiles do
+			local angleOffset = (centerOffset + (math.floor(i/2))*angelIncrement) * (-1)^i
+			if numProjectiles % 2 == 0 then
+				angleOffset = (centerOffset + (math.floor((i+1)/2)-1)*angelIncrement) * (-1)^i
+			end
+			game.CreateProjectileFromUnit({ WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				FireFromTarget = true,
+				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle + angleOffset
+			})
+			print(angleOffset)
+			game.wait(daggerProjectileInterval)
+		end
+		game.Destroy({Id = dropLocation })
+		repeats = repeats + 1
+	end
+	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
 local weaponThreadMap = {
-	["WeaponAxeSpecialSwing"] = mod.StartAxeSpecialRepeatThread
+	["WeaponAxeSpecialSwing"] = mod.StartAxeSpecialRepeatThread,
+	["WeaponDaggerThrow"] = mod.StartDaggerSpecialRepeatThread
 }
 
 local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", }
