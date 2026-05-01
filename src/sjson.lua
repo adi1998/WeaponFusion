@@ -21,6 +21,12 @@ sjson.hook(traitTextEnFile, function (data)
             DisplayName = "Minor Aspect of Nergal",
             Description = "You have the {$Keywords.RallyAspect}, and become {$Keywords.FrenzyBuff} after you strike enough foes."
         },
+        {
+            Id = "SuitComboAspect_Secondary",
+            InheritFrom = "BaseBoonMultiline",
+            DisplayName = "Minor Aspect of Shiva",
+            Description = "You have {$Keywords.ComboAspect}, which absorbs {$Keywords.SpecialEX} blasts to grow {$Keywords.ComboBuff}.",
+        }
     }
     for index, value in ipairs(traitTextList) do
         table.insert(data.Texts, sjson.to_object(value, traitTextOrder))

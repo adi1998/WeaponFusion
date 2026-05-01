@@ -210,9 +210,9 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    if primarySource ~= secondarySource and secondarySource == "WeaponAxe" then
+    if primarySource ~= secondarySource and secondarySource == "WeaponSuit" then
         for i = 1, 4 do
-            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "AxeRallyAspect_Secondary"
+            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "SuitComboAspect_Secondary"
         end
     end
 
@@ -220,6 +220,11 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 end
 
 function UnfuseWeapons()
+    for _, aspectList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
+        for _, aspectName in ipairs(aspectList) do
+            game.TraitData[aspectName][_PLUGIN.guid .. "SecondaryAspect"] = nil
+        end
+    end
     for weapon, _ in pairs(mod.WeaponData) do
         FuseWeapon(weapon, weapon)
     end
