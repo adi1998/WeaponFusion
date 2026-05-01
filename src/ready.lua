@@ -210,9 +210,9 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    if primarySource ~= secondarySource then
+    if primarySource ~= secondarySource and secondarySource == "WeaponAxe" then
         for i = 1, 4 do
-            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "AxeArmCastAspect_Secondary"
+            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "AxeRallyAspect_Secondary"
         end
     end
 
@@ -248,7 +248,13 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
         print("equipping minor aspect", aspectTraitName)
         if traitData and aspectTraitName and (not game.HeroHasTrait( aspectTraitName )) then
             print("adding secondary aspect trait")
-            game.AddTraitToHero({ TraitName = traitData[_PLUGIN.guid .. "SecondaryAspect"], SkipUIUpdate = true, SkipPriorityTray = true})
+            game.AddTraitToHero({ TraitName = aspectTraitName })
+            local aspectTraitData = game.TraitData[aspectTraitName]
+            if aspectTraitData.ReplacementGrannyModels ~= nil then
+				for originalModel, attachmentModel in pairs(aspectTraitData.ReplacementGrannyModels) do
+					game.SetThingProperty({ Property = "GrannyAlternateModelAttachment", Value = attachmentModel, OriginalAttachmentModel = originalModel, DestinationId = game.CurrentRun.Hero.ObjectId })
+				end
+			end
         end
     end
     return val
@@ -256,10 +262,15 @@ end)
 
 modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     for traitName, _ in pairs(mod.AspectTraitData) do
-        print("unequipping minor aspect")
+        print("unequipping minor aspect", traitName)
         local traitData = game.TraitData[traitName]
         while game.HeroHasTrait( traitName ) do
             game.RemoveTrait( game.CurrentRun.Hero, traitName )
+        end
+        if traitData.ReplacementGrannyModels ~= nil then
+            for originalModel, _ in pairs(traitData.ReplacementGrannyModels) do
+                game.SetThingProperty({ Property = "GrannyAlternateModelAttachment", Value = originalModel, OriginalAttachmentModel = originalModel, DestinationId = game.CurrentRun.Hero.ObjectId })
+            end
         end
     end
     local val = base(args)

@@ -23,7 +23,7 @@ function mod.StartAxeSpecialRepeatThread(startX, startY, angle, args)
 		WeaponName = weaponName,
 		Type = "Projectile",
 	})
-
+	print(mod.dump(derivedValues))
 	local logProjectileIdForMagicCrit = false
 	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
 		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
@@ -36,23 +36,36 @@ function mod.StartAxeSpecialRepeatThread(startX, startY, angle, args)
 			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
 		end
 		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
-		local offset = 90
-		local dropLocation1 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
-		offset = offset + 460
-		local dropLocation2 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
-		offset = offset + 460
-		local dropLocation3 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
 		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
 			break
 		end
-		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation1, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
-		game.wait(0.2)
-		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation2, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
-		game.wait(0.2)
-		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation3, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
-		game.Destroy({Id = dropLocation1 })
-		game.Destroy({Id = dropLocation2 })
-		game.Destroy({Id = dropLocation3 })
+		if not game.HeroHasTrait("AxeRallyAspect_Secondary") then
+			local offset = 90
+			local dropLocation1 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
+			offset = offset + 460
+			local dropLocation2 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
+			offset = offset + 460
+			local dropLocation3 = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = OffsetCoordinate(startX, angle, "X", offset), LocationY = OffsetCoordinate(startY, angle, "Y", offset) })
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation1, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.waitUnmodified(0.2, threadName)
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation2, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.waitUnmodified(0.2, threadName)
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation3, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.Destroy({Id = dropLocation1 })
+			game.Destroy({Id = dropLocation2 })
+			game.Destroy({Id = dropLocation3 })
+		else
+			local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.waitUnmodified(0.4, threadName)
+			derivedValues.PropertyChanges.DamageRadius = derivedValues.PropertyChanges.DamageRadius * 1.33
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.waitUnmodified(0.4, threadName)
+			derivedValues.PropertyChanges.DamageRadius = derivedValues.PropertyChanges.DamageRadius * 1.66 / 1.33
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.Destroy({Id = dropLocation })
+			derivedValues.PropertyChanges.DamageRadius = derivedValues.PropertyChanges.DamageRadius / 1.66
+		end
 		repeats = repeats + 1
 	end
 	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
@@ -86,9 +99,9 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 		daggerProjectileInterval = 0.04
 	end
 
-	local angelIncrement = 12
+	local angleIncrement = 12
 	if game.HeroHasTrait("DaggerSpecialLineTrait") then
-		angelIncrement = 0
+		angleIncrement = 0
 	end
 
 	while repeats < functionArgs.Repeats do
@@ -101,7 +114,7 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 		local centerOffset = 0
 
 		if numProjectiles % 2 == 0 then
-			centerOffset = angelIncrement/2
+			centerOffset = angleIncrement/2
 		end
 
 		local start = 1
@@ -114,14 +127,14 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle
 			})
 			print(angle)
-			game.wait(daggerProjectileInterval)
+			game.waitUnmodified(daggerProjectileInterval, threadName)
 			start = 2
 		end
 
 		for i = start, numProjectiles do
-			local angleOffset = (centerOffset + (math.floor(i/2))*angelIncrement) * (-1)^i
+			local angleOffset = (centerOffset + (math.floor(i/2))*angleIncrement) * (-1)^i
 			if numProjectiles % 2 == 0 then
-				angleOffset = (centerOffset + (math.floor((i+1)/2)-1)*angelIncrement) * (-1)^i
+				angleOffset = (centerOffset + (math.floor((i+1)/2)-1)*angleIncrement) * (-1)^i
 			end
 			game.CreateProjectileFromUnit({ WeaponName = weaponName,
 				Name = projectileName,
@@ -131,7 +144,7 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle + angleOffset
 			})
 			print(angleOffset)
-			game.wait(daggerProjectileInterval)
+			game.waitUnmodified(daggerProjectileInterval, threadName)
 		end
 		game.Destroy({Id = dropLocation })
 		repeats = repeats + 1
