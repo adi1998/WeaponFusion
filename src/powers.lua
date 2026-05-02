@@ -170,11 +170,14 @@ function mod.StartSuitSpecialRepeatThread(startX, startY, angle, args)
 	if game.HeroHasTrait("SuitComboForwardRocketTrait") then
 		projectileName = "ProjectileSuitBombStraight"
 	end
+	if not game.HeroHasTrait("SuitComboAspect_Secondary") then
+		projectileName = "ProjectileSuitRangedUnguided"
+	end
 	local threadName = "RepeatSpecialThread"
 	local repeats = 1
 	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
 	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
-	local numProjectiles = triggerArgs.NumProjectiles
+	local numProjectiles = 4
 	local derivedValues = game.GetDerivedPropertyChangeValues({
 		ProjectileName = projectileName,
 		WeaponName = weaponName,
@@ -187,13 +190,26 @@ function mod.StartSuitSpecialRepeatThread(startX, startY, angle, args)
 		end
 		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
 		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
-		game.CreateProjectileFromUnit({ WeaponName = weaponName,
-			Name = projectileName,
-			Id = game.CurrentRun.Hero.ObjectId,
-			DestinationId = dropLocation,
-			FireFromTarget = true,
-			DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle
-		})
+		if projectileName ~= "ProjectileSuitRangedUnguided" then
+			game.CreateProjectileFromUnit({ WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				FireFromTarget = true,
+				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle
+			})
+		else
+			for _ = 1, numProjectiles do
+				game.CreateProjectileFromUnit({ WeaponName = weaponName,
+					Name = projectileName,
+					Id = game.CurrentRun.Hero.ObjectId,
+					DestinationId = dropLocation,
+					FireFromTarget = true,
+					DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle + math.random(-120,120),
+				})
+				game.waitUnmodified(0.07, threadName)
+			end
+		end
 		game.Destroy({Id = dropLocation })
 		repeats = repeats + 1
 	end
@@ -205,7 +221,7 @@ function mod.StartSuitSpecialRepeatThread(startX, startY, angle, args)
 	game.SessionMapState.OriginMarkers[weaponName] = nil
 end
 
-local weaponThreadMap = {
+mod.WeaponThreadMap = {
 	["WeaponAxeSpecialSwing"] = mod.StartAxeSpecialRepeatThread,
 	["WeaponDaggerThrow"] = mod.StartDaggerSpecialRepeatThread,
 	["WeaponSuitRanged"] = mod.StartSuitSpecialRepeatThread,
@@ -238,7 +254,7 @@ modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionAr
                     SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
                     thread( DestroyOnDelay, {id} , functionArgs.DestroyDelay )
                 end
-                game.thread(weaponThreadMap[weaponName] or mod.StartSpecialRepeatThread, startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
+                game.thread(mod.WeaponThreadMap[weaponName] or mod.StartSpecialRepeatThread, startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
             end
             local zOffset = 90
 
