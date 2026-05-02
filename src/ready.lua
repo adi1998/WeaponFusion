@@ -182,6 +182,52 @@ mod.WeaponData = {
     }
 }
 
+function MorosSpecialDetonatePatches()
+    local specialWeaponProjectileMap = {
+        ["WeaponStaffBall"] = {
+            "ProjectileStaffBall",
+            "ProjectileStaffBallCharged"
+        },
+        ["WeaponAxeSpecialSwing"] = {
+            "ProjectileAxeBlock2",
+        },
+        ["WeaponAxeSpecial"] = {
+            "ProjectileAxeSpecial",
+        },
+        ["WeaponDaggerThrow"] = {
+            "ProjectileDaggerThrowCharged",
+            "ProjectileDaggerThrow"
+        },
+        ["WeaponSuitRanged"] = {
+            "ProjectileSuitRangedGuided",
+            "ProjectileSuitRangedUnguided",
+            "ProjectileSuitRangedCharged",
+            "ProjectileSuitRangedChargedUnguided",
+            "ProjectileSuitRangedGuidedSplit",
+            "ProjectileSuitRangedChargedSplit",
+        },
+    }
+    for weaponName, projectiles in pairs(specialWeaponProjectileMap) do
+        for _, projectileName in ipairs(projectiles) do
+            table.insert(game.TraitData.TorchDetonateAspect.PropertyChanges, {
+				WeaponName = weaponName,
+				ProjectileName = projectileName,
+				ProjectileProperty = "CollisionLayer",
+				ChangeValue = "Lyre",
+				ChangeType = "Absolute",
+			})
+            table.insert(game.TraitData.TorchDetonateAspect.PropertyChanges, {
+				WeaponName = weaponName,
+				ProjectileName = projectileName,
+				ProjectileProperty = "DetonatesProjectilesOnLayer",
+				ChangeValue = true,
+				ChangeType = "Absolute",
+			})
+        end
+    end
+end
+MorosSpecialDetonatePatches()
+
 function PatchHammerRequirements(hammerName, weaponName)
     local hammerData = game.TraitData[hammerName]
     hammerData.GameStateRequirements[1] =
