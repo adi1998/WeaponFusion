@@ -188,6 +188,9 @@ function mod.StartSuitSpecialRepeatThread(startX, startY, angle, args)
 		if functionArgs.AttackAnimationName then
 			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
 		end
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
 		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
 		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
 		if projectileName ~= "ProjectileSuitRangedUnguided" then
@@ -221,10 +224,72 @@ function mod.StartSuitSpecialRepeatThread(startX, startY, angle, args)
 	game.SessionMapState.OriginMarkers[weaponName] = nil
 end
 
+function mod.StartTorchSpecialRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileTorchOrbitEx"
+	local threadName = "RepeatSpecialThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+	local numProjectiles = triggerArgs.NumProjectiles or 2
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+		MatchProjectileName = true,
+	})
+	-- print(mod.dump(triggerArgs))
+	print(mod.dump(derivedValues))
+	local projectileIds = {}
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		local dropLocation = game.SpawnObstacle({ Name = "BlankObstacle", LocationX = startX, LocationY = startY})
+
+		local projectileId = game.CreateProjectileFromUnit({
+			Name = "1_BaseDamagingProjectile",
+			Id = game.CurrentRun.Hero.ObjectId,
+			DestinationId = dropLocation,
+			FireFromTarget = true,
+		})
+		table.insert(projectileIds, projectileId)
+		for i = 1, numProjectiles do
+			local torchOrbitId = game.CreateProjectileFromUnit({ WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				ProjectileDestinationId = projectileId,
+				FireFromTarget = true,
+				AttachToTarget = true,
+				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle + i*360/numProjectiles + 90*repeats
+			})
+			table.insert(projectileIds, torchOrbitId)
+		end
+		game.Destroy({Id = dropLocation })
+		repeats = repeats + 1
+	end
+	game.wait( 1.2, threadName ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+	game.ExpireProjectiles({ ProjectileIds = projectileIds })
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
 mod.WeaponThreadMap = {
 	["WeaponAxeSpecialSwing"] = mod.StartAxeSpecialRepeatThread,
 	["WeaponDaggerThrow"] = mod.StartDaggerSpecialRepeatThread,
 	["WeaponSuitRanged"] = mod.StartSuitSpecialRepeatThread,
+	["WeaponTorchSpecial"] = mod.StartTorchSpecialRepeatThread,
 }
 
 local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", }
