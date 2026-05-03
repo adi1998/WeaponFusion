@@ -707,6 +707,89 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "DaggerHomingThrowAspect_FlavorText",
+	},
+
+	StaffClearCastAspect_Secondary =
+	{
+		InheritFrom = { "BaseTrait" },
+		Icon = "Hammer_Staff_40",
+		ReplacementGrannyModels = 
+		{
+			WeaponStaff_Mesh = "WeaponStaff_Circe_Mesh"
+		},
+
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 15/10,
+			},
+			Epic =
+			{
+				Multiplier = 20/10,
+			},
+			Heroic =
+			{
+				Multiplier = 25/10,
+			},
+			Legendary =
+			{
+				Multiplier = 30/10,
+			},
+			Perfect =
+			{
+				Multiplier = 45/10,
+			},
+		},
+		OnWeaponFiredFunctions =
+		{
+			ValidWeapons = game.WeaponSets.HeroRangedWeapons,
+			FunctionName = "CheckFamiliarLink",
+			FunctionArgs =
+			{
+				ProjectileName = "FamiliarLinkLaser",
+				DamageMultiplier = { BaseValue = 1.0 },
+				ReportValues = { ReportedDamage = "DamageMultiplier" }
+			},
+			ExcludeLinked = true,
+		},
+		StatLines =
+		{
+			"ClearCastDurationDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedDamage",
+				ExtractAs = "Damage",
+				Format = "MultiplyByBase",
+				BaseType = "Projectile",
+				BaseName = "FamiliarLinkLaser",
+				BaseProperty = "Damage",
+			},
+			{
+				ExtractAs = "Duration",
+				SkipAutoExtract = true,
+				External = true,
+				BaseType = "ProjectileBase",
+				BaseName = "FamiliarLinkLaser",
+				BaseProperty = "Fuse",
+			},
+			{
+				ExtractAs = "Interval",
+				SkipAutoExtract = true,
+				External = true,
+				BaseType = "ProjectileBase",
+				BaseName = "FamiliarLinkLaser",
+				BaseProperty = "ImmunityDuration",
+				DecimalPlaces = 1,
+			},
+		},
+		FlavorText = "StaffClearCastAspect_FlavorText",
 	}
 }
 
