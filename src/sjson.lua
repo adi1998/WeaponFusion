@@ -26,6 +26,12 @@ sjson.hook(traitTextEnFile, function (data)
             InheritFrom = "BaseBoonMultiline",
             DisplayName = "Minor Aspect of Shiva",
             Description = "You have {$Keywords.ComboAspect}, which absorbs {$Keywords.SpecialEX} blasts to grow {$Keywords.ComboBuff}.",
+        },
+        {
+            Id = "DaggerHomingThrowAspect_Secondary",
+            InheritFrom = "BaseBoonMultiline",
+            DisplayName = "Minor Aspect of Pan",
+            Description = "Your {$Keywords.SpecialSet} seek foes in your {$Keywords.CastSet}, and fire more shots if you {$Keywords.Hold} longer."
         }
     }
     for index, value in ipairs(traitTextList) do

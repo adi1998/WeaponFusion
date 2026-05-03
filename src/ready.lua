@@ -256,9 +256,9 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    if primarySource ~= secondarySource and secondarySource == "WeaponSuit" then
+    if primarySource ~= secondarySource and secondarySource == "WeaponDagger" then
         for i = 1, 4 do
-            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "SuitComboAspect_Secondary"
+            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "DaggerHomingThrowAspect_Secondary"
         end
     end
 

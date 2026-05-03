@@ -1,5 +1,6 @@
 mod.AspectTraitData = {
-    AxeArmCastAspect_Secondary = {
+    AxeArmCastAspect_Secondary =
+	{
         Name = "AxeArmCastAspect_Secondary",
         InheritFrom = {"BaseTrait"},
         Icon = "Hammer_Axe_41",
@@ -394,7 +395,8 @@ mod.AspectTraitData = {
 	},
 
 	SuitComboAspect_Secondary =
-	{
+	{	
+		Name = "SuitComboAspect_Secondary",
 		InheritFrom = { "BaseTrait" },
 		Icon = "Hammer_Suit_16",
 		ReplacementGrannyModels =
@@ -600,6 +602,111 @@ mod.AspectTraitData = {
 
 		},
 		FlavorText = "SuitComboAspect_FlavorText",
+	},
+
+	DaggerHomingThrowAspect_Secondary =
+	{
+		Name = "DaggerHomingThrowAspect_Secondary",
+		InheritFrom = { "BaseTrait" },
+		RarityLevels =
+		{
+			Common =
+			{
+				MinMultiplier = 1.0,
+				MaxMultiplier = 1.0,
+			},
+			Rare =
+			{
+				MinMultiplier = 2.0,
+				MaxMultiplier = 2.0,
+			},
+			Epic =
+			{
+				MinMultiplier = 3.0,
+				MaxMultiplier = 3.0,
+			},
+			Heroic =
+			{
+				MinMultiplier = 4.0,
+				MaxMultiplier = 4.0,
+			},
+			Legendary =
+			{
+				MinMultiplier = 5.0,
+				MaxMultiplier = 5.0,
+			},
+			Perfect =
+			{
+				Multiplier = 8
+			}
+		},
+		Icon = "Hammer_Daggers_40",
+		ReplacementGrannyModels =
+		{
+			WeaponDaggerA_Mesh = "WeaponDaggerA_Pan_Mesh",
+			WeaponDaggerB_Mesh = "WeaponDaggerB_Pan_Mesh"
+		},
+		ChargeStageModifiers =
+		{
+			ValidWeapons = {"WeaponDaggerThrow"},
+			AddProjectedChargeStages =
+			{
+				NumStages = { BaseValue = 1 },
+				ProjectedChanges =
+				{
+					NumProjectiles = 1,
+					ManaCost = 3,
+				},
+				ReportValues = { ReportedProjectiles = "NumStages" }
+			},
+			AddWeaponPropertiesStageRequirementMin = 5,
+			AddWeaponProperties =
+			{
+				FireGraphic = "Melinoe_Dagger_SpecialEx_Fire_Slow",
+			},
+			HideStageReachedFxExceptForFinal = true ,
+		},
+		OnEnemyDamagedAction =
+		{
+			FunctionName = "CheckDaggerPenetration",
+			ValidProjectiles = { "ProjectileDaggerThrowCharged" },
+		},
+		StatLines =
+		{
+			"ExThrowStatDisplay1",
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponNames = { "WeaponDaggerThrow" },
+				ExcludeLinked = true,
+				ProjectileProperties = 
+				{
+					AdjustRateAcceleration = math.rad(10000),
+					MaxAdjustRate = math.rad(2160),
+					RequireTargetsHaveEffect = "ImpactSlow",
+				}
+
+			},
+
+			{
+				WeaponName = "WeaponDaggerThrow",
+				ProjectileName = "ProjectileDaggerThrowCharged",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "DaggerProjectileFx_Pan",
+				ChangeType = "Absolute",
+			},
+
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedProjectiles",
+				ExtractAs = "Projectiles",
+				IncludeSigns = true,
+			},
+		},
+		FlavorText = "DaggerHomingThrowAspect_FlavorText",
 	}
 }
 
@@ -642,8 +749,8 @@ modutil.mod.Path.Wrap("ShowAxeUI", function (base)
 		return
 	end
 
-	game.ScreenAnchors.AxeUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
-	game.ScreenAnchors.AxeUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+	game.ScreenAnchors.AxeUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
+	game.ScreenAnchors.AxeUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
 
 	if game.HeroHasTrait("AxeRallyAspect_Secondary") then
 		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount })
@@ -675,8 +782,8 @@ modutil.mod.Path.Wrap("ShowSuitUI", function (base, args)
 		return
 	end
 
-	game.ScreenAnchors.SuitUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
-	game.ScreenAnchors.SuitUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+	game.ScreenAnchors.SuitUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
+	game.ScreenAnchors.SuitUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
 	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount })
 	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = 0, Instant = true })
 	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI, Duration = 0, Fraction = 0 })
