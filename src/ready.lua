@@ -33,7 +33,6 @@ mod.WeaponData = {
             "StaffRaiseDeadBigTrait",
             "StaffRaiseDeadDoubleTrait",
             "StaffLoneShadeRespawnTrait",
-
         },
         SecondaryHammers = {
             "StaffSecondStageTrait",
@@ -67,6 +66,11 @@ mod.WeaponData = {
             "DaggerChargeStageSkipTrait",
             "DaggerSpecialReturnTrait",
 
+            "DaggerTripleHomingSpecialTrait",
+        },
+        CommonHammers = {
+            "DaggerTripleBuffTrait",
+            "DaggerTripleRepeatWomboTrait"
         }
     },
 
@@ -87,7 +91,6 @@ mod.WeaponData = {
             "AxeThirdStrikeTrait",
             "AxeMassiveThirdStrikeTrait",
             "AxeRallyFirstStrikeTrait",
-            "AxeRallyFrenzyTrait",
         },
         SecondaryHammers = {
             "AxeSecondStageTrait",
@@ -95,6 +98,9 @@ mod.WeaponData = {
             "AxeArmorTrait",
             "AxeChargedSpecialTrait",
         },
+        CommonHammers = {
+            "AxeRallyFrenzyTrait"
+        }
     },
 
     WeaponTorch = {
@@ -120,7 +126,6 @@ mod.WeaponData = {
             "TorchLongevityTrait",
             "TorchOrbitPointTrait",
             "TorchSpecialLineTrait",
-
         },
     },
 
@@ -178,6 +183,8 @@ mod.WeaponData = {
             "SuitSpecialDiscountTrait",
             "SuitSpecialConsecutiveHitTrait",
 
+            "SuitComboForwardRocketTrait",
+            "SuitComboDoubleSpecialTrait",
         },
     }
 }
@@ -228,18 +235,68 @@ function MorosSpecialDetonatePatches()
 end
 MorosSpecialDetonatePatches()
 
-function PatchHammerRequirements(hammerName, weaponName)
+function PatchSecondaryHammerRequirements(hammerName, weaponName)
     local hammerData = game.TraitData[hammerName]
     hammerData.GameStateRequirements[1] =
     {
         Path = { "CurrentRun", "Hero", "Weapons", },
         HasAll = { weaponName, },
     }
+    local secondRequirement = hammerData.GameStateRequirements[2]
+    if secondRequirement then
+        if secondRequirement.IsAny then
+            local newRequirement =
+            {
+                Path = {"CurrentRun", "Hero", "TraitDictionary"},
+                HasAny = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
+            }
+            hammerData.GameStateRequirements[2] = newRequirement
+        end
+        if secondRequirement.IsNone then
+            local newRequirement =
+            {
+                Path = {"CurrentRun", "Hero", "TraitDictionary"},
+                HasNone = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
+            }
+            hammerData.GameStateRequirements[2] = newRequirement
+        end
+    end
+end
+
+function PatchCommonHammerRequirements(hammerName, weaponName, secondWeaponName)
+    local hammerData = game.TraitData[hammerName]
+    hammerData.GameStateRequirements[1] =
+    {
+        Path = { "CurrentRun", "Hero", "Weapons", },
+        HasAny = { weaponName, secondWeaponName},
+    }
+    local secondRequirement = hammerData.GameStateRequirements[2]
+    if secondRequirement then
+        if secondRequirement.IsAny then
+            local newRequirement =
+            {
+                Path = {"CurrentRun", "Hero", "TraitDictionary"},
+                HasAny = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
+            }
+            hammerData.GameStateRequirements[2] = newRequirement
+        end
+        if secondRequirement.IsNone then
+            local newRequirement =
+            {
+                Path = {"CurrentRun", "Hero", "TraitDictionary"},
+                HasNone = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
+            }
+            hammerData.GameStateRequirements[2] = newRequirement
+        end
+    end
 end
 
 for weapon, modWeaponData in pairs(mod.WeaponData) do
     for _, hammerName in ipairs(modWeaponData.SecondaryHammers) do
-        PatchHammerRequirements(hammerName, modWeaponData.Secondary[1])
+        PatchSecondaryHammerRequirements(hammerName, modWeaponData.Secondary[1])
+    end
+    for _, hammerName in ipairs(modWeaponData.CommonHammers or {}) do
+        PatchCommonHammerRequirements(hammerName, weapon, modWeaponData.Secondary[1])
     end
 end
 
