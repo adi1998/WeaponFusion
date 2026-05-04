@@ -103,7 +103,11 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 	if game.HeroHasTrait("DaggerSpecialLineTrait") then
 		angleIncrement = 0
 	end
-
+	local logProjectileIdForMagicCrit = false
+	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
+		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
+		logProjectileIdForMagicCrit = true
+	end
 	while repeats < functionArgs.Repeats do
 		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
 		if functionArgs.AttackAnimationName then
@@ -183,6 +187,11 @@ function mod.StartSuitSpecialRepeatThread(startX, startY, angle, args)
 		WeaponName = weaponName,
 		Type = "Projectile",
 	})
+	local logProjectileIdForMagicCrit = false
+	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
+		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
+		logProjectileIdForMagicCrit = true
+	end
 	while repeats < functionArgs.Repeats do
 		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
 		if functionArgs.AttackAnimationName then

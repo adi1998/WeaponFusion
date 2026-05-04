@@ -20,3 +20,12 @@ modutil.mod.Path.Context.Wrap.Static("CheckFinisher",function (victim, functionA
 		return base(weaponList)
 	end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("CheckDifferentOmegaCrit", function ( weaponData, functionArgs, triggerArgs )
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		if traitName == "SuitComboAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
