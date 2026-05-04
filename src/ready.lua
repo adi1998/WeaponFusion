@@ -256,7 +256,7 @@ function PatchSecondaryHammerRequirements(hammerName, weaponName)
             local newRequirement =
             {
                 Path = {"CurrentRun", "Hero", "TraitDictionary"},
-                HasNone = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
+                HasNone = {secondRequirement.IsNone[1], secondRequirement.IsNone[1].."_Secondary"}
             }
             hammerData.GameStateRequirements[2] = newRequirement
         end
@@ -284,7 +284,7 @@ function PatchCommonHammerRequirements(hammerName, weaponName, secondWeaponName)
             local newRequirement =
             {
                 Path = {"CurrentRun", "Hero", "TraitDictionary"},
-                HasNone = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
+                HasNone = {secondRequirement.IsNone[1], secondRequirement.IsNone[1].."_Secondary"}
             }
             hammerData.GameStateRequirements[2] = newRequirement
         end
