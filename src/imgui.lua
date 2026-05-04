@@ -34,11 +34,11 @@ function DrawMenu()
         rom.ImGui.Text("Primary")
         rom.ImGui.Text("Weapon"); rom.ImGui.SameLine()
 
-        if rom.ImGui.BeginCombo("###primary", WeaponNameDisplayNameMap[config.last_primary]) then
+        if rom.ImGui.BeginCombo("###primary", WeaponNameDisplayNameMap[config.primary]) then
             for displayName, weaponName in pairs(DisplayNameWeaponNameMap) do
-                if rom.ImGui.Selectable(displayName, weaponName == config.last_primary) then
-                    if weaponName ~= config.last_primary then
-                        config.last_primary = weaponName
+                if rom.ImGui.Selectable(displayName, weaponName == config.primary) then
+                    if weaponName ~= config.primary then
+                        config.primary = weaponName
                     end
                     rom.ImGui.SetItemDefaultFocus()
                 end
@@ -48,11 +48,11 @@ function DrawMenu()
 
         rom.ImGui.Text("Secondary")
         rom.ImGui.Text("Weapon"); rom.ImGui.SameLine()
-        if rom.ImGui.BeginCombo("###secondary", WeaponNameDisplayNameMap[config.last_secondary]) then
+        if rom.ImGui.BeginCombo("###secondary", WeaponNameDisplayNameMap[config.secondary]) then
             for displayName, weaponName in pairs(DisplayNameWeaponNameMap) do
-                if rom.ImGui.Selectable(displayName, weaponName == config.last_secondary) then
-                    if weaponName ~= config.last_secondary then
-                        config.last_secondary = weaponName
+                if rom.ImGui.Selectable(displayName, weaponName == config.secondary) then
+                    if weaponName ~= config.secondary then
+                        config.secondary = weaponName
                     end
                     rom.ImGui.SetItemDefaultFocus()
                 end
@@ -63,9 +63,9 @@ function DrawMenu()
         rom.ImGui.Text("Aspect"); rom.ImGui.SameLine()
         if rom.ImGui.BeginCombo("###aspect", "unimplemented") then
             for displayName, aspectName in pairs({}) do
-                if rom.ImGui.Selectable(displayName, aspectName == config.last_aspect) then
-                    if aspectName ~= config.last_aspect then
-                        config.last_aspect = aspectName
+                if rom.ImGui.Selectable(displayName, aspectName == config.aspect) then
+                    if aspectName ~= config.aspect then
+                        config.aspect = aspectName
                     end
                     rom.ImGui.SetItemDefaultFocus()
                 end
@@ -76,11 +76,17 @@ function DrawMenu()
         local clicked = rom.ImGui.Button("Fuse")
         if clicked then
             UnfuseWeapons()
-            FuseWeapon(config.last_primary, config.last_secondary)
+            config.last_primary = config.primary
+            config.last_secondary = config.secondary
+            config.last_aspect = config.aspect
+            FuseWeapon(config.primary, config.secondary, config.aspect)
         end
 
         rom.ImGui.SameLine(); clicked = rom.ImGui.Button("Unfuse")
         if clicked then
+            config.last_primary = "WeaponStaffSwing"
+            config.last_secondary = "WeaponStaffSwing"
+            config.last_aspect = ""
             UnfuseWeapons()
         end
     else
