@@ -790,7 +790,187 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "StaffClearCastAspect_FlavorText",
+	},
+
+	DaggerTripleAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Daggers_42",
+		NumHits = 3, -- used only for text
+		ReplacementGrannyModels =
+		{
+			WeaponDaggerA_Mesh = "WeaponDaggerA_Morrigan_Mesh",
+			WeaponDaggerB_Mesh = "WeaponDaggerB_Morrigan_Mesh"
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 3,
+			},
+			Rare =
+			{
+				Multiplier = 4,
+			},
+			Epic =
+			{
+				Multiplier = 5,
+			},
+			Heroic =
+			{
+				Multiplier = 6,
+			},
+			Legendary =
+			{
+				Multiplier = 7,
+			},
+			Perfect =
+			{
+				Multiplier = 9,
+			},
+		},
+		WeaponDataOverride =
+		{
+			WeaponDaggerThrow =
+			{
+				MinWeaponChargeTime = 0.16,
+				ChargeWeaponStages =
+				{
+					{
+						ManaCost = 15,
+						WeaponProperties =
+						{
+							Projectile = "ProjectileDaggerThrowCharged",
+							NumProjectiles = 3, 
+							AdditionalProjectileWaveChance = 0
+						},
+						ApplyEffects =
+						{
+							"WeaponDaggerMorriganThrowEXDisable",
+							"WeaponDaggerMorriganThrowEXDisableCancellable",
+							"WeaponDaggerMorriganThrowEXDisableMoveHold"
+						},
+						Wait = 0.45,
+						ChannelSlowEventOnEnter = true,
+						HideStageReachedFx = true,
+					},
+				},
+				Sounds =
+				{
+					ChargeSounds =
+					{
+						{
+							Name = "/SFX/Player Sounds/MelMagicalChargeLoop",
+							StoppedBy = { "ChargeCancel", "Fired" }
+						},
+					},
+					FireSounds =
+					{
+						PerfectChargeSounds =
+						{
+							{ Name = "/SFX/Player Sounds/ZagreusCriticalFire" },
+						},
+						{ Name = "/SFX/Player Sounds/BowFire" },
+						{ Name = "/VO/MelinoeEmotes/MorriganEmoteAttacking2" },
+					},
+					FireStageSounds =
+					{
+						{ Name = "/VO/MelinoeEmotes/EmotePowerAttackingStaff" },
+						{ Name = "/SFX/Player Sounds/MelDaggerKnifeThrowSwishGROUP" },
+					},
+					ImpactSounds =
+					{
+						Invulnerable = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Armored = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Bone = "/SFX/ArrowMetalBoneSmash",
+						Brick = "/SFX/ArrowMetalStoneClang",
+						Stone = "/SFX/ArrowMetalStoneClang",
+						Organic = "/SFX/DaggerThrowImpact",
+						StoneObstacle = "/SFX/ArrowWallHitClankSmall",
+						BrickObstacle = "/SFX/ArrowWallHitClankSmall",
+						MetalObstacle = "/SFX/ArrowWallHitClankSmall",
+						BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
+						Shell = "/SFX/ShellImpact",
+					},
+				},
+			},
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "SetBaseChargeTimes",
+			Args = {
+				WeaponNames =
+				{
+					"WeaponDaggerThrow",
+				}
+			}
+		},
+		CustomExDefinitions =
+		{
+			ProjectileDaggerThrow = false,
+			ProjectileDaggerThrowMorrigan = true
+		},
+		OnEnemyDamagedAction = 
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			FunctionName = "CheckFinisher",
+			Args =
+			{
+				ProjectileName = "WomboStrike",
+				DamageMultiplier = { BaseValue = 1 },
+				ReportValues = { ReportedMultiplier = "DamageMultiplier" },
+				EffectNames = { "ComboSpecialIndicator", "ComboExIndicator", "ComboAttackIndicator" }, -- for packaging
+				CompleteObjectivesOnFire = { "WeaponDaggerWombo" },
+			}
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponName = "WeaponDaggerThrow",
+				WeaponProperties =
+				{
+					ChargeTime = 0.3,
+					MinChargeToFire = 0.34,
+					Cooldown = 1.5,
+					ProjectileAngleOffset = 12,
+					ChargeStartAnimation = "Melinoe_Dagger_Special_Start_Slow",
+					ClipSize = 1,
+					ClipRegenInterval = 0.8,
+					LockTriggerForMinCharge = true,
+				},
+				ProjectileProperties =
+				{
+					MaxAdjustRate = 0,
+					ImmunityDuration = 0.20,
+					RepeatHitOnReturn = true,
+					MultiDetonate = true,
+					MultipleUnitCollisions = true,
+					ReturnToOwnerAfterInactiveSeconds = 0.6,
+					Speed = 900,
+					Graphic = "DaggerThrowMorrigan",
+					Damage = 20,
+				},
+			},
+		},
+		StatLines =
+		{
+			"ComboDamageStatDisplay",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedMultiplier",
+				ExtractAs = "Damage",
+				Format = "MultiplyByBase",
+				BaseType = "Projectile",
+				BaseName = "WomboStrike",
+				BaseProperty = "Damage",
+			},
+		},
+		FlavorText = "DaggerTripleAspect_FlavorText",
 	}
+
 }
 
 game.OverwriteTableKeys( game.TraitData, mod.AspectTraitData )

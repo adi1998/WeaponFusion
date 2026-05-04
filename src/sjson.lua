@@ -38,6 +38,12 @@ sjson.hook(traitTextEnFile, function (data)
             InheritFrom = "BaseBoonMultiline",
             DisplayName = "Minor Aspect of Circe",
             Description = "Whenever you use {$Keywords.CastSet}, so does your {$Keywords.Familiar}, forming a {$Keywords.FamiliarBuff}."
+        },
+        {
+            Id = "DaggerTripleAspect_Secondary",
+            InheritFrom = "BaseBoonMultiline",
+            DisplayName = "Minor Aspect of Morrigan",
+            Description = "You have the {$Keywords.TripleAspect}, which can perform the ritual of the {$Keywords.TripleAspectStrike}."
         }
     }
     for index, value in ipairs(traitTextList) do

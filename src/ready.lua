@@ -256,9 +256,9 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    if primarySource ~= secondarySource and secondarySource == "WeaponStaffSwing" then
+    if primarySource ~= secondarySource and secondarySource == "WeaponDagger" then
         for i = 1, 4 do
-            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "StaffClearCastAspect_Secondary"
+            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "DaggerTripleAspect_Secondary"
         end
     end
 
@@ -299,7 +299,7 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
         print("equipping minor aspect", aspectTraitName)
         if traitData and aspectTraitName and (not game.HeroHasTrait( aspectTraitName )) then
             print("adding secondary aspect trait")
-            game.AddTraitToHero({ TraitName = aspectTraitName })
+            game.AddTraitToHero({ TraitName = aspectTraitName, Rarity = "Common" })
             local aspectTraitData = game.TraitData[aspectTraitName]
             if aspectTraitData.ReplacementGrannyModels ~= nil then
 				for originalModel, attachmentModel in pairs(aspectTraitData.ReplacementGrannyModels) do
