@@ -1941,6 +1941,100 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "SuitMarkCritAspect_FlavorText",
+	},
+
+	SuitHexAspect_Secondary =
+	{
+		InheritFrom = { "BaseTrait" },
+		Icon = "Hammer_Suit_02",
+		ReplacementGrannyModels =
+		{
+			WeaponSuitR_Base_Mesh = "WeaponSuitR_Selene_Mesh",
+			WeaponSuitL_Base_Mesh = "WeaponSuitL_Selene_Mesh",
+			WeaponSuitB_Base_Mesh = "WeaponSuitB_Selene_Mesh",
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 3,
+			},
+			Legendary =
+			{
+				Multiplier = 4,
+			},
+			Perfect =
+			{
+				Multiplier = 6,
+			},
+		},
+		LinkedSpell = "MoonBeam",
+		StatLines =
+		{
+			"SuitSpellCostStatLine",
+		},
+		TalentPointCount = 2,	-- First Selene drop will give 1, so this boosts it to 3 on first pick-up baseline
+		ManaSpendCostModifiers =
+		{
+			Add = { BaseValue = -10 },
+			ReportValues = { ReportedManaCost = "Add" }
+		},
+		ExtractValues =
+		{
+			{
+				Format = "AdjustedBaseManaSpendCost",
+				WeaponName = "WeaponSpellMoonBeam",
+				ExtractAs = "ManaCost",
+				Key = "ReportedManaCost",
+			},
+			{
+				External = true,
+				BaseType = "WeaponData",
+				BaseProperty = "FiredFunctionArgs",
+				BaseName = "WeaponSpellMoonBeam",
+				FiredFunctionArg = "Count",
+				ExtractAs = "MoonBeamCount",
+				SkipAutoExtract = true,
+			},
+			{
+				External = true,
+				BaseType = "ProjectileBase",
+				BaseName = "ProjectileMoonBeam",
+				BaseProperty = "Damage",
+				ExtractAs = "MoonBeamDamage",
+				SkipAutoExtract = true,
+			},
+			{
+				External = true,
+				BaseType = "EffectData",
+				BaseName = "MoonBeamVulnerability",
+				BaseProperty = "Modifier",
+				Format = "PercentDelta",
+				ExtractAs = "MoonBeamVulnerability",
+				SkipAutoExtract = true,
+			},
+			{
+				External = true,
+				BaseType = "EffectData",
+				BaseName = "MoonBeamVulnerability",
+				BaseProperty = "Duration",
+				ExtractAs = "MoonBeamDuration",
+				SkipAutoExtract = true,
+			},
+		},
+		FlavorText = "SuitHexAspect_FlavorText",
 	}
 }
 

@@ -122,3 +122,15 @@ modutil.mod.Path.Context.Wrap.Static("WeaponSuitAmmoTransform", function (trigge
 		return HeroHasTraitWrap(base, traitName, "SuitMarkCritAspect")
 	end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("OpenSpellScreen", function ( spellItem, args, user )
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "SuitHexAspect")
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("RestockWorldItem", function ( replacedIndex, kitId, args )
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "SuitHexAspect")
+	end)
+end)

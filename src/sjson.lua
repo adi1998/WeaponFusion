@@ -67,6 +67,12 @@ local traitTextList = {
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Nyx",
         Description = "You have {$Keywords.NyxSprint}, which lets you produce {$Keywords.NyxAspectBuff} after you activate it.",
+    },
+    {
+        Id = "SuitHexAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Selene",
+        Description = "You start with {$TraitData.SpellMoonBeamTrait.Name}, a hidden {$Keywords.Spell} that strikes multiple foes and applies {$Keywords.MoonBeamVulnerability}.",
     }
 }
 

@@ -367,6 +367,21 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
 					game.SetThingProperty({ Property = "GrannyAlternateModelAttachment", Value = attachmentModel, OriginalAttachmentModel = originalModel, DestinationId = game.CurrentRun.Hero.ObjectId })
 				end
 			end
+            if aspectTraitData.LinkedSpell then
+                print("equipping Spell", aspectTraitData.LinkedSpell)
+                local spellName = aspectTraitData.LinkedSpell
+                local spellTraitName = game.SpellData[spellName].TraitName
+                local spellTraitData = game.AddTraitToHero({ TraitName = spellTraitName, SkipUIUpdate = args.SkipUIUpdate, SkipNewTraitHighlight = args.SkipTraitHighlight, SkipQuestStatusCheck = args.SkipQuestStatusCheck })
+                if spellTraitData.CheckChargeFunctionName then
+                    game.thread( game.CallFunctionName, spellTraitData.CheckChargeFunctionName, game.CurrentRun.Hero )
+                end
+                game.CurrentRun.Hero.SlottedSpell = game.DeepCopyTable( game.SpellData[spellName] )
+                game.CurrentRun.Hero.SlottedSpell.Talents = game.DeepCopyTable( game.CreateTalentTree( game.SpellData[spellName] ) )
+                local spellData = game.CurrentRun.Hero.SlottedSpell
+                game.UpdateTalentPointInvestedCache()
+                game.UpdateSpellActiveStatus()
+                game.UpdateHeroTraitDictionary()
+            end
         end
     end
     return val
@@ -383,6 +398,11 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
             for originalModel, _ in pairs(traitData.ReplacementGrannyModels) do
                 game.SetThingProperty({ Property = "GrannyAlternateModelAttachment", Value = originalModel, OriginalAttachmentModel = originalModel, DestinationId = game.CurrentRun.Hero.ObjectId })
             end
+        end
+    end
+    for _, traitData in ipairs( game.CurrentRun.Hero.Traits ) do
+        if traitData.LinkedSpell and string.match(traitData.Name, "_Secondary") then
+            game.UnequipLinkedSpell( traitData )
         end
     end
     local val = base(args)
