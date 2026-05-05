@@ -969,7 +969,328 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "DaggerTripleAspect_FlavorText",
-	}
+	},
+
+	TorchAutofireAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 1.5,
+			},
+			Epic =
+			{
+				Multiplier = 2.0,
+			},
+			Heroic =
+			{
+				Multiplier = 2.5,
+			},
+			Legendary =
+			{
+				Multiplier = 3.0,
+			},
+			Perfect =
+			{
+				Multiplier = 4.5,
+			},
+		},
+		Icon = "Hammer_Torch_42",
+		ReplacementGrannyModels = 
+		{
+			WeaponTorchR_Mesh = "WeaponTorchR_Supay_Mesh",
+			WeaponTorchL_Mesh = "WeaponTorchL_Supay_Mesh"
+		},
+		OnExpire = {
+			FunctionName = "EndAutofire",
+		},
+		WeaponDataOverride = 
+		{
+			WeaponTorchSpecial = 
+			{
+				ChannelSlowIneligible = false,
+				CancelCameraShake = true,
+				CancelSlowFrames = true,
+				ChargeStageModifiers = 
+				{
+					ValidWeapons = { "WeaponTorchSpecial"},
+					ExcludeLinked = true,
+					AddWeaponProperties = 
+					{
+						FireFx = "TorchOrbitStartSwirl_Supay",
+					}
+				},
+				ChargeWeaponStages = 
+				{
+					{
+						ManaCost = 30,
+						Wait = 0.925,
+						ChannelSlowEventOnStart = true,
+						ForceRelease = true,
+						WeaponProperties =
+						{
+							Projectile = "ProjectileTorchOrbitEx",
+							ProjectileAngleStartOffset = math.rad(-90),
+							ProjectileAngleOffset = math.rad(60),
+							FireGraphic = "Melinoe_Torch_Special1Ex_Fire",
+							FireFx = "TorchOrbitStartSwirl_Base",
+							AdditionalProjectileWaveChance = 0,
+						},
+						ProjectileProperties = 
+						{
+							ArcEnd = -1080,
+						},
+						CompleteObjective = "WeaponTorchSpecialCharged",
+					},
+				},
+				SkipManaDisableCheck = true,
+				IsExWithMapStateVariable = "TorchExSpecial",
+
+				Sounds =
+				{
+					ChargeSounds =
+					{
+						{ Name = "/EmptyCue" },
+						{
+							Name = "/SFX/Player Sounds/MelMagicalCharge",
+							StoppedBy = { "ChargeCancel", "Fired" }
+						},
+					},
+					FireSounds =
+					{
+						{ Name = "/SFX/Player Sounds/MelTorchSpecialPreSpin" },
+
+					},
+					FireStageSounds = 
+					{
+						{ Name = "/VO/MelinoeEmotes/EmoteAttackingBombLob" },
+					},
+					ImpactSounds =
+					{
+						Invulnerable = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Armored = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Bone = "/SFX/BurnDamageTorches",
+						Brick = "/SFX/BurnDamageTorches",
+						Stone = "/SFX/BurnDamageTorches",
+						Organic = "/SFX/BurnDamageTorches",
+						StoneObstacle = "/SFX/BurnDamageTorches",
+						BrickObstacle = "/SFX/BurnDamageTorches",
+						MetalObstacle = "/SFX/BurnDamageTorches",
+						BushObstacle = "/SFX/BurnDamage",
+						Shell = "/SFX/ShellImpact",
+					},
+				},
+
+			},
+		},
+		PropertyChanges = {
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileName = "ProjectileTorchOrbit",
+				ExcludeLinked = true,
+				ProjectileProperties = 
+				{
+					Damage = 10,
+					Speed = 220,
+				},
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileName = "ProjectileTorchOrbitEx",
+				ExcludeLinked = true,
+				WeaponProperties = 
+				{
+					ChargeStartAnimation = "Melinoe_Torch_Supay_AttackEx1_FireAlt",
+					FireGraphic = "null",
+					ChargeCancelGraphic = "Melinoe_Torch_Supay_AttackEx1_End",
+					TriggerReleaseGraphic = "null",
+					SetTargetAngleOnRequest = false,
+				},
+				ProjectileProperties = 
+				{
+					Fuse = 5,
+					ReturnToOwnerAfterInactiveSeconds = 4,
+					SizeDuration = 0.1,
+					MaxSize = 1.4,
+					MinRange = 150,
+					Range = 300,
+					MaxRange = 600,
+					ArcEnd = 9000,
+					Speed = 440,
+					Damage = 15,
+				},
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				WeaponProperty = "AllowFire",
+				ChangeValue = false,
+				ExcludeLinked = true,
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				WeaponProperty = "UseAttackTurbo",
+				ChangeValue = false,
+				ExcludeLinked = true,
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileName = "ProjectileTorchOrbit",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "TorchOrbitIn_Supay",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileName = "ProjectileTorchOrbit",
+				ProjectileProperty = "DissipateFx",
+				ChangeValue = "TorchOrbitOut_Supay",
+				ChangeType = "Absolute",
+			},			
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileProperty = "AmbientSound",
+				ChangeValue = "null",
+				ChangeType = "Absolute",
+			},			
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileNames = { "ProjectileTorchOrbit", "ProjectileTorchOrbitEx", },
+				ProjectileProperty = "DissipateFx",
+				ChangeValue = "TorchOrbitOut_Supay",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileNames = { "ProjectileTorchOrbit", "ProjectileTorchOrbitEx" },
+				ProjectileProperty = "AttachedAnim",
+				ChangeValue = "TorchOrbitShadow_Supay",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				ProjectileName = "ProjectileTorchOrbitEx",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "TorchOrbitInEX_Supay",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponTorchSpecial",
+				WeaponProperty = "FireFx",
+				ChangeValue = "TorchOrbitStartSwirl_Single_Supay",
+				ChangeType = "Absolute",
+			},
+		},
+		SetupFunction =
+		{
+			Name = "SetupTorchAutofire",
+			Args = 
+			{
+				PrimaryInterval = 0.75,
+				BurstCount = 1,
+				FlameStagger = 0.75,
+				PrimaryExIntervalOverride = 0,	-- If set at above 0, overrides the stagger/interval with this value during EX moves
+				PrimaryExIntervalMultiplier = 1.0,
+				--PrimaryCastIntervalMultiplier = { BaseValue = 0.9, SourceIsMultiplier = true }, -- Might be worth revisiting
+				PrimaryExInterval = 4,
+				PrimaryExVfx = "SupayEXStart",
+				SpecialRefreshInterval = 0.25,
+				SpecialSounds = 
+				{
+					SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+					SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					AresSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					AphroditeSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					ApolloSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					DemeterSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					HephaestusSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					HestiaSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					HeraSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					PoseidonSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+					ZeusSpecialBoon = 
+					{
+						SpecialSound = "/SFX/Player Sounds/MelTorchSpecialTail",
+						SpecialExSound = "/SFX/Player Sounds/MelTorchSpecialOmegaLoop",
+					},
+				},
+				ReportValues = 
+				{ 
+					--ReportedSpeed = "PrimaryCastIntervalMultiplier",
+					ReportedDuration = "PrimaryExInterval",
+				}
+			},
+		},
+		OnProjectileDeathFunction = 
+		{
+			Name = "UpdateProjectileLedger",
+			ValidProjectiles = {"ProjectileTorchBall", "ProjectileTorchSupayBallEx", "ProjectileTorchOrbit", "ProjectileTorchOrbitEx", "ProjectileCast"},
+		},
+		AddOutgoingDamageModifiers =
+		{
+			ValidProjectiles = game.WeaponSets.SprintProjectileNames,
+			ValidWeaponMultiplier =
+			{
+				BaseValue = 1.10,
+				SourceIsMultiplier = true,
+			},
+			ReportValues = { ReportedMultiplier = "ValidWeaponMultiplier"},
+		},
+		StatLines =
+		{
+			"RaiseDeadStatLine1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedMultiplier",
+				ExtractAs = "SprintDamageBonus",
+				Format = "PercentDelta",
+			},
+			{
+				Key = "ReportedDuration",
+				ExtractAs = "TooltipAutofireDuration",
+				SkipAutoExtract = true,
+			},
+		},
+		FlavorText = "TorchAutofireAspect_FlavorText",
+	},
 
 }
 

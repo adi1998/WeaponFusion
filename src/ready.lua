@@ -32,7 +32,6 @@ mod.WeaponData = {
             "StaffOneWayAttackTrait",
             "StaffRaiseDeadBigTrait",
             "StaffRaiseDeadDoubleTrait",
-            "StaffLoneShadeRespawnTrait",
         },
         SecondaryHammers = {
             "StaffSecondStageTrait",
@@ -40,6 +39,11 @@ mod.WeaponData = {
             "StaffFastSpecialTrait",
             "StaffJumpSpecialTrait",
             "StaffTripleShotTrait",
+
+            "StaffLoneShadeRallyTrait",
+        },
+        CommonHammers = {
+            "StaffLoneShadeRespawnTrait",
         }
     },
 
@@ -90,6 +94,7 @@ mod.WeaponData = {
             "AxeAttackRecoveryTrait",
             "AxeThirdStrikeTrait",
             "AxeMassiveThirdStrikeTrait",
+
             "AxeRallyFirstStrikeTrait",
         },
         SecondaryHammers = {
@@ -104,9 +109,7 @@ mod.WeaponData = {
     },
 
     WeaponTorch = {
-        Primary = {
-
-        },
+        Primary = { },
         Secondary = {
             "WeaponTorchSpecial"
         },
@@ -117,7 +120,6 @@ mod.WeaponData = {
             "TorchSpinAttackTrait",
             "TorchMoveSpeedTrait",
             "TorchAttackSpeedTrait",
-
         },
         SecondaryHammers = {
             "TorchSpecialImpactTrait",
@@ -126,6 +128,9 @@ mod.WeaponData = {
             "TorchLongevityTrait",
             "TorchOrbitPointTrait",
             "TorchSpecialLineTrait",
+        },
+        CommonHammers = {
+            "TorchAutofireSprintTrait",
         },
     },
 
@@ -235,6 +240,33 @@ function MorosSpecialDetonatePatches()
 end
 MorosSpecialDetonatePatches()
 
+function PatchHammerAspectRequirement(requirement)
+    local newRequirement = requirement
+    if requirement.IsAny then
+        newRequirement =
+        {
+            Path = {"CurrentRun", "Hero", "TraitDictionary"},
+            HasAny = { }
+        }
+        for _, traitName in ipairs(requirement.IsAny) do
+            table.insert(newRequirement.HasAny, traitName)
+            table.insert(newRequirement.HasAny, traitName.."_Secondary")
+        end
+    end
+    if requirement.IsNone then
+        newRequirement =
+        {
+            Path = {"CurrentRun", "Hero", "TraitDictionary"},
+            HasNone = { },
+        }
+        for _, traitName in ipairs(requirement.IsNone) do
+            table.insert(newRequirement.HasNone, traitName)
+            table.insert(newRequirement.HasNone, traitName.."_Secondary")
+        end
+    end
+    return newRequirement
+end
+
 function PatchSecondaryHammerRequirements(hammerName, weaponName)
     local hammerData = game.TraitData[hammerName]
     hammerData.GameStateRequirements[1] =
@@ -244,22 +276,7 @@ function PatchSecondaryHammerRequirements(hammerName, weaponName)
     }
     local secondRequirement = hammerData.GameStateRequirements[2]
     if secondRequirement then
-        if secondRequirement.IsAny then
-            local newRequirement =
-            {
-                Path = {"CurrentRun", "Hero", "TraitDictionary"},
-                HasAny = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
-            }
-            hammerData.GameStateRequirements[2] = newRequirement
-        end
-        if secondRequirement.IsNone then
-            local newRequirement =
-            {
-                Path = {"CurrentRun", "Hero", "TraitDictionary"},
-                HasNone = {secondRequirement.IsNone[1], secondRequirement.IsNone[1].."_Secondary"}
-            }
-            hammerData.GameStateRequirements[2] = newRequirement
-        end
+        hammerData.GameStateRequirements[2] = PatchHammerAspectRequirement(secondRequirement)
     end
 end
 
@@ -272,22 +289,7 @@ function PatchCommonHammerRequirements(hammerName, weaponName, secondWeaponName)
     }
     local secondRequirement = hammerData.GameStateRequirements[2]
     if secondRequirement then
-        if secondRequirement.IsAny then
-            local newRequirement =
-            {
-                Path = {"CurrentRun", "Hero", "TraitDictionary"},
-                HasAny = {secondRequirement.IsAny[1], secondRequirement.IsAny[1].."_Secondary"}
-            }
-            hammerData.GameStateRequirements[2] = newRequirement
-        end
-        if secondRequirement.IsNone then
-            local newRequirement =
-            {
-                Path = {"CurrentRun", "Hero", "TraitDictionary"},
-                HasNone = {secondRequirement.IsNone[1], secondRequirement.IsNone[1].."_Secondary"}
-            }
-            hammerData.GameStateRequirements[2] = newRequirement
-        end
+        hammerData.GameStateRequirements[2] = PatchHammerAspectRequirement(secondRequirement)
     end
 end
 
@@ -313,9 +315,9 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    if primarySource ~= secondarySource and secondarySource == "WeaponSuit" then
-        for i = 1, 4 do
-            game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource][i]][_PLUGIN.guid .. "SecondaryAspect"] = "SuitComboAspect_Secondary"
+    if primarySource ~= secondarySource and secondarySource == "WeaponTorch" then
+        for _, traitName in ipairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource]) do
+            game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = "TorchAutofireAspect_Secondary"
         end
     end
 
@@ -387,4 +389,18 @@ end)
 
 modutil.mod.Path.Override("BiomeMapPresentation", function (base, ...)
     return
+end)
+
+modutil.mod.Path.Wrap("TorchSpecialAutofire", function (base, ...)
+    if not game.CurrentRun.Hero.Weapons["WeaponTorchSpecial"] then
+        return
+    end
+    return base(...)
+end)
+
+modutil.mod.Path.Wrap("TorchPrimaryAutofire", function (base, ...)
+    if not game.CurrentRun.Hero.Weapons["WeaponTorch"] then
+        return
+    end
+    return base(...)
 end)
