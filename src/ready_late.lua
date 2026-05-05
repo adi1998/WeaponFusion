@@ -64,3 +64,12 @@ modutil.mod.Path.Context.Wrap.Static("EmptyTorchSpecialCharge", function ( weapo
 		return base(traitName)
 	end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("CleanupShadeMerc", function ( triggerArgs )
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "StaffRaiseDeadAspect" and game.HeroHasTrait(traitName .. "_Secondary") then
+			return base(traitName .. "_Secondary")
+		end
+		return base(traitName)
+	end)
+end)

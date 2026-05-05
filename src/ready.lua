@@ -315,9 +315,9 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    if primarySource ~= secondarySource and secondarySource == "WeaponTorch" then
+    if primarySource ~= secondarySource and secondarySource == "WeaponStaffSwing" then
         for _, traitName in ipairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource]) do
-            game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = "TorchAutofireAspect_Secondary"
+            game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = "StaffRaiseDeadAspect_Secondary"
         end
     end
 

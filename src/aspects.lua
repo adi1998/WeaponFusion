@@ -1292,6 +1292,355 @@ mod.AspectTraitData = {
 		FlavorText = "TorchAutofireAspect_FlavorText",
 	},
 
+	StaffRaiseDeadAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 1.5,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 2.5,
+			},
+			Legendary =
+			{
+				Multiplier = 3,
+			},
+			Perfect =
+			{
+				Multiplier = 4.5,
+			},
+		},
+		Icon = "Hammer_Staff_42",
+		ReplacementGrannyModels =
+		{
+			WeaponStaff_Mesh = "WeaponStaff_Anubis_Mesh"
+		},
+		AddOutgoingDamageModifiers =
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			ExMultiplier = { BaseValue = 1.1, SourceIsMultiplier = true},
+			ReportValues = 
+			{
+				ReportedDamage = "ExMultiplier",
+			}
+		},
+		WeaponSpeedMultiplier =
+		{
+			WeaponNames = game.WeaponSets.HeroAllWeaponsAndSprint,
+			Value =
+			{
+				BaseValue = 0.9,
+				SourceIsMultiplier = true,
+			},
+			ReportValues = { ReportedWeaponMultiplier = "Value" }
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "SetupAnubisAnimationSwaps",
+		},
+		OnExpire =
+		{
+			FunctionName = "EndAnubisAnimationSwaps"
+		},
+		WeaponDataOverride =
+		{
+			WeaponStaffBall =
+			{
+				FireScreenshake = { },
+				HitScreenshake = { Distance = 6, Speed = 300, FalloffSpeed = 0, Duration = 0.34, Angle = 90, DistanceThreshold = 200 },
+				RumbleDistanceThreshold = 480,
+				HitRumbleParameters =
+				{
+					{ ScreenPreWait = 0.02, LeftFraction = 0.125, Duration = 0.15 },
+				},
+
+				CompleteObjectivesOnNonStagedFire = { "WeaponStaffBall_Anubis" },
+				
+				ExParameters = 
+				{
+					HitScreenshake = { Distance = 6, Speed = 1000, Duration = 0.35, FalloffSpeed = 3000 },
+					HitRumbleParameters =
+					{
+						RumbleDistanceThreshold = 480,
+						{ ScreenPreWait = 0.06, Fraction = 0.21, Duration = 0.21 },
+					},
+				},
+				ChargeWeaponStages = 
+				{
+					{ 
+						ManaCost = 10, 
+						Wait = 0.85,
+						WeaponProperties =
+						{
+							Projectile = "ProjectileStaffBallCharged",
+							AdditionalProjectileWaveChance = 0,
+							Cooldown = 0.31,
+							ClipRegenInterval = 0,
+							FireGraphic = "Melinoe_Staff_SpecialEx1_Fire",
+							SelfVelocity = 0,
+						},
+						ProjectileProperties =
+						{
+							DamageRadius = 435,
+							Damage = 110,
+						},
+						ApplyEffects = { "Special1DisableMoveHold", },
+						FxOnStart = "StaffBoltCharge", 
+						ChannelSlowEventOnStart = true,
+
+					},
+				},
+				Sounds =
+				{
+					ChargeSounds =
+					{
+						-- { Name = "/VO/MelinoeEmotes/EmoteCharging" },
+						{
+							Name = "/SFX/Player Sounds/MelMagicalChargeLoop",
+							StoppedBy = { "ChargeCancel", "Fired" }
+						},
+					},
+					ChargeStageSounds =
+					{
+						{ Name = "/VO/MelinoeEmotes/EmoteCharging",
+							StoppedBy = { "ChargeCancel", "Fired", "ChargeStage" }
+						},
+						{
+							Name = "/SFX/Player Sounds/ZagreusWeaponChargeup",
+							StoppedBy = { "ChargeCancel", "Fired", }
+						}
+					},
+					FireSounds =
+					{
+						PerfectChargeSounds =
+						{
+							{ Name = "/Leftovers/SFX/AuraPerfectThrow" },
+						},
+						{ Name = "/VO/MelinoeEmotes/EmoteLaunchingSuit" },
+					},
+					FireStageSounds = 
+					{
+						{ Name = "/VO/MelinoeEmotes/AnubisEmoteSpecial" },
+						{ Name = "/Leftovers/SFX/AuraThrowSmall" },
+					},
+					-- ImpactSounds handled in ProjectileData
+				},
+
+			},
+		},
+		ManaCostModifiers =
+		{
+			WeaponNames = game.WeaponSets.HeroSecondaryWeapons,
+			ExWeapons = true,
+			ManaCostAdd = 20,
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponName = "WeaponStaffBall",
+				ProjectileName = "ProjectileStaffBallCharged",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "StaffBallProjectileCharged_Anubis",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ProjectileName = "ProjectileStaffBall",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "StaffBallProjectileIn_Anubis",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ProjectileName = "ProjectileStaffBallCharged",
+				ProjectileProperty = "StartFx",
+				ChangeValue = "StaffProjectileFireFx3_Anubis",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ProjectileName = "ProjectileStaffBallCharged",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "RadialNovaPentagramCharged_Anubis",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ExcludeLinked = true,
+				WeaponProperties =
+				{
+					ChargeStartAnimation = "Melinoe_Staff_Anubis_Special1_Start",
+					FireGraphic = "Melinoe_Staff_Anubis_Special1_Fire",
+					ChargeCancelGraphic = "Melinoe_Staff_Anubis_Special1_End",
+					SelfVelocity = 0,
+					Cooldown = 0.33,
+					ChargeTime = 0.1,
+					ClipRegenInterval = 0.32,
+				},
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ExcludeLinked = true,
+				ProjectileName = "ProjectileStaffBall",
+				ProjectileProperties = 
+				{
+					UnlimitedUnitPenetration = false,
+					Damage = 20,
+				}
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ExcludeLinked = true,
+				EffectName = "Special1Disable",
+				EffectProperty = "Duration",
+				ChangeValue = 7/60,
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ExcludeLinked = true,
+				EffectName = "Special1DisableCancellable",
+				EffectProperty = "Duration",
+				ChangeValue = 12/60,
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ExcludeLinked = true,
+				EffectName = "Special1DisableMoveHold",
+				EffectProperty = "Duration",
+				ChangeValue = 23/60,
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				EffectName = "Special1AspectTriggerLock",
+				EffectProperty = "Active",
+				ChangeValue = true,
+				ExcludeLinked = true,
+			},
+			{
+				WeaponName = "WeaponStaffBall",
+				ProjectileName = "ProjectileStaffBall",
+				EffectName = "StaffAspectStun",
+				EffectProperty = "Active",
+				ChangeValue = true,
+				ExcludeLinked = true,
+			},
+		},
+		OnEnemyDamagedAction =
+		{
+			ValidWeapons = {"WeaponStaffBall",},
+			FirstHitOnly = true,
+			FunctionName = "CheckStaffProjectilePull",
+			Args =
+			{
+				Radius = 500,
+				RadiusEx = 900,
+				ScaleY = 0.55,
+				PlayerDistance = 400,
+				PlayerDistanceEx = 550,
+				DeadZoneRadius = 10,			-- Radius within which the pull has no effect
+				DistanceMultiplier = 1.7,		-- How strong the pull is relative to distance
+				PullVfx = "AnubisVacuumFxFront_Base",
+				ExPullVfx = "AnubisExVacuumFxFront_Base",
+				TraitPullVfxOverride  =
+				{
+					AphroditeSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Aphrodite",
+						ExPullVfx = "AnubisExVacuumFxFront_Aphrodite",	
+					},
+					ApolloSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Apollo",
+						ExPullVfx = "AnubisExVacuumFxFront_Apollo",	
+					},
+					DemeterSpecialBoon = {
+
+						PullVfx = "AnubisVacuumFxFront_Demeter",
+						ExPullVfx = "AnubisExVacuumFxFront_Demeter",	
+					} ,
+					HephaestusSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Hephaestus",
+						ExPullVfx = "AnubisExVacuumFxFront_Hephaestus",	
+					},
+					HestiaSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Hestia",
+						ExPullVfx = "AnubisExVacuumFxFront_Hestia",	
+					},
+					HeraSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Hera",
+						ExPullVfx = "AnubisExVacuumFxFront_Hera",	
+					},
+					PoseidonSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Poseidon",
+						ExPullVfx = "AnubisExVacuumFxFront_Poseidon",
+					},
+					ZeusSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Zeus",
+						ExPullVfx = "AnubisExVacuumFxFront_Zeus",	
+					},
+					AresSpecialBoon = 
+					{
+						PullVfx = "AnubisVacuumFxFront_Ares",
+						ExPullVfx = "AnubisExVacuumFxFront_Ares",	
+					},
+				},
+			}
+		},
+		EncounterEndFunctionName = "EndEncounterShadeDissipate",
+		EncounterEndFunctionArgs =
+		{
+			Name = "ShadeMercAspect",
+			SmileChance = 0.05,
+		},
+		OnEnemyDeathFunction =
+		{
+			Name = "CreateShadeMerc",
+			FunctionArgs =
+			{
+				MaxCount = 8,
+				Chance = 1.0,
+				Name = "ShadeMercAspect",
+				AngleMin = 190,
+				AngleMax = 350,
+			}
+		},
+		OnProjectileDeathFunction =
+		{
+			Name = "CleanupShadeMerc",
+			ValidProjectiles = {"ShadeMercAspectSpiritball"},
+		},
+		StatLines =
+		{
+			"RaiseDeadOmegaBuffStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedDamage",
+				ExtractAs = "TooltipSpeed",
+				Format = "PercentDelta",
+			},
+		},
+		FlavorText = "StaffRaiseDeadAspect_FlavorText",
+	}
 }
 
 game.OverwriteTableKeys( game.TraitData, mod.AspectTraitData )
