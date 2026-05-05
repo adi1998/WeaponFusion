@@ -73,3 +73,52 @@ modutil.mod.Path.Context.Wrap.Static("CleanupShadeMerc", function ( triggerArgs 
 		return base(traitName)
 	end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("CheckPerfectAxeCrit", function ( victim, args, triggerArgs )
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "AxePerfectCriticalAspect" and game.HeroHasTrait(traitName .. "_Secondary") then
+			return base(traitName .. "_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("ResetPerfectAxeCrit", function ( attacker, args, triggerArgs )
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "AxePerfectCriticalAspect" and game.HeroHasTrait(traitName .. "_Secondary") then
+			return base(traitName .. "_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("EmptySuitCharge", function ( weaponName, stageReached )
+	local orig_HeroHasTrait = modutil.mod.Path.Get("HeroHasTrait")
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "SuitMarkCritAspect")
+	end)
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "SuitMarkCritAspect" and orig_HeroHasTrait(traitName .. "_Secondary") then
+			return base(traitName .. "_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("PoseidonIntermittentClearCast", function ( weaponData, functionArgs, triggerArgs )
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "SuitMarkCritAspect")
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("HoldSprintUntilInput", function ()
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "SuitMarkCritAspect")
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("WeaponSuitAmmoTransform", function (triggerArgs, weaponDataArgs)
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "SuitMarkCritAspect")
+	end)
+end)

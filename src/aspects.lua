@@ -1640,6 +1640,307 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "StaffRaiseDeadAspect_FlavorText",
+	},
+
+	AxePerfectCriticalAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1.0,
+			},
+			Rare =
+			{
+				Multiplier = 1.25,
+			},
+			Epic =
+			{
+				Multiplier = 1.5,
+			},
+			Heroic =
+			{
+				Multiplier = 1.75,
+			},
+			Legendary =
+			{
+				Multiplier = 2.0,
+			},
+			Perfect =
+			{
+				Multiplier = 2.75,
+			},
+		},
+		Icon = "Hammer_Axe_42",
+		ReplacementGrannyModels =
+		{
+			Melinoe_Axe_Mesh1 = "Melinoe_Axe_Thanatos_Mesh"
+		},
+		AddOutgoingCritModifiers =
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			IsEx = true,
+			HeroTraitValue = "PerfectCritChance",
+		},
+		PerfectCritChance = 0,
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "SetupPerfectCritUI",
+		},
+		OnExpire =
+		{
+			FunctionName = _PLUGIN.guid .. "." .. "StopThanatosMaxMortalityFx",
+		},
+		OnEnemyDamagedAction =
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			FunctionName = "CheckPerfectAxeCrit",
+			FirstHitOnly = true,
+			Args =
+			{
+				Increment = 0.02,
+				MaxCrit = 0.20,
+				ReportValues =
+				{
+					ReportedIncrement = "Increment",
+					ReportedMaxCrit = "MaxCrit",
+				}
+			}
+		},
+		OnSelfDamagedFunction =
+		{
+			Name = "ResetPerfectAxeCrit",
+			NotDamagingRetaliate = true,
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponNames = game.WeaponSets.HeroPrimaryWeapons,
+				BaseValue = 0.8,
+				SourceIsMultiplier = true,
+				SpeedPropertyChanges = true,
+				ReportValues = { ReportedSpeed = "ChangeValue" }
+			},
+		},
+		StatLines =
+		{
+			"AttackSpeedStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedIncrement",
+				ExtractAs = "TooltipIncrement",
+				Format = "Percent",
+				DecimalPlaces = 1,
+				SkipAutoExtract = true
+			},
+			{
+				Key = "ReportedMaxCrit",
+				ExtractAs = "TooltipMax",
+				Format = "LuckModifiedPercent",
+				SkipAutoExtract = true
+			},
+			{
+				Key = "ReportedSpeed",
+				ExtractAs = "TooltipSpeedIncrease",
+				Format = "NegativePercentDelta",
+			},
+		},
+		FlavorText = "AxePerfectCriticalAspect_FlavorText",
+	},
+
+	SuitMarkCritAspect_Secondary =
+	{
+		InheritFrom = { "BaseTrait" },
+		PreEquipWeapons = { "WeaponSprintEx" },
+		Icon = "Hammer_Suit_03",
+		ReplacementGrannyModels =
+		{
+			WeaponSuitR_Base_Mesh = "WeaponSuitR_Nyx_Mesh",
+			WeaponSuitL_Base_Mesh = "WeaponSuitL_Nyx_Mesh",
+			WeaponSuitB_Base_Mesh = "WeaponSuitB_Nyx_Mesh",
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 2,
+			},
+			Epic =
+			{
+				Multiplier = 3,
+			},
+			Heroic =
+			{
+				Multiplier = 4,
+			},
+			Legendary =
+			{
+				Multiplier = 5,
+			},
+			Perfect =
+			{
+				Multiplier = 7,
+			},
+
+		},
+		WeaponDataOverride =
+		{
+			WeaponSprint =
+			{
+				SkipManaIndicatorIfOutOfMana = true,
+				OnChargeFunctionNames = { "DoWeaponCharge", },
+				ChargeWeaponData =
+				{
+					OnStageReachedFunctionName = "SprintChargeStage",
+					EmptyChargeFunctionName = "EmptySprintCharge",
+				},
+				ShowManaIndicator = true,
+				ChargeWeaponStages =
+				{
+					{
+						ManaCost = 30,
+						SkipManaSpendOnFire = true,
+						Wait = 1.0,
+						WeaponName = "WeaponSprintEx",
+						EffectName = "NyxBlastReady",
+						ReportValues =
+						{
+							ReportedChargeDuration = "Wait",
+							ReportedCost = "ManaCost",
+						},
+					},
+				},
+			},
+		},
+		OnWeaponFiredFunctions =
+		{
+			ValidWeapons = { "WeaponSprint"},
+			FunctionName = "CheckSprintCollision",
+			FunctionArgs =
+			{
+				Range = 165,
+			}
+		},
+		SprintStrikeDamageMultiplier = 1,
+		OnProjectileDeathFunction =
+		{
+			Name = "CheckProjectileSpawn",
+			ValidProjectiles = { "ProjectileSuitRangedGuided" },
+			Args =
+			{
+				UseOriginalProjectileForPropertyChanges = true,
+				IgnoreImpactId = true,
+				MatchProjectileName = true,
+				SpawnCount = 2,
+				SpawnArc = 60,
+				Alpha = 0.3,
+				RetargetChance = 0,	-- Chance split missiles can hit the same target
+				ProjectileOffsets =
+				{
+					-- ProjectileSuit = 200,
+					-- ProjectileSuit2 = 250,
+					--ProjectileSuitCharged = 300,
+				},
+				ProjectileVfx = 
+				{
+					ProjectileSuitRangedGuided = "NyxMissileSpawner",
+					--ProjectileSuitRangedCharged = "NyxMissileSpawner",
+				},
+				ProjectileNameMap = 
+				{
+					ProjectileSuitRangedGuided = "ProjectileSuitRangedGuidedSplit",
+					--ProjectileSuitRangedCharged = "ProjectileSuitRangedChargedSplit",
+					-- ProjectileSuit = "ProjectileSuitSplit",
+					-- ProjectileSuit2 = "ProjectileSuitSplit2",
+					--ProjectileSuitCharged = "ProjectileSuitChargedSplit",
+				},
+				DamageMultiplier = { BaseValue = 0.15 },
+				ReportValues =
+				{
+					ReportedCount = "SpawnCount",
+					ReportedMultiplier = "DamageMultiplier"
+				}
+			}
+		},
+		OnEnemyDamagedAction =
+		{
+			FunctionName = "SplitSelfBuff",
+			ValidProjectiles = { "NyxSprintBlast" },
+			Args =
+			{
+				EffectName = "NyxHitBuff",
+				Duration = 5,
+				ReportValues =
+				{
+					ReportedDuration = "Duration",
+				}
+			},
+		},
+		OnProjectileCreationFunction =
+		{
+			ValidProjectiles = {"ProjectileSuitRangedUnguided", --[["ProjectileSuit", "ProjectileSuit2",]] --[["ProjectileSuitCharged", "ProjectileSuitRangedChargedUnguided"]] },
+			Name = "CheckSplitValidity",
+			Args =
+			{
+				RequiredEffect = "NyxHitBuff",
+			},
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "SetupSuitUI",
+		},
+		StatLines =
+		{
+			"SplitDamageStatDisplay",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedMultiplier",
+				ExtractAs = "SplitDamage",
+				Format = "Percent",
+				HideSigns = true,
+			},
+			{
+				Key = "ReportedCount",
+				ExtractAs = "AspectSplitCount",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedChargeDuration",
+				ExtractAs = "ChargeDuration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedCost",
+				ExtractAs = "ManaCost",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedDuration",
+				ExtractAs = "Duration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "SprintStrikeDamageMultiplier",
+				ExtractAs = "Damage",
+				Format = "MultiplyByBase",
+				BaseType = "Projectile",
+				BaseName = "NyxSprintBlast",
+				BaseProperty = "Damage",
+				SkipAutoExtract = true,
+			},
+		},
+		FlavorText = "SuitMarkCritAspect_FlavorText",
 	}
 }
 
@@ -1671,10 +1972,26 @@ function mod.CheckFrenzyCount(victim, functionArgs, triggerArgs)
 	end
 end
 
+modutil.mod.Path.Wrap("SetupPerfectCritUI", function (base)
+	if game.SessionMapState.WeaponsDisabled then
+		return
+	end
+	if game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") then
+		game.wait(0.05)
+		local trait = game.GetHeroTrait("AxePerfectCriticalAspect_Secondary")
+    	local currentCrit = game.round(trait.PerfectCritChance * 100, 1)
+    	local maxCrit = trait.ReportedMaxCrit * 100
+    	if currentCrit == maxCrit then
+    		game.CreateAnimation({ Name = "ThanatosMaxMortalityFx", DestinationId = game.CurrentRun.Hero.ObjectId })
+    	end
+	end
+	return base()
+end)
+
 modutil.mod.Path.Wrap("ShowAxeUI", function (base)
 	base()
 
-	if not game.HeroHasTrait("AxeRallyAspect_Secondary") or not game.ShowingCombatUI then
+	if (not game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") and not game.HeroHasTrait("AxeRallyAspect_Secondary")) or not game.ShowingCombatUI then
 		return
 	end
 
@@ -1682,8 +1999,8 @@ modutil.mod.Path.Wrap("ShowAxeUI", function (base)
 		return
 	end
 
-	game.ScreenAnchors.AxeUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
-	game.ScreenAnchors.AxeUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
+	game.ScreenAnchors.AxeUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
+	game.ScreenAnchors.AxeUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
 
 	if game.HeroHasTrait("AxeRallyAspect_Secondary") then
 		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount })
@@ -1701,13 +2018,35 @@ modutil.mod.Path.Wrap("ShowAxeUI", function (base)
 		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
 		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = 0, Fraction = 0 })
 		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+	elseif game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") then
+		local trait = game.GetHeroTrait("AxePerfectCriticalAspect_Secondary")
+		local currentCrit = game.round(trait.PerfectCritChance * 100 * game.GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true } ))
+		local maxCrit = game.round(trait.ReportedMaxCrit * 100 * game.GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true } ))
+		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount })
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = currentCrit/ maxCrit, Instant = true })
+
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = 0, Fraction = 0 })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = 0, Fraction = 0 })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+		game.CreateTextBox({
+			Id = game.ScreenAnchors.AxeUI,
+			OffsetX = 26, OffsetY = -2,
+			Text = "UI_CritText",
+			TextSymbolScale = 0.88,
+			Font = "NumericP22UndergroundSCHeavy", FontSize = 24,
+			ShadowRed = 0.1, ShadowBlue = 0.1, ShadowGreen = 0.1,
+			OutlineColor = {0.113, 0.113, 0.113, 1}, OutlineThickness = 1,
+			ShadowAlpha = 1.0, ShadowBlur = 0, ShadowOffsetY = 2, ShadowOffsetX = 0,
+			Justification = "Left",LuaKey = "TempTextData", LuaValue = { Amount = currentCrit }
+		})
 	end
 end)
 
 modutil.mod.Path.Wrap("ShowSuitUI", function (base, args)
 	base(args)
 	args = args or {}
-	if not game.HeroHasTrait("SuitComboAspect_Secondary") or not game.ShowingCombatUI then
+	if (not game.HeroHasTrait("SuitMarkCritAspect_Secondary") and not game.HeroHasTrait("SuitComboAspect_Secondary")) or not game.ShowingCombatUI then
 		return
 	end
 	if game.ScreenAnchors.SuitUI ~= nil then
@@ -1715,8 +2054,8 @@ modutil.mod.Path.Wrap("ShowSuitUI", function (base, args)
 		return
 	end
 
-	game.ScreenAnchors.SuitUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
-	game.ScreenAnchors.SuitUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset - 50 })
+	game.ScreenAnchors.SuitUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
+	game.ScreenAnchors.SuitUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
 	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount })
 	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = 0, Instant = true })
 	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI, Duration = 0, Fraction = 0 })
@@ -1837,4 +2176,8 @@ function mod.CheckSuitComboAttackBuff(triggerArgs, functionArgs)
 	game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] or {}
 	table.insert(game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"], triggerArgs.ProjectileId)
 	game.notifyExistingWaiters(_PLUGIN.guid .. "ProjectileCreation")
+end
+
+function mod.StopThanatosMaxMortalityFx()
+	game.StopAnimation({ Name = "ThanatosMaxMortalityFx", DestinationId = game.CurrentRun.Hero.ObjectId})
 end

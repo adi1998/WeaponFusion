@@ -315,9 +315,11 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    if primarySource ~= secondarySource and secondarySource == "WeaponStaffSwing" then
+    print(primarySource, secondarySource, secondaryAspect)
+
+    if primarySource ~= secondarySource and mod.AspectTraitData[secondaryAspect] then
         for _, traitName in ipairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource]) do
-            game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = "StaffRaiseDeadAspect_Secondary"
+            game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = secondaryAspect
         end
     end
 
@@ -338,7 +340,7 @@ end
 UnfuseWeapons()
 
 if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary] then
-    FuseWeapon(config.last_primary, config.last_secondary)
+    FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
 end
 
 modutil.mod.Path.Wrap("SetupMap", function(base, ...)
