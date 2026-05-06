@@ -42,6 +42,21 @@ local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
     mod = modutil.mod.Mod.Register(_PLUGIN.guid)
+    function mod.dump(o, depth)
+        depth = depth or 0
+        if type(o) == 'table' then
+            local s = "\n" .. string.rep("\t", depth) .. '{\n'
+            for k,v in pairs(o) do
+                if type(k) ~= 'number' then k = '"'..k..'"' end
+                s = s .. string.rep("\t",(depth+1)) .. '['..k..'] = ' .. mod.dump(v, depth + 1) .. ',\n'
+            end
+            return s .. string.rep("\t", depth) .. '}'
+        elseif type(o) == "string" then
+            return "\"" .. o .. "\""
+        else
+            return tostring(o)
+        end
+    end
     import 'sjson.lua'
     import 'aspects.lua'
     import 'ready.lua'
@@ -54,6 +69,7 @@ local function on_reload()
     if config.enabled == false then return end
 
     import 'imgui.lua'
+    import 'screen.lua'
     import 'reload.lua'
 end
 

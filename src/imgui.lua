@@ -21,14 +21,6 @@ local WeaponNameDisplayNameMap = {
     ["WeaponSuit"] = "Xinth",
 }
 
-local WeaponDisplayOrder = {
-    "WeaponStaffSwing",
-    "WeaponDagger",
-    "WeaponTorch",
-    "WeaponAxe",
-    "WeaponSuit",
-}
-
 local DisplayNameWeaponNameMap = {}
 
 for key, value in pairs(WeaponNameDisplayNameMap) do

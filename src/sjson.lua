@@ -88,3 +88,35 @@ sjson.hook(traitTextEnFile, function (data)
     end
     return data
 end)
+
+WeaponDisplayOrder = {
+    "WeaponStaffSwing",
+    "WeaponDagger",
+    "WeaponTorch",
+    "WeaponAxe",
+    "WeaponSuit",
+}
+
+local weaponAnimationFile = rom.path.combine(rom.paths.Content, "Game\\Animations\\Model\\Weapon_Animation.sjson")
+
+local animList = {}
+for index, value in ipairs(WeaponDisplayOrder) do
+    table.insert(animList, game.WeaponData[value].UpgradeScreenKitAnimation)
+end
+
+sjson.hook(weaponAnimationFile, function (data)
+    local newData = {}
+    for index, value in ipairs(data.Animations) do
+        if game.Contains(animList, value.Name) then
+            local newEntry = game.DeepCopyTable(value)
+            newEntry.Name = newEntry.Name .. "_FusionScreen"
+            newEntry.ZWobbleSpeed = 0
+            newEntry.ZWobbleDistance = 0
+            table.insert(newData, newEntry)
+        end
+    end
+    for index, value in ipairs(newData) do
+        table.insert(data.Animations, value)
+    end
+    return data
+end)
