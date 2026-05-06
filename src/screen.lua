@@ -24,7 +24,8 @@ mod.FusionScreenData = {
     BlockPause = true,
     DefaultGroup = "Combat_Menu",
 
-    
+    StartingBoonIndex = 1,
+	NumBoonsPerPage = 1,
 
     ButtonSlotData =
 	{
@@ -253,6 +254,15 @@ function mod.OpenWeaponFusionScreen()
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData2"..weaponName].Id })
     end
+
+	screen.TraitList = {}
+
+	for _, aspectName in ipairs(WeaponMinorAspectData[config.secondary]) do
+		local rawTraitData = game.TraitData[aspectName]
+		local traitData = game.GetProcessedTraitData({ Unit = game.CurrentRun.Hero, TraitName = aspectName, Rarity = "Common", })
+		game.SetTraitTextData( traitData )
+		table.insert(screen.TraitList, traitData)
+	end
 
     screen.KeepOpen = true
 	screen.CanClose = true

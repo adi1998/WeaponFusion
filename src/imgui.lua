@@ -27,7 +27,7 @@ for key, value in pairs(WeaponNameDisplayNameMap) do
     DisplayNameWeaponNameMap[value] = key
 end
 
-local WeaponMinorAspectData = {}
+WeaponMinorAspectData = {}
 
 for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
     WeaponMinorAspectData[weaponName] = {"None"}
