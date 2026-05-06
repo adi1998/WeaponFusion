@@ -134,3 +134,47 @@ modutil.mod.Path.Context.Wrap.Static("RestockWorldItem", function ( replacedInde
 		return HeroHasTraitWrap(base, traitName, "SuitHexAspect")
 	end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("TraitUIActivateTraits", function ( args )
+	local orig_HeroHasTrait = modutil.mod.Path.Get("HeroHasTrait")
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
+	end)
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "DaggerBlockAspect" and orig_HeroHasTrait(traitName .. "_Secondary") then
+			return base(traitName .. "_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("UpdateDaggerUI", function ()
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "DaggerBlockAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("CheckDaggerCritCharges", function (weaponData, functionArgs, triggerArgs)
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "DaggerBlockAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+	end)
+end)
+
+-- print(mod.dump(ModUtil.Hades.Triggers.OnHit))
+
+-- modutil.mod.Context.Wrap.Static(ModUtil.Hades.Triggers.OnHit.CombatLogic[1].Call, function ()
+-- 	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+-- 		print("get", traitName)
+-- 		if traitName == "DaggerBlockAspect" then
+-- 			return base(traitName) or base(traitName.."_Secondary")
+-- 		end
+-- 	end)
+-- 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+-- 		print("has",traitName)
+-- 		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
+-- 	end)
+-- end )

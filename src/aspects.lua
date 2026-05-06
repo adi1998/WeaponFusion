@@ -2035,6 +2035,138 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "SuitHexAspect_FlavorText",
+	},
+
+	DaggerBlockAspect_Secondary =
+	{
+		InheritFrom = { "BaseTrait" },
+		Icon = "Hammer_Daggers_39",
+		ReplacementGrannyModels = 
+		{
+			WeaponDaggerA_Mesh = "WeaponDaggerA_Artemis_Mesh",
+			WeaponDaggerB_Mesh = "WeaponDaggerB_Artemis_Mesh"
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1.5
+			},
+			Epic =
+			{
+				Multiplier = 2.0
+			},
+			Heroic =
+			{
+				Multiplier = 2.5
+			},
+			Legendary =
+			{
+				Multiplier = 3.0
+			},
+			Perfect =
+			{
+				Multiplier = 4.5,
+			},
+		},
+		AddOutgoingCritModifiers =
+		{
+			ValidVolleyChance = 0.5,
+			ReportValues = { ReportedChance = "ValidVolleyChance"},
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "DaggerBlockSetup",
+		},
+		OnProjectileDeathFunction =
+		{
+			Name = "RemoveCritVolley",
+		},
+		OnWeaponChargeFunctions =
+		{
+			ValidWeapons = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+			FunctionName = "CheckDaggerBlock",
+			FunctionArgs =
+			{
+				Cooldown = 10,
+				CritCount = 9,
+				InvulnerableEffectName = "DaggerBlockInvincibubble",
+				InvulnerableDuration = 1,
+				Vfx = "ArtemisParryShield",
+				BackVfx = "ArtemisParryShieldBack",
+				ActivatedVfx = "DaggerBlockActiveFx",
+				ReportValues =
+				{
+					ReportedCooldown = "Cooldown",
+					ReportedHits = "CritCount",
+					ReportedDuration = "InvulnerableDuration",
+					ReportedSpeedIncrease = "ExAttackSpeed",
+				},
+			}
+		},
+		OnWeaponFiredFunctions =
+		{
+			ValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack","WeaponTransformSpecial", } ),
+			FunctionName = "CheckDaggerCritCharges",
+		},
+		WeaponSpeedMultiplier =
+		{
+			WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+			Value =
+			{
+				BaseValue = 0.80,
+				SourceIsMultiplier = true,
+			},
+			ReportValues = { ReportedSpeedIncrease = "Value" }
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+				BaseValue = 0.80,
+				SourceIsMultiplier = true,
+				SpeedPropertyChanges = true,
+			}
+		},
+		StatLines =
+		{
+			"EXAttackSpeedStatDisplay",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedSpeedIncrease",
+				ExtractAs = "SpeedIncrease",
+				Format = "NegativePercentDelta"
+			},
+			{
+				Key = "ReportedCooldown",
+				ExtractAs = "Cooldown",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedHits",
+				ExtractAs = "Duration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedDuration",
+				ExtractAs = "InvulnerableDuration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedChance",
+				ExtractAs = "CritChance",
+				SkipAutoExtract = true,
+				Format = "LuckModifiedPercent",
+			},
+		},
+		FlavorText = "DaggerBlockAspect_FlavorText",
 	}
 }
 
@@ -2275,3 +2407,120 @@ end
 function mod.StopThanatosMaxMortalityFx()
 	game.StopAnimation({ Name = "ThanatosMaxMortalityFx", DestinationId = game.CurrentRun.Hero.ObjectId})
 end
+
+modutil.mod.Path.Wrap("ShowDaggerUI", function (base, args)
+	base(args)
+
+	if game.HeroHasTrait("DaggerBlockAspect") then
+		return
+	end
+
+	args = args or {}
+	if not game.ShowingCombatUI  and not args.Force then
+		return
+	end
+	if not game.HeroHasTrait("DaggerBlockAspect_Secondary") then
+		return
+	end
+
+	if game.ScreenAnchors.DaggerUI ~= nil then
+		game.SetAlpha({ Ids = { game.ScreenAnchors.DaggerUI, game.ScreenAnchors.DaggerUIChargeAmount }, Duration = args.FadeDuration or game.HUDScreen.FadeInDuration, Fraction = args.Fraction or game.ConfigOptionCache.HUDOpacity })
+		return
+	end
+	if game.ScreenAnchors.DaggerUIChargeAmount then
+		game.Destroy({ Id = game.ScreenAnchors.DaggerUIChargeAmount })
+	end
+
+	game.ScreenAnchors.DaggerUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150 , Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+	game.ScreenAnchors.DaggerUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+
+	local trait = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+	local totalTime = trait.OnWeaponChargeFunctions.FunctionArgs.Cooldown
+
+	if not game.CheckCooldownNoTrigger("DaggerBlockShield", totalTime) and game.SessionState.GlobalCooldowns.DaggerBlockShield then
+		local remainingTime = totalTime - ( game._worldTime - game.SessionState.GlobalCooldowns.DaggerBlockShield)			
+		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, PlaySpeed = game.ScreenData.HUD.ReloadTimerFrames / totalTime })
+		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, StartFrameFraction = 1 - remainingTime / totalTime })
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, Fraction = 1 })
+	else
+		game.SetAnimation({ Name = "StaffReloadTimerReady",SuppressSounds = true, DestinationId = game.ScreenAnchors.DaggerUI })
+		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount})
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, Fraction = 1, Instant = true })
+	end
+	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUI, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUIChargeAmount, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+end)
+
+game.OnWeaponChargeCanceled{ "WeaponAxeSpin",
+	function( triggerArgs )
+		if game.MapState.DaggerBlockShieldActive then
+			game.MapState.DaggerBlockShieldActive = false
+			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
+			game.SetPlayerInterruptible("DaggerBlock")
+			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+			if chargeFunctionArgs.Vfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+			if chargeFunctionArgs.BackVfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+		end
+	end
+}
+
+game.OnWeaponChargeCanceled{ "WeaponTorch",
+	function( triggerArgs )
+		if game.MapState.DaggerBlockShieldActive then
+			game.MapState.DaggerBlockShieldActive = false
+			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
+			game.SetPlayerInterruptible("DaggerBlock")
+			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+			if chargeFunctionArgs.Vfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+			if chargeFunctionArgs.BackVfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+		end
+	end
+}
+
+game.OnWeaponChargeCanceled{ "WeaponStaffSwing5",
+	function( triggerArgs )
+		if game.MapState.DaggerBlockShieldActive then
+			game.MapState.DaggerBlockShieldActive = false
+			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
+			game.SetPlayerInterruptible("DaggerBlock")
+			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+			if chargeFunctionArgs.Vfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+			if chargeFunctionArgs.BackVfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+		end
+	end
+}
+
+game.OnWeaponChargeCanceled{ "WeaponSuitCharged",
+	function( triggerArgs )
+		if game.MapState.DaggerBlockShieldActive then
+			game.MapState.DaggerBlockShieldActive = false
+			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
+			game.SetPlayerInterruptible("DaggerBlock")
+			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+			if chargeFunctionArgs.Vfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+			if chargeFunctionArgs.BackVfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+		end
+	end
+}

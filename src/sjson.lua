@@ -73,6 +73,12 @@ local traitTextList = {
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Selene",
         Description = "You start with {$TraitData.SpellMoonBeamTrait.Name}, a hidden {$Keywords.Spell} that strikes multiple foes and applies {$Keywords.MoonBeamVulnerability}.",
+    },
+    {
+        Id = "DaggerBlockAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Artemis",
+        Description = "While you {$Keywords.Hold} your {$Keywords.AttackEX}, you occasionally {$Keywords.Block}, then {$Keywords.DaggerBlockBuff} right after."
     }
 }
 
