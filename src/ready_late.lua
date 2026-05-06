@@ -164,17 +164,13 @@ modutil.mod.Path.Context.Wrap.Static("CheckDaggerCritCharges", function (weaponD
 	end)
 end)
 
--- print(mod.dump(ModUtil.Hades.Triggers.OnHit))
-
--- modutil.mod.Context.Wrap.Static(ModUtil.Hades.Triggers.OnHit.CombatLogic[1].Call, function ()
--- 	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
--- 		print("get", traitName)
--- 		if traitName == "DaggerBlockAspect" then
--- 			return base(traitName) or base(traitName.."_Secondary")
--- 		end
--- 	end)
--- 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
--- 		print("has",traitName)
--- 		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
--- 	end)
--- end )
+modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1.Call", function ()
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "DaggerBlockAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+	end)
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
+	end)
+end )

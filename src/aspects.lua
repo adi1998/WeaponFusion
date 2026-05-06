@@ -2116,7 +2116,7 @@ mod.AspectTraitData = {
 		},
 		WeaponSpeedMultiplier =
 		{
-			WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+			WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
 			Value =
 			{
 				BaseValue = 0.80,
@@ -2127,7 +2127,7 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
-				WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+				WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
 				BaseValue = 0.80,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
