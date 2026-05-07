@@ -16,7 +16,10 @@ Use the Imgui menu (default toggle keybind: INSERT) in the Crossroads training g
 
 ![Imgui menu](images/imgui.png)
 
-After fusion (re)equip the primary weapon/aspect in the training grounds to get the fused weapon. If it feels like the fusion didn't apply properly try starting a run/reloading the room.
+After fusion (re)equip the primary weapon/aspect in the training grounds to get the fused weapon. 
+
+If it feels like the fusion didn't apply properly try starting a run/reloading the room.
+
 If it still seems bugged would really appreciate a bug report :).
 
 ## Current Limitaions / Future plans
