@@ -28,12 +28,12 @@ If it still seems bugged would really appreciate a bug report :).
 
 ## Current Limitaions / Future plans
 
-- No Argent Skull(yet)
-- No ingame UI(yet)
-- No upgrades for the minor/secondary aspects(yet)
-- Some aspects which didn't make sense to have just its special didn't make it in(eos, moros, etc)
-- Momus is currently unavailable for the secondary weapon, having it as primary does properly work for every other omega special.
-- Eos currently dosen't have every weapon's special being replicated, the charged attack still works if fused
+- No Argent Skull (yet)
+- No ingame UI (yet)
+- No upgrades for the minor/secondary aspects (yet)
+- Some aspects which didn't make sense to have just its special didn't make it in (Eos, Moros, etc)
+- [wIP] Momus is currently unavailable for the secondary weapon, having it as primary does properly work for every other omega special
+- [WIP] Eos currently dosen't have every weapon's special being replicated, the charged attack still works if fused
 
 ## Issues and feedback
 
