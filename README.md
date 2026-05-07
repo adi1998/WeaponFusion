@@ -12,9 +12,11 @@ There's almost no way I could have tested every combo so it is recommended to ba
 
 ## Usage
 
-Use the Imgui menu (default toggle keybind: INSERT) in the Crossroads training grounds.
+Use the Imgui menu (default toggle keybind: INSERT).
 
 If the Imgui window seem unresponsive try disabling V-sync and any external frame limiters if enabled.
+
+Fusion can only be performed in the Crossroads training grounds.
 
 ![Imgui menu](images/imgui.png)
 
@@ -28,10 +30,10 @@ If it still seems bugged would really appreciate a bug report :).
 
 - No Argent Skull(yet)
 - No ingame UI(yet)
-- No upgrades for the minor aspects(yet)
-- Some aspects which didn't make sense to have just its special didn't make it in
-- Some aspects like Momus are currently unavailable for the secondary weapon
-- Eos currently don't have every weapon's special being replicated, the charged attack still works
+- No upgrades for the minor/secondary aspects(yet)
+- Some aspects which didn't make sense to have just its special didn't make it in(eos, moros, etc)
+- Momus is currently unavailable for the secondary weapon, having it as primary does properly work for every other omega special.
+- Eos currently dosen't have every weapon's special being replicated, the charged attack still works if fused
 
 ## Issues and feedback
 
