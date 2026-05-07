@@ -42,17 +42,31 @@ print(mod.dump(mod.AspectDisplayNameMap))
 print(mod.dump(WeaponMinorAspectData))
 function DrawMenu()
     if game.CurrentHubRoom then
-        rom.ImGui.Text("Try to not have either of the\ntwo weapons equipped while fusing.")
-        rom.ImGui.Text("If the weapons feel like they\nhaven't been swapped properly try\nexiting and entering the room or starting a new run")
+        rom.ImGui.Text("Try to not have either of the two       \nweapons equipped while fusing.")
+        rom.ImGui.Text("If the weapons feel like they haven'       \nbeen swapped properly try exiting and         \nentering the room or starting a new run")
 
         rom.ImGui.Separator()
         rom.ImGui.Text("Currently fused weapon")
-        rom.ImGui.Text("Primary: " .. WeaponNameDisplayNameMap[config.last_primary])
-        rom.ImGui.Text("Secondary: " .. WeaponNameDisplayNameMap[config.last_secondary])
-        rom.ImGui.Text("Minor Asepct: " .. (mod.AspectDisplayNameMap[config.last_aspect] or "None"))
+
+        local width = rom.ImGui.CalcTextSize("Secondary: ") + 60
+
+        rom.ImGui.Text("Primary"); rom.ImGui.SameLine()
+        rom.ImGui.SetCursorPosX(width)
+        rom.ImGui.Text(WeaponNameDisplayNameMap[config.last_primary])
+
+        rom.ImGui.Text("Secondary"); rom.ImGui.SameLine()
+        rom.ImGui.SetCursorPosX(width)
+        rom.ImGui.Text(WeaponNameDisplayNameMap[config.last_secondary])
+
+        rom.ImGui.Text("Second Aspect"); rom.ImGui.SameLine()
+        rom.ImGui.SetCursorPosX(width)
+        rom.ImGui.Text((mod.AspectDisplayNameMap[config.last_aspect] or "None"))
 
         rom.ImGui.Separator()
+        rom.ImGui.Text("Select Weapons to fuse")
+
         rom.ImGui.Text("Primary"); rom.ImGui.SameLine()
+        -- rom.ImGui.SetCursorPosX(width)
 
         if rom.ImGui.BeginCombo("###primary", WeaponNameDisplayNameMap[config.primary]) then
             for _, weaponName in ipairs(WeaponDisplayOrder) do
@@ -68,6 +82,8 @@ function DrawMenu()
         end
 
         rom.ImGui.Text("Secondary"); rom.ImGui.SameLine()
+        -- rom.ImGui.SetCursorPosX(width)
+
         if rom.ImGui.BeginCombo("###secondary", WeaponNameDisplayNameMap[config.secondary]) then
             for _, weaponName in ipairs(WeaponDisplayOrder) do
                 local displayName = WeaponNameDisplayNameMap[weaponName]
@@ -82,7 +98,9 @@ function DrawMenu()
             rom.ImGui.EndCombo()
         end
 
-        rom.ImGui.Text("Minor Aspect"); rom.ImGui.SameLine()
+        rom.ImGui.Text("Second Aspect"); rom.ImGui.SameLine()
+        -- rom.ImGui.SetCursorPosX(width)
+
         if rom.ImGui.BeginCombo("###aspect", mod.AspectDisplayNameMap[config.aspect] or "None") then
             for _, aspectName in ipairs(WeaponMinorAspectData[config.secondary]) do
                 local displayName = mod.AspectDisplayNameMap[aspectName] or "None"

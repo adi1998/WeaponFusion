@@ -1,6 +1,6 @@
 ## Weapon Fusion
 
-Hades II mod allowing you to fuse any* 2 weapons and their aspects into one. 
+Hades II mod allowing you to fuse any* 2 weapons and their aspects. Takes Attacks and Specials from different weapons and combines them into a single weapon.
 
 Gameplay example of what it looks like in action [Weapon fusion test (Moros plus Xinth)](https://www.youtube.com/watch?v=6Wv3l-xk-m4).
 
@@ -13,6 +13,8 @@ There's almost no way I could have tested every combo so it is recommended to ba
 ## Usage
 
 Use the Imgui menu (default toggle keybind: INSERT) in the Crossroads training grounds.
+
+If the Imgui window seem unresponsive try disabling V-sync and any external frame limiters if enabled.
 
 ![Imgui menu](images/imgui.png)
 
