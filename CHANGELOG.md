@@ -2,13 +2,15 @@
 
 ## [Unreleased]
 
+- Fix charon missing it's cast damage mulitplier
+
 ## [0.1.0] - 2026-05-07
+
+- First version of the mod!
 
 ## [0.0.2] - 2026-05-07
 
 ## [0.0.1] - 2026-05-07
-
-- First version of the mod!
 
 [unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.1.0...HEAD
 [0.1.0]: https://github.com/adi1998/WeaponFusion/compare/0.0.2...0.1.0
