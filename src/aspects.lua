@@ -36,6 +36,18 @@ mod.AspectTraitData = {
 				Multiplier = 4.5,
 			}
 		},
+		AddOutgoingDamageModifiers =
+		{
+			ValidProjectileIdMultiplier =
+			{
+				BaseValue = 1.1,
+				SourceIsMultiplier = true,
+			},
+			ReportValues =
+			{
+				ReportedDamageBonus = "ValidProjectileIdMultiplier"
+			},
+		},
         OnProjectileCreationFunction =
 		{
 			ValidProjectiles = { "ProjectileAxeBlock2" },
@@ -54,6 +66,10 @@ mod.AspectTraitData = {
 				ExtractAs = "TooltipDamage",
 				Format = "PercentDelta",
 			},
+		},
+		StatLines =
+		{
+			"AxeArmStatDisplay1",
 		},
 		FlavorText = "AxeArmCastAspect_FlavorText",
     },
