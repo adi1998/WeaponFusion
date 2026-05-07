@@ -82,7 +82,9 @@ local traitTextList = {
     }
 }
 
-mod.AspectDisplayNameMap = {}
+mod.AspectDisplayNameMap = {
+    ["None"] = "None",
+}
 
 for index, value in ipairs(traitTextList) do
     mod.AspectDisplayNameMap[value.Id] = value.DisplayName

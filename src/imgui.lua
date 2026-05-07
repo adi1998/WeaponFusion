@@ -46,6 +46,12 @@ function DrawMenu()
         rom.ImGui.Text("If the weapons feel like they\nhaven't been swapped properly try\nexiting and entering the room or starting a new run")
 
         rom.ImGui.Separator()
+        rom.ImGui.Text("Currently fused weapon")
+        rom.ImGui.Text("Primary: " .. WeaponNameDisplayNameMap[config.last_primary])
+        rom.ImGui.Text("Secondary: " .. WeaponNameDisplayNameMap[config.last_secondary])
+        rom.ImGui.Text("Minor Asepct: " .. (mod.AspectDisplayNameMap[config.last_aspect] or "None"))
+
+        rom.ImGui.Separator()
         rom.ImGui.Text("Primary"); rom.ImGui.SameLine()
 
         if rom.ImGui.BeginCombo("###primary", WeaponNameDisplayNameMap[config.primary]) then

@@ -471,6 +471,7 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     end
     for _, traitData in ipairs( game.CurrentRun.Hero.Traits ) do
         if traitData.LinkedSpell and string.match(traitData.Name, "_Secondary") then
+            print("equipping Spell", traitData.LinkedSpell)
             game.UnequipLinkedSpell( traitData )
         end
     end

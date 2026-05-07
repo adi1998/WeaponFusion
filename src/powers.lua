@@ -23,7 +23,7 @@ function mod.StartAxeSpecialRepeatThread(startX, startY, angle, args)
 		WeaponName = weaponName,
 		Type = "Projectile",
 	})
-	print(mod.dump(derivedValues))
+	-- print(mod.dump(derivedValues))
 	local logProjectileIdForMagicCrit = false
 	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
 		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
@@ -100,6 +100,9 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 	end
 
 	local angleIncrement = 12
+	if game.HeroHasTrait("DaggerTripleAspect_Secondary") or game.HeroHasTrait("DaggerTripleAspect") then
+		angleIncrement = math.deg(angleIncrement)
+	end
 	if game.HeroHasTrait("DaggerSpecialLineTrait") then
 		angleIncrement = 0
 	end
@@ -133,7 +136,7 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 				FireFromTarget = true,
 				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle
 			})
-			print(angle)
+			-- print(angle)
 			game.waitUnmodified(daggerProjectileInterval, threadName)
 			start = 2
 		end
@@ -150,7 +153,7 @@ function mod.StartDaggerSpecialRepeatThread(startX, startY, angle, args)
 				FireFromTarget = true,
 				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle + angleOffset
 			})
-			print(angleOffset)
+			-- print(angleOffset)
 			game.waitUnmodified(daggerProjectileInterval, threadName)
 		end
 		game.Destroy({Id = dropLocation })
@@ -252,7 +255,7 @@ function mod.StartTorchSpecialRepeatThread(startX, startY, angle, args)
 		MatchProjectileName = true,
 	})
 	-- print(mod.dump(triggerArgs))
-	print(mod.dump(derivedValues))
+	-- print(mod.dump(derivedValues))
 	local projectileIds = {}
 	while repeats < functionArgs.Repeats do
 		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )

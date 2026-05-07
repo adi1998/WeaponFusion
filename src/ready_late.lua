@@ -162,6 +162,14 @@ modutil.mod.Path.Context.Wrap.Static("CheckDaggerCritCharges", function (weaponD
 			return base(traitName) or base(traitName.."_Secondary")
 		end
 	end)
+	modutil.mod.Path.Wrap("IncrementTableValue", function (base, tableArg, key, amount)
+		if key == nil then
+			print("nil argument 'key' detected in IncrementTableValue call from CheckDaggerCritCharges")
+			print(mod.dump(tableArg), key, amount)
+			return
+		end
+		return base(tableArg,key,amount)
+	end)
 end)
 
 modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1.Call", function ()
