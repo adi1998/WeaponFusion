@@ -79,6 +79,12 @@ local traitTextList = {
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Artemis",
         Description = "While you {$Keywords.Hold} your {$Keywords.AttackEX}, you occasionally {$Keywords.Block}, then {$Keywords.DaggerBlockBuff} right after."
+    },
+    {
+        Id = "StaffAspectofYoungMelinoe_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Young Melinoë",
+        Description = "While you have no more than {#UpgradeFormat}{$TooltipData.ExtractData.HealthThreshold}%{!Icons.Health}{#Prev}, absorb your {$Keywords.SpecialEX} blast to restore {#BoldFormatGraft}{$TooltipData.ExtractData.HealAmount}{!Icons.Health}{#Prev}."
     }
 }
 

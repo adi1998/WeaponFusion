@@ -2186,6 +2186,103 @@ mod.AspectTraitData = {
 	}
 }
 
+AspectYoungMel = "JarlUlsfark-AspectYoungMel"
+
+if rom.mods["JarlUlsfark-AspectYoungMel"] then
+	game.OverwriteTableKeys(mod.AspectTraitData, {
+		StaffAspectofYoungMelinoe_Secondary = {
+			InheritFrom = {"BaseTrait"},
+			Icon = "JarlUlsfark-AspectYoungMel\\StaffAspectYoungMelIcon",
+			ReplacementGrannyModels =
+			{
+				WeaponStaff_Mesh = "WeaponStaff_Mesh"
+			},
+			RarityLevels =
+			{
+				Common =
+				{
+					Multiplier = 1,
+				},
+				Rare =
+				{
+					Multiplier = 1.333,
+				},
+				Epic =
+				{
+					Multiplier = 1.666,
+				},
+				Heroic =
+				{
+					Multiplier = 2,
+				},
+				Legendary =
+				{
+					Multiplier = 2.333,
+				},
+				Perfect =
+				{
+					Multiplier = 2.666,
+				},
+			},
+			OnProjectileDeathFunction =
+			{
+				Name = AspectYoungMel .. "." .. "CheckStaffSelfHit",
+				ValidProjectiles = {"ProjectileStaffBallCharged"},
+				Args = 
+				{
+					ProjectileName = "ProjectileStaffBallCharged",
+					Threshold = { BaseValue = 0.3 },
+					HealAmount = 5,
+					ReportValues = 
+					{ 
+						ReportedThreshold = "Threshold" ,
+						ReportedHeal = "HealAmount"
+					},
+				}
+			},
+			ExtractValues =
+			{
+				{
+					Key = "ReportedThreshold",
+					ExtractAs = "HealthThreshold",
+					Format = "Percent",
+					SkipAutoExtract = true
+				},
+				{
+					Key = "ReportedHeal",
+					ExtractAs = "HealAmount",
+					SkipAutoExtract = true
+				},
+			},
+			StatLines =
+			{
+				"HealthThresholdStatDisplay"
+			},
+			PropertyChanges =
+			{
+				{
+					WeaponName = "WeaponStaffBall",
+					WeaponProperty = "Projectile",
+					ChangeValue = "ProjectileStaffBoltEA",
+				},
+				{
+					WeaponName = "WeaponStaffBall",
+					WeaponProperty = "InitialCooldown",
+					ChangeValue = 0,
+					ChangeType = "Absolute",
+				},
+				{
+					WeaponName = "WeaponStaffBall",
+					WeaponProperty = "Cooldown",
+					ChangeValue = 0.4,
+					ChangeType = "Absolute",
+				},
+			},
+			FlavorText = "StaffAspectofYoungMelinoe_FlavorText",
+		}
+	})
+end
+
 game.OverwriteTableKeys( game.TraitData, mod.AspectTraitData )
 
 for traitName, traitData in pairs(mod.AspectTraitData) do
