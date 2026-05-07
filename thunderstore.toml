@@ -6,7 +6,7 @@ schemaVersion = "0.0.1"
 namespace = "zerp"
 name = "WeaponFusion"
 versionNumber = "0.0.1"
-description = "Hades II mod allowing you to fuse any 2 weapons into one."
+description = "Hades II mod allowing you to fuse any* 2 weapons and their aspects into one. "
 websiteUrl = "https://github.com/adi1998/WeaponFusion"
 containsNsfwContent = false
 

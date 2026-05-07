@@ -17,14 +17,17 @@ Use the Imgui menu (default toggle keybind: INSERT) in the Crossroads training g
 ![Imgui menu](images/imgui.png)
 
 After fusion (re)equip the primary weapon/aspect in the training grounds to get the fused weapon. If it feels like the fusion didn't apply properly try starting a run/reloading the room.
-If it still seems bugged would really appreciate a bug report.
+If it still seems bugged would really appreciate a bug report :).
 
 ## Current Limitaions / Future plans
 
 - No Argent Skull(yet)
-- Some aspects like Eos and Momus are currently unavailable for the secondary weapon.
 - No ingame UI(yet)
+- No upgrades for the minor aspects(yet)
+- Some aspects which didn't make sense to have just its special didn't make it in
+- Some aspects like Momus are currently unavailable for the secondary weapon
+- Eos currently don't have every weapon's special being replicated, the charged attack still works
 
 ## Issues and feedback
 
-Report any issues or feedback [here](https://github.com/adi1998/WeaponFusion/issues) or on [Discord](https://discord.gg/bKvJTAJj)
+Report any issues or feedback [here](https://github.com/adi1998/WeaponFusion/issues) or on [Discord](https://discord.gg/bKvJTAJj).
