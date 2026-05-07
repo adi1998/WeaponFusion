@@ -1,17 +1,30 @@
 ## Weapon Fusion
 
-Hades II mod allowing you to fuse any 2 weapons into one.
+Hades II mod allowing you to fuse any* 2 weapons and their aspects into one. 
+
+Gameplay example of what it looks like in action [Weapon fusion test (Moros plus Xinth)](https://www.youtube.com/watch?v=6Wv3l-xk-m4).
 
 ## Installation
 
 Use r2modman by ebkr from [Thunderstore](https://thunderstore.io/package/ebkr/r2modman/) or [GitHub](https://github.com/ebkr/r2modmanPlus/releases/latest).
 
-While the mod has been tested decently well it is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\Profile*.sav` in case there are issues.
+There's almost no way I could have tested every combo so it is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\Profile*.sav` in case there are issues.
 
 ## Usage
 
-Use the Imgui menu (default toggle keybind: INSERT) in the crossroads.
+Use the Imgui menu (default toggle keybind: INSERT) in the Crossroads training grounds.
 
-## Issues
+![Imgui menu](images/imgui.png)
 
-Report any issues [here](https://github.com/adi1998/WeaponFusion/issues) or on [Discord](https://discord.gg/bKvJTAJj)
+After fusion (re)equip the primary weapon/aspect in the training grounds to get the fused weapon. If it feels like the fusion didn't apply properly try starting a run/reloading the room.
+If it still seems bugged would really appreciate a bug report.
+
+## Current Limitaions / Future plans
+
+- No Argent Skull(yet)
+- Some aspects like Eos and Momus are currently unavailable for the secondary weapon.
+- No ingame UI(yet)
+
+## Issues and feedback
+
+Report any issues or feedback [here](https://github.com/adi1998/WeaponFusion/issues) or on [Discord](https://discord.gg/bKvJTAJj)
