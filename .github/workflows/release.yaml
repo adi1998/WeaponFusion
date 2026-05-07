@@ -79,7 +79,7 @@ jobs:
           retention-days: 1
 
       - name: Publish package
-        if: ${{ !inputs.is-dry-run }}
+        if: ${{ (!inputs.is-dry-run) && (!inputs.github-only) }}
         env:
           TCLI_AUTH_TOKEN: ${{ secrets.TCLI_AUTH_TOKEN }}
         run: tcli publish --file ${{ env.artifact-path }}
