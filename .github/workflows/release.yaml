@@ -78,13 +78,13 @@ jobs:
           retention-days: 1
 
       - name: Publish package
-        if: ${{ inputs.release-type == "Ship" }}
+        if: ${{ inputs.release-type == Ship }}
         env:
           TCLI_AUTH_TOKEN: ${{ secrets.TCLI_AUTH_TOKEN }}
         run: tcli publish --file ${{ env.artifact-path }}
 
       - name: Tag and push to repository
-        if: ${{ inputs.release-type == "Ship" || inputs.release-type == "Release" }}
+        if: ${{ inputs.release-type == Ship || inputs.release-type == Release }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -95,7 +95,7 @@ jobs:
 
       - name: Create release
         id: release
-        if: ${{ inputs.release-type == "Ship" || inputs.release-type == "Release" }}
+        if: ${{ inputs.release-type == Ship || inputs.release-type == Release }}
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
         with:
           release_name: ${{ inputs.tag }}
@@ -105,7 +105,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact to release
-        if: ${{ inputs.release-type == "Ship" || inputs.release-type == "Release" }}
+        if: ${{ inputs.release-type == Ship || inputs.release-type == Release }}
         uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
