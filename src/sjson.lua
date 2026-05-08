@@ -103,6 +103,7 @@ WeaponDisplayOrder = {
     "WeaponTorch",
     "WeaponAxe",
     "WeaponSuit",
+    "WeaponLob"
 }
 
 local weaponAnimationFile = rom.path.combine(rom.paths.Content, "Game\\Animations\\Model\\Weapon_Animation.sjson")

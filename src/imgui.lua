@@ -19,6 +19,7 @@ local WeaponNameDisplayNameMap = {
     ["WeaponTorch"] = "Ygnium",
     ["WeaponAxe"] = "Zorephet",
     ["WeaponSuit"] = "Xinth",
+    ["WeaponLob"] = "Argent Skull",
 }
 
 local DisplayNameWeaponNameMap = {}

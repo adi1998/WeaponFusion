@@ -181,4 +181,19 @@ modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1
 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
 		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
 	end)
-end )
+end)
+
+modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnBlinkFinished.WeaponLogic.2.Call", function (triggerArgs)
+	modutil.mod.Path.Wrap("GetWeaponDataValue", function (base, args)
+		local dataValue = base(args)
+		if not dataValue then
+			if args.WeaponName == "WeaponLob" and args.Property == "ChargeTime" then
+				return 0.23
+			end
+			if args.WeaponName == "WeaponLob" and args.Property == "MinChargeToFire" then
+				return 0.04
+			end
+		end
+		return dataValue
+	end)
+end)

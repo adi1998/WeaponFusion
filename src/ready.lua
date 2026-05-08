@@ -118,32 +118,32 @@ mod.WeaponData = {
         },
     },
 
-    -- WeaponLob = {
-    --     Primary = {
-    --         "WeaponLobChargedPulse",
-    --     },
-    --     Secondary = {
-    --         "WeaponLobSpecial", "WeaponSkullImpulse"
-    --     },
-    --     PrimaryHammers = {
-    --         "LobAmmoTrait",
-    --         "LobAmmoMagnetismTrait",
-    --         "LobSpreadShotTrait",
-    --         "LobPulseAmmoCollectTrait",
-    --         "LobPulseAmmoTrait",
-    --         "LobGrowthTrait",
-    --         "LobStraightShotTrait",
+    WeaponLob = {
+        Primary = {
+            "WeaponLobChargedPulse",
+        },
+        Secondary = {
+            "WeaponLobSpecial", "WeaponSkullImpulse"
+        },
+        PrimaryHammers = {
+            "LobAmmoTrait",
+            "LobAmmoMagnetismTrait",
+            "LobSpreadShotTrait",
+            "LobPulseAmmoCollectTrait",
+            "LobPulseAmmoTrait",
+            "LobGrowthTrait",
+            "LobStraightShotTrait",
 
-    --     },
-    --     SecondaryHammers = {
-    --         "LobRushArmorTrait",
-    --         "LobOneSideTrait",
-    --         "LobSturdySpecialTrait",
-    --         "LobSpecialSpeedTrait",
-    --         "LobInOutSpecialExTrait",
+        },
+        SecondaryHammers = {
+            "LobRushArmorTrait",
+            "LobOneSideTrait",
+            "LobSturdySpecialTrait",
+            "LobSpecialSpeedTrait",
+            "LobInOutSpecialExTrait",
 
-    --     }
-    -- },
+        }
+    },
 
     WeaponSuit = {
         Primary = {
