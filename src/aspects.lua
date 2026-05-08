@@ -2183,6 +2183,182 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "DaggerBlockAspect_FlavorText",
+	},
+
+	LobImpulseAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		PreEquipWeapons = {"WeaponSkullImpulse"},
+		Icon = "Hammer_Lob_15",
+		ReplacementGrannyModels = 
+		{
+			WeaponLob_Mesh = "WeaponLob_Persephone_Mesh"
+		},
+		Charge = 0,
+		PropertyChanges = {
+			{
+				WeaponName = "WeaponLobSpecial",
+				ProjectileName = "ProjectileThrowCharged",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "LobSpecialFx_Persephone",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponLobSpecial",
+				ProjectileName = "ProjectileThrowBlink",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "DashLobTrailEmitter_Persephone",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponSkullImpulse",
+				ProjectileName = "ProjectileSkullImpulse",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "DashLobTrailEmitter_Persephone",
+				ChangeType = "Absolute",
+			},
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 1.5,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 5/2,
+			},
+			Legendary =
+			{
+				Multiplier = 6/2,
+			},
+			Perfect =
+			{
+				Multiplier = 9/2,
+			},
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "SetupSkullImpulseUI",
+		},
+		OnWeaponFiredFunctions = 
+		{
+			ValidWeapons = {"WeaponLobSpecial", "WeaponSkullImpulse"},
+			FunctionName = "SkullImpulseTransform",
+			FunctionArgs = 
+			{
+				BaseDuration = 0.5,			-- Duration of ex attack w/ no charge
+				Interval = 200,
+			}
+		},
+		MaxBonusBoonRankWeighted =
+		{
+			BaseValue = 2,
+		},
+		MaxBonusBoonRankDistribution =
+		{
+			[2] =
+			{
+				-- Weighted list, so all values should add up to 1 for best distribution
+				-- Don't add entries for 1 because that's the same as 0 boon and causes 'level 1' to show up on boon menus
+				[0] = 0.70,
+				[2] = 0.30,
+			},
+			[3] =
+			{
+				[0] = 0.65,
+				[2] = 0.30,
+				[3] = 0.05,
+			},
+			[4] =
+			{
+				[0] = 0.60,
+				[2] = 0.25,
+				[3] = 0.10,
+				[4] = 0.05,
+			},
+			[5] =
+			{
+				[0] = 0.55,
+				[2] = 0.20,
+				[3] = 0.15,
+				[4] = 0.10,
+				[5] = 0.05,
+			},
+			[6] =
+			{
+				[0] = 0.50,
+				[2] = 0.16,
+				[3] = 0.14,
+				[4] = 0.12,
+				[5] = 0.06,
+				[6] = 0.02,
+			},
+			[9] =
+			{
+				[0] = 0.28,
+				[2] = 0.16,
+				[3] = 0.14,
+				[4] = 0.12,
+				[5] = 0.10,
+				[6] = 0.08,
+				[7] = 0.06,
+				[8] = 0.04,
+				[9] = 0.02,
+			}
+		},
+		OnEnemyDamagedAction = 
+		{
+			AllEffectsTrigger = true,
+			FunctionName = "ChargeSkullImpulse",
+			Args = 
+			{
+				-- One "charge" is equal to full one second of skull car
+				-- 0.001 means 100 damage = 0.1 seconds of skull car charge
+				ValidProjectiles = game.WeaponSets.OlympianProjectileNames,
+				ValidEffectNames = game.WeaponSets.OlympianEffectNames,
+				ChargePerDamage = 0.00100,
+				MaxCharge = 2,
+				MinChargeToFire = 0.5,
+				ReportValues =
+				{
+					ReportedMinChargeToFire = "MinChargeToFire",
+					ReportedMaxCharge = "MaxCharge",
+				}
+			}
+		},
+		StatLines =
+		{
+			"ExDamageStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "MaxBonusBoonRankWeighted",
+				ExtractAs = "BoonRank",
+				IncludeSigns = true,
+			},
+			{
+				Key = "ReportedMaxCharge",
+				ExtractAs = "Duration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedMinChargeToFire",
+				ExtractAs = "MinCharge",
+				SkipAutoExtract = true,
+			},
+		},
+		FlavorText = "LobImpulseAspect_FlavorText",
 	}
 }
 
@@ -2467,6 +2643,37 @@ modutil.mod.Path.Wrap("ShowDaggerUI", function (base, args)
 	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
 	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUIChargeAmount, Duration = 0, Fraction = 0 })
 	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+end)
+
+modutil.mod.Path.Wrap("ShowLobUI", function (base)
+	base()
+	if (not game.HeroHasTrait("LobImpulseAspect_Secondary") and not game.HeroHasTrait("LobGunAspect_Secondary")) or not game.ShowingCombatUI then
+		return
+	end
+
+	if game.ScreenAnchors.LobUI ~= nil then
+		return
+	end
+	game.ScreenAnchors.LobUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+	game.ScreenAnchors.LobUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount })
+	if game.HeroHasTrait("LobImpulseAspect_Secondary") then
+		local trait = game.GetHeroTrait("LobImpulseAspect_Secondary")
+		local currentCharge = trait.Charge
+		local maxCharge = trait.OnEnemyDamagedAction.Args.MaxCharge
+		local currentChargeText = game.round( currentCharge, 1)
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount, Fraction = currentCharge/ maxCharge, Instant = true })
+
+		if trait.Charge >= trait.OnEnemyDamagedAction.Args.MaxCharge then
+			game.SetAnimation({ Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = game.ScreenAnchors.LobUI })
+		end
+	elseif game.HeroHasTrait("LobGunAspect_Secondary") then
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount, Fraction = 0, Instant = true })
+	end
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUI, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUIChargeAmount, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
 end)
 
 game.OnWeaponChargeCanceled{ "WeaponAxeSpin",

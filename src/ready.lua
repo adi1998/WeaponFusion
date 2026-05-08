@@ -474,7 +474,7 @@ if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary]
 end
 
 modutil.mod.Path.Wrap("SetupMap", function(base, ...)
-    game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit"}})
+    game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit", "WeaponLob"}})
     return base(...)
 end)
 
