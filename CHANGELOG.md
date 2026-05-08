@@ -3,11 +3,12 @@
 ## [Unreleased]
 
 - Adds the Argent Skull with Aspect of Persephone available as a secondary aspect
-- Fusing weapons now automatically swaps to the fused weapon, primary aspect still needs to be equipped using the ingame ui
+- Fusing weapons now instantly swaps to the fused weapon, primary aspect still needs to be changed using the in-game UI
 
 ## [0.1.3] - 2026-05-08
 
 - Fix crash due to shit code
+- Minor aspects will be the same level as its source
 
 ## [0.1.2] - 2026-05-08
 
