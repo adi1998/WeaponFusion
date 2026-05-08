@@ -130,10 +130,14 @@ mod.WeaponData = {
             "LobAmmoMagnetismTrait",
             "LobSpreadShotTrait",
             "LobPulseAmmoCollectTrait",
-            "LobPulseAmmoTrait",
+            "LobPulseAmmoTrait", -- funky requirements
             "LobGrowthTrait",
             "LobStraightShotTrait",
 
+            "LobGunOverheatTrait",
+            "LobGunBounceTrait",
+            "LobGunAttackRangeTrait",
+            "LobGunAttackDoublerTrait"
         },
         SecondaryHammers = {
             "LobRushArmorTrait",
@@ -142,6 +146,7 @@ mod.WeaponData = {
             "LobSpecialSpeedTrait",
             "LobInOutSpecialExTrait",
 
+            "LobGunSpecialBounceTrait"
         }
     },
 

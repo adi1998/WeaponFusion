@@ -455,7 +455,7 @@ mod.AspectTraitData = {
 		},
 		AddOutgoingDamageModifiers =
 		{
-			ValidWeapons = { "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5"},
+			ValidWeapons = { "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5", "WeaponTorch", "WeaponLob"},
 			ValidSuitProjectile = true,
 		},
 		OnProjectileDeathFunction =
@@ -565,7 +565,7 @@ mod.AspectTraitData = {
 		},
 		OnWeaponFiredFunctions =
 		{
-			ValidWeapons = {"WeaponSuitCharged", "WeaponSuitRanged", "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5" },
+			ValidWeapons = {"WeaponSuitCharged", "WeaponSuitRanged", "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5", "WeaponLob", "WeaponTorch" },
 			FunctionName = "CheckSuitComboAttackBuff",
 			FunctionArgs =
 			{
@@ -581,7 +581,10 @@ mod.AspectTraitData = {
 		},
 		OnProjectileCreationFunction =
 		{
-			ValidProjectiles = { "ProjectileSwing5", "ProjectileAxeSpin" },
+			ValidProjectiles = {
+				"ProjectileSwing5", "ProjectileAxeSpin", "ProjectileTorchWave", "ProjectileTorchGhostLarge", "ProjectileTorchSupayBallEx", "ProjectileTorchBallEos",
+				"ProjectileLobCharged", "ProjectileLobOverheat"
+			},
 			Name = _PLUGIN.guid .. "." .. "CheckSuitComboAttackBuff",
 			Args =
 			{
@@ -2559,7 +2562,8 @@ modutil.mod.Path.Wrap("ShivaAttackBoostClear", function (base, triggerArgs)
 end)
 
 modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, functionArgs, triggerArgs)
-	if game.Contains({"WeaponStaffSwing5", "WeaponAxeSpin"}, weaponData.Name) then
+	if game.Contains({"WeaponAxeSpin", "WeaponStaffSwing5", "WeaponLob", "WeaponTorch"}, weaponData.Name) and
+			game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) then
 		if weaponData.Name == "WeaponStaffSwing5" then
 			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
 			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
@@ -2569,11 +2573,16 @@ modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, fu
 			end
 		elseif weaponData.Name == "WeaponAxeSpin" then
 			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
+		elseif weaponData.Name == "WeaponTorch" then
+			game.wait(0.01)
+		elseif weaponData.Name == "WeaponLob" then
+
 		end
 
 		local projectileIds = game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] or {}
 		local stacks = game.CurrentRun.Hero.ActiveEffects[functionArgs.EffectName]
 		if not stacks then
+			game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
 			return
 		end
 		if functionArgs.SelfEffectMaxStacks and stacks > functionArgs.SelfEffectMaxStacks then
@@ -2583,6 +2592,9 @@ modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, fu
 			game.SessionMapState.SuitBonusProjectileId[id] = 1 + functionArgs.SelfEffectStackMultiplier * stacks
 		end
 		game.ClearEffect({Id = game.CurrentRun.Hero.ObjectId, Name = "ShivaAttackBoost"})
+		game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
+		return
+	elseif game.Contains({"WeaponAxeSpin", "WeaponStaffSwing5", "WeaponLob", "WeaponTorch"}, weaponData.Name) then
 		game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
 		return
 	end
@@ -2781,3 +2793,16 @@ game.OnBlinkFinished{ "WeaponBlink", function (triggerArgs)
 		game.SessionMapState.MagnetismMultiplier = nil
 	end
 end}
+
+modutil.mod.Path.Wrap("HandleGunBehavior", function (base, weaponData, functionArgs, triggerArgs)
+	base(weaponData, functionArgs, triggerArgs)
+	if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs )  then
+		local chargeStages = game.GetWeaponChargeStages( weaponData )
+		local weaponCharge = (game.MapState.WeaponCharge or {})[weaponData.Name] or 1
+		if #chargeStages <= weaponCharge and game.Contains( {"WeaponStaffBall", "WeaponDaggerThrow", "WeaponTorchSpecial", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponSuitRanged"}, weaponData.Name ) then
+			local dataProperties = game.MergeTables(game.EffectData[functionArgs.EffectName].DataProperties, functionArgs.EffectData)
+			dataProperties.Duration = dataProperties.Duration + game.GetTotalHeroTraitValue("OverheatDurationIncrease")
+			game.ApplyEffect({ DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = functionArgs.EffectName, DataProperties = dataProperties })
+		end
+	end
+end)
