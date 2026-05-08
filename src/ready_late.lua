@@ -184,4 +184,4 @@ modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1
 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
 		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
 	end)
-end )
+end)
