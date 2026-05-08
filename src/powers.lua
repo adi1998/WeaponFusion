@@ -304,32 +304,32 @@ mod.WeaponThreadMap = {
 	["WeaponTorchSpecial"] = mod.StartTorchSpecialRepeatThread,
 }
 
-local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", }
+local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", "WeaponSkullImpulse"}
 
 modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionArgs, triggerArgs )
     if game.Contains(dropOriginWeapons, weaponData.Name) then
         if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) or triggerArgs.DisjointExCast then
             -- print(mod.dump(weaponData))
             -- print(mod.dump(triggerArgs))
-            local playerLocation = GetLocation({ Id = CurrentRun.Hero.ObjectId })
+            local playerLocation = game.GetLocation({ Id = game.CurrentRun.Hero.ObjectId })
             local startX = triggerArgs.ProjectileX or playerLocation.X
             local startY = triggerArgs.ProjectileY or playerLocation.Y
             local weaponName = weaponData.Name
-            if game.Contains({"WeaponDaggerThrow"}, weaponData.Name) then
-                SessionMapState.OriginMarkers = SessionMapState.OriginMarkers or {}
-                if SessionMapState.OriginMarkers[weaponName] then
-                    Destroy({ Id = SessionMapState.OriginMarkers[weaponName] })
+            if game.Contains(dropOriginWeapons, weaponName) then
+                game.SessionMapState.OriginMarkers = game.SessionMapState.OriginMarkers or {}
+                if game.SessionMapState.OriginMarkers[weaponName] then
+                    game.Destroy({ Id = game.SessionMapState.OriginMarkers[weaponName] })
                 end
             end
             if  game.Contains(dropOriginWeapons, weaponData.Name) then
                 local threadName = "RepeatSpecialThread"
-                if HasThread( threadName ) then
-                    killTaggedThreads( threadName )
-                    waitUnmodified(0.1)
-                    local id = SessionMapState.OriginMarkers[weaponName]
-                    SessionMapState.OriginMarkers[weaponName] = nil
-                    SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
-                    thread( DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+                if game.HasThread( threadName ) then
+                    game.killTaggedThreads( threadName )
+                    game.waitUnmodified(0.1)
+                    local id = game.SessionMapState.OriginMarkers[weaponName]
+                    game.SessionMapState.OriginMarkers[weaponName] = nil
+                    game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+                    game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
                 end
                 game.thread(mod.WeaponThreadMap[weaponName] or mod.StartSpecialRepeatThread, startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
             end
