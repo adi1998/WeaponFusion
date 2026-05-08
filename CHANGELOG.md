@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- Fix crash when using unfused weapons
+- Fix crash due to shit code
 
 ## [0.1.2] - 2026-05-08
 
