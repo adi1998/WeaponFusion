@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Better hammer compatibility for the secondary weapon
+
 ## [0.1.1] - 2026-05-07
 
 - Fix charon missing it's cast damage mulitplier
