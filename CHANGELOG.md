@@ -2,9 +2,12 @@
 
 ## [Unreleased]
 
+- Fusing weapons now instantly swaps to the fused weapon, primary aspect still needs to be changed using the in-game UI
+
 ## [0.1.3] - 2026-05-08
 
 - Fix crash due to shit code
+- Minor aspects will be the same level as its source
 
 ## [0.1.2] - 2026-05-08
 
