@@ -526,6 +526,10 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     for traitName, _ in pairs(mod.AspectTraitData) do
         print("unequipping minor aspect", traitName)
         local traitData = game.TraitData[traitName]
+        if traitData.LinkedSpell and game.HeroHasTrait( traitName ) then
+            print("unequipping Spell", traitData.LinkedSpell)
+            game.UnequipLinkedSpell( traitData )
+        end
         while game.HeroHasTrait( traitName ) do
             game.RemoveTrait( game.CurrentRun.Hero, traitName )
         end
@@ -533,12 +537,6 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
             for originalModel, _ in pairs(traitData.ReplacementGrannyModels) do
                 game.SetThingProperty({ Property = "GrannyAlternateModelAttachment", Value = originalModel, OriginalAttachmentModel = originalModel, DestinationId = game.CurrentRun.Hero.ObjectId })
             end
-        end
-    end
-    for _, traitData in ipairs( game.CurrentRun.Hero.Traits ) do
-        if traitData.LinkedSpell and string.match(traitData.Name, "_Secondary") then
-            print("unequipping Spell", traitData.LinkedSpell)
-            game.UnequipLinkedSpell( traitData )
         end
     end
     local val = base(args)
