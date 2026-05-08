@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fusing weapons now instantly swaps to the fused weapon, primary aspect still needs to be changed using the in-game UI
+- Fix for SkyFall not unequipping properly in the Crossroads
 
 ## [0.1.3] - 2026-05-08
 
