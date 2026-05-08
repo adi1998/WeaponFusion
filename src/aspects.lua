@@ -2752,3 +2752,32 @@ game.TraitData.LobCloseAttackAspect.OnEnemyDamagedAction.ValidWeapons =
 {
 	"WeaponLobSpecial", "WeaponStaffBall", "WeaponDaggerThrow", "WeaponTorchSpecial", "WeaponAxeSpecial", "WeaponSuitRanged"
 }
+
+game.WeaponData.WeaponBlink.OnFiredFunctionNames = game.WeaponData.WeaponBlink.OnFiredFunctionNames or {}
+
+table.insert(game.WeaponData.WeaponBlink.OnFiredFunctionNames, _PLUGIN.guid .. "." .. "RecordBlinkCharge")
+
+function mod.RecordBlinkCharge(unit, weaponData, args, triggerArgs)
+	if game.CurrentRun.Hero.Weapons["WeaponLob"] and not game.CurrentRun.Hero.Weapons["WeaponLobSpecial"] then
+		local ammoPacks  = game.GetIdsByType({ Name = "LobAmmoPack"})
+		game.SetObstacleProperty({ Property = "Magnetism", Value = game.WeaponData.WeaponLobSpecial.MagnetismMultiplier, DestinationIds = ammoPacks, ValueChangeType = "Multiply" })
+		game.SessionMapState.MagnetismMultiplier = game.WeaponData.WeaponLobSpecial.MagnetismMultiplier
+	end
+end
+
+game.OnBlinkFinished{ "WeaponBlink", function (triggerArgs)
+	if game.CurrentRun.Hero.Weapons["WeaponLob"] and not game.CurrentRun.Hero.Weapons["WeaponLobSpecial"] and game.SessionMapState.MagnetismMultiplier then
+		for id, data in pairs( game.SessionMapState.AutoMagnetizeIds ) do
+			data.MagnetismMultiplier = game.WeaponData.WeaponLobSpecial.MagnetismMultiplier
+		end
+
+		local playerMagnetism = game.SessionMapState.MagnetismMultiplier * game.GetBaseDataValue({ Type = "Obstacle", Name = "LobAmmoPack", Property = "Magnetism"})
+		local ammoPacks  = game.GetIdsByType({ Name = "LobAmmoPack"})
+		for _, ammoId in pairs( ammoPacks ) do
+			if game.GetDistance ({ Id = ammoId, DestinationId = game.CurrentRun.Hero.ObjectId }) >= playerMagnetism then
+				game.SetObstacleProperty({ Property = "Magnetism", Value = 1/game.SessionMapState.MagnetismMultiplier, DestinationId = ammoId, ValueChangeType = "Multiply" })
+			end
+		end
+		game.SessionMapState.MagnetismMultiplier = nil
+	end
+end}
