@@ -490,7 +490,12 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
         print("equipping minor aspect", aspectTraitName)
         if traitData and aspectTraitName and (not game.HeroHasTrait( aspectTraitName )) then
             print("adding secondary aspect trait")
-            game.AddTraitToHero({ TraitName = aspectTraitName, Rarity = "Common" })
+            local origAspectTraitName = string.gsub(aspectTraitName, "_Secondary", "")
+            local level = game.GetWeaponUpgradeLevel(origAspectTraitName)
+            print("applying trait with level", origAspectTraitName, level)
+            local rarity = game.GetRarityKey( level, game.TraitRarityData.WeaponRarityUpgradeOrder )
+            print("Rarity", rarity)
+            game.AddTraitToHero({ TraitName = aspectTraitName, Rarity = rarity })
             local aspectTraitData = game.TraitData[aspectTraitName]
             if aspectTraitData.ReplacementGrannyModels ~= nil then
 				for originalModel, attachmentModel in pairs(aspectTraitData.ReplacementGrannyModels) do
@@ -532,7 +537,7 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     end
     for _, traitData in ipairs( game.CurrentRun.Hero.Traits ) do
         if traitData.LinkedSpell and string.match(traitData.Name, "_Secondary") then
-            print("equipping Spell", traitData.LinkedSpell)
+            print("unequipping Spell", traitData.LinkedSpell)
             game.UnequipLinkedSpell( traitData )
         end
     end

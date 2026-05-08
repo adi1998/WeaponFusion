@@ -22,12 +22,6 @@ local WeaponNameDisplayNameMap = {
     ["WeaponLob"] = "Argent Skull",
 }
 
-local DisplayNameWeaponNameMap = {}
-
-for key, value in pairs(WeaponNameDisplayNameMap) do
-    DisplayNameWeaponNameMap[value] = key
-end
-
 WeaponMinorAspectData = {}
 
 for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
@@ -39,10 +33,58 @@ for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.Disp
         end
     end
 end
-print(mod.dump(mod.AspectDisplayNameMap))
-print(mod.dump(WeaponMinorAspectData))
+
+function mod.UnequipWeapons()
+    game.UnequipWeaponUpgrade()
+    local toUnequip = {}
+    local heroId = game.CurrentRun.Hero.ObjectId
+	for k, weaponName in ipairs( game.WeaponSets.HeroPrimaryWeapons ) do
+        game.CurrentRun.Hero.Weapons[weaponName] = nil
+        local unequipWeaponData = game.WeaponData[weaponName]
+        if unequipWeaponData.SecondaryWeapon ~= nil then
+            game.CurrentRun.Hero.Weapons[unequipWeaponData.SecondaryWeapon] = nil
+        end
+        table.insert( toUnequip, weaponName )
+        game.ConcatTableValues( toUnequip, game.WeaponSets.HeroWeaponSets[weaponName] )
+        if unequipWeaponData.DummyTraitName ~= nil then
+            game.RemoveTrait( game.CurrentRun.Hero, unequipWeaponData.DummyTraitName )
+        end
+        if unequipWeaponData.UnequipFunctionName then
+            game.thread( game.CallFunctionName, unequipWeaponData.UnequipFunctionName )
+        end
+	end
+    game.UnequipWeapon({ DestinationId = heroId, Names = toUnequip, UnloadPackages = false })
+	game.RemoveTableValues( game.MapState.EquippedWeapons, toUnequip )
+end
+
+function mod.EquipWeapons()
+    local weaponKit = game.WeaponData[config.last_primary]
+    local args = {}
+	game.AddInputBlock({ Name = "PickupWeaponKit" })
+	if game.GameState.ActiveObjectiveSet == nil or game.ObjectiveSetData[game.GameState.ActiveObjectiveSet] == nil or not game.ObjectiveSetData[game.GameState.ActiveObjectiveSet].BlockWeaponObjectives then
+		game.ClearObjectives()
+	end
+	game.Halt({ Id = game.CurrentRun.Hero.ObjectId })
+	game.EndRamWeapons({ Id = game.CurrentRun.Hero.ObjectId })
+	local weaponUntouched = game.IsWeaponUntouched( weaponKit.Name )
+	game.UnequipWeaponUpgrade()
+	game.EquipPlayerWeapon( weaponKit, args )
+	game.EquipWeaponUpgrade( game.CurrentRun.Hero )
+
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponKit.Name)
+	game.RunEventsGeneric( weaponData.StartRoomEvents, weaponData )
+	if weaponUntouched then
+		game.FirstTimeWeaponPickupPresentation( weaponKit )
+	end
+
+	game.thread( game.UpdateWeaponKits )
+	game.thread( game.SpawnSkelly, 1.0 )
+
+	game.RemoveInputBlock({ Name = "PickupWeaponKit" })
+end
+
 function DrawMenu()
-    if game.CurrentHubRoom then
+    if game.CurrentHubRoom and game.CurrentHubRoom.Name == "Hub_PreRun" then
         rom.ImGui.Text("Try to not have either of the two       \nweapons equipped while fusing.")
         rom.ImGui.Text("If the weapons feel like they haven'       \nbeen swapped properly try exiting and         \nentering the room or starting a new run")
 
@@ -117,21 +159,25 @@ function DrawMenu()
 
         local clicked = rom.ImGui.Button("Fuse")
         if clicked then
+            mod.UnequipWeapons()
             UnfuseWeapons()
             config.last_primary = config.primary
             config.last_secondary = config.secondary
             config.last_aspect = config.aspect
             FuseWeapon(config.primary, config.secondary, config.aspect)
+            mod.EquipWeapons()
         end
 
         rom.ImGui.SameLine(); clicked = rom.ImGui.Button("Unfuse")
         if clicked then
+            mod.UnequipWeapons()
             config.last_primary = "WeaponStaffSwing"
             config.last_secondary = "WeaponStaffSwing"
             config.last_aspect = "None"
             UnfuseWeapons()
+            mod.EquipWeapons()
         end
     else
-        rom.ImGui.Text("Fusion only allowed at the Crossroads.")
+        rom.ImGui.Text("Fusion only allowed in the\nCrossroads Training Grounds.")
     end
 end
