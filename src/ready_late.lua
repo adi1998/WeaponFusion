@@ -153,6 +153,7 @@ modutil.mod.Path.Context.Wrap.Static("UpdateDaggerUI", function ()
 		if traitName == "DaggerBlockAspect" then
 			return base(traitName) or base(traitName.."_Secondary")
 		end
+		return base(traitName)
 	end)
 end)
 
@@ -161,6 +162,7 @@ modutil.mod.Path.Context.Wrap.Static("CheckDaggerCritCharges", function (weaponD
 		if traitName == "DaggerBlockAspect" then
 			return base(traitName) or base(traitName.."_Secondary")
 		end
+		return base(traitName)
 	end)
 	modutil.mod.Path.Wrap("IncrementTableValue", function (base, tableArg, key, amount)
 		if key == nil then
@@ -177,6 +179,7 @@ modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1
 		if traitName == "DaggerBlockAspect" then
 			return base(traitName) or base(traitName.."_Secondary")
 		end
+		return base(traitName)
 	end)
 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
 		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
