@@ -304,7 +304,7 @@ mod.WeaponThreadMap = {
 	["WeaponTorchSpecial"] = mod.StartTorchSpecialRepeatThread,
 }
 
-local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", "WeaponSkullImpulse"}
+local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", "WeaponLobSpecial"}
 
 modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionArgs, triggerArgs )
     if game.Contains(dropOriginWeapons, weaponData.Name) then
