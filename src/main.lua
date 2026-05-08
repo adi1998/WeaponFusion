@@ -70,7 +70,6 @@ local function on_reload()
 
     import 'imgui.lua'
     import 'screen.lua'
-    import 'reload.lua'
 end
 
 local function on_ready_late()
