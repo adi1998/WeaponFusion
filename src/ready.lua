@@ -277,9 +277,84 @@ function PatchCommonHammerRequirements(hammerName, weaponName, secondWeaponName)
     end
 end
 
+local secondaryWeaponMinorAspectMap = {}
+
+for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
+    if mod.WeaponData[weaponName] then
+        local secondaryWeaponName = mod.WeaponData[weaponName].Secondary[1]
+        secondaryWeaponMinorAspectMap[secondaryWeaponName] = { }
+        for _, aspectName in ipairs(aspectNameList) do
+            if mod.AspectTraitData[aspectName .. "_Secondary"] then
+                secondaryWeaponMinorAspectMap[secondaryWeaponName][aspectName .. "_Secondary"] = true
+            end
+        end
+        local mapCopy = secondaryWeaponMinorAspectMap[secondaryWeaponName]
+        for index, linkedWeaponName in ipairs(mod.WeaponData[weaponName].Secondary) do
+            secondaryWeaponMinorAspectMap[linkedWeaponName] = mapCopy
+        end
+    end
+end
+
+function PatchSecondaryHammerPropertyChanges(hammerName, weaponName)
+    local traitData = game.TraitData[hammerName]
+    local newPropertyChanges = {}
+    local replacePropertyChanges = {}
+    for propertyIndex, property in ipairs(traitData.PropertyChanges or {}) do
+        local weaponName = property.WeaponName
+        local minorAspectMap = secondaryWeaponMinorAspectMap[weaponName]
+        if minorAspectMap then
+            local duplicate = 0
+            if property.TraitName and minorAspectMap[property.TraitName .. "_Secondary"] then
+                local newProperty = game.DeepCopyTable(property)
+                newProperty.TraitName = property.TraitName .. "_Secondary"
+                table.insert(newPropertyChanges, newProperty)
+                duplicate = duplicate + 1
+            end
+            if property.FalseTraitName and minorAspectMap[property.FalseTraitName .. "_Secondary"] then
+                local newProperty = game.DeepCopyTable(property)
+                newProperty.FalseTraitName = nil
+                newProperty.FalseTraitNames = { property.FalseTraitName, property.FalseTraitName .. "_Secondary" }
+                replacePropertyChanges[propertyIndex] = newProperty
+                duplicate = duplicate + 1
+            end
+            if property.TraitNames then
+                local newProperty
+                for index, traitName in ipairs(property.TraitNames) do
+                    if minorAspectMap[traitName .. "_Secondary"] then
+                        newProperty = game.DeepCopyTable(property)
+                        newProperty.TraitNames[index] = traitName .. "_Secondary"
+                        table.insert(newPropertyChanges, newProperty)
+                        duplicate = duplicate + 1
+                    end
+                end
+            end
+            if property.FalseTraitNames then
+                local newProperty = game.DeepCopyTable(property)
+                for _, traitName in ipairs(property.FalseTraitNames) do
+                    if minorAspectMap[traitName .. "_Secondary"] then
+                        table.insert(newProperty.FalseTraitNames, traitName.."_Secondary")
+                        replacePropertyChanges[propertyIndex] = newProperty
+                        duplicate = duplicate + 1
+                    end
+                end
+            end
+            if duplicate > 1 then
+                print("multiple property changes detected for", hammerName, propertyIndex, mod.dump(property))
+            end
+        end
+    end
+    for index, property in pairs(replacePropertyChanges) do
+        traitData.PropertyChanges[index] = property
+    end
+    for _, property in ipairs(newPropertyChanges) do
+        table.insert(traitData.PropertyChanges, property)
+    end
+end
+
 for weapon, modWeaponData in pairs(mod.WeaponData) do
     for _, hammerName in ipairs(modWeaponData.SecondaryHammers) do
         PatchSecondaryHammerRequirements(hammerName, modWeaponData.Secondary[1])
+        PatchSecondaryHammerPropertyChanges(hammerName, modWeaponData.Secondary[1])
     end
     for _, hammerName in ipairs(modWeaponData.CommonHammers or {}) do
         PatchCommonHammerRequirements(hammerName, weapon, modWeaponData.Secondary[1])
@@ -287,20 +362,6 @@ for weapon, modWeaponData in pairs(mod.WeaponData) do
 end
 
 function mod.PatchBoonVfx()
-    local secondaryWeaponMinorAspectMap = {}
-
-    for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
-        if mod.WeaponData[weaponName] then
-            local secondaryWeaponName = mod.WeaponData[weaponName].Secondary[1]
-            secondaryWeaponMinorAspectMap[secondaryWeaponName] = { }
-            for _, aspectName in ipairs(aspectNameList) do
-                if mod.AspectTraitData[aspectName .. "_Secondary"] then
-                    secondaryWeaponMinorAspectMap[secondaryWeaponName][aspectName .. "_Secondary"] = true
-                end
-            end
-        end
-    end
-
     local specialBoonList = {
         "ApolloSpecialBoon",
         "AphroditeSpecialBoon",
@@ -356,7 +417,7 @@ function mod.PatchBoonVfx()
                     end
                 end
                 if duplicate > 1 then
-                    print("multiple property changes detected for", specialBoon, mod.dump(property))
+                    print("multiple property changes detected for", specialBoon, propertyIndex, mod.dump(property))
                 end
             end
         end
