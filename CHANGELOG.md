@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Better hammer compatibility for the secondary weapon
+- Fix crash due to missing file
 
 ## [0.1.1] - 2026-05-07
 
