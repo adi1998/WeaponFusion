@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix crash when using unfused weapons
+
 ## [0.1.2] - 2026-05-08
 
 - Better hammer compatibility for the secondary weapon
