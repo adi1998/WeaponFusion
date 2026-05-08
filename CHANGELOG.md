@@ -4,6 +4,7 @@
 
 - Adds the Argent Skull with Aspect of Persephone available as a secondary aspect
 - Fix Shiva not boosting some omega attacks
+- Fusion now triggers a save
 - Fusing weapons now instantly swaps to the fused weapon, primary aspect still needs to be changed using the in-game UI
 
 ## [0.1.3] - 2026-05-08
