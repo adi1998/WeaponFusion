@@ -7,6 +7,7 @@ modutil.mod.Path.Context.Wrap.Static("CheckFinisher",function (victim, functionA
 				"WeaponAxe",
 				"WeaponTorch",
                 "WeaponSuit",
+				"WeaponLob",
 			}
 		elseif weaponList[1] == "WeaponDaggerThrow" then
 			weaponList = {
@@ -14,7 +15,8 @@ modutil.mod.Path.Context.Wrap.Static("CheckFinisher",function (victim, functionA
 				"WeaponStaffBall",
 				"WeaponAxeSpecial",
 				"WeaponTorchSpecial",
-                "WeaponSuitRanged"
+                "WeaponSuitRanged",
+				"WeaponLobSpecial"
 			}
 		end
 		return base(weaponList)

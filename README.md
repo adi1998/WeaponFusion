@@ -8,11 +8,11 @@ Gameplay example of what it looks like in action [Weapon fusion test (Moros plus
 
 Use r2modman by ebkr from [Thunderstore](https://thunderstore.io/package/ebkr/r2modman/) or [GitHub](https://github.com/ebkr/r2modmanPlus/releases/latest).
 
-There's almost no way I could have tested every combo so it is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\Profile*.sav` in case there are issues.
+There's almost no way I could have tested every combo here :) so it is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\Profile*.sav` in case there are issues.
 
 ## Usage
 
-Use the Imgui menu (default toggle keybind: INSERT).
+Use the Imgui menu (default toggle keybind: INSERT). It's recommended to only use this if you atleast have every weapon unlocked.
 
 If the Imgui window seem unresponsive try disabling V-sync and any external frame limiters if enabled.
 
@@ -20,7 +20,7 @@ Fusion can only be performed in the Crossroads training grounds.
 
 ![Imgui menu](images/imgui.png)
 
-The primary aspect needs to be chosen in the in-game UI before/after fusion.
+The primary aspect needs to be changed in the in-game UI before/after fusion.
 
 If it feels like the fusion didn't apply properly try starting a run/reloading the room.
 
