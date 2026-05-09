@@ -2108,7 +2108,7 @@ mod.AspectTraitData = {
 		},
 		OnWeaponChargeFunctions =
 		{
-			ValidWeapons = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+			ValidWeapons = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
 			FunctionName = "CheckDaggerBlock",
 			FunctionArgs =
 			{
@@ -2135,7 +2135,7 @@ mod.AspectTraitData = {
 		},
 		WeaponSpeedMultiplier =
 		{
-			WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+			WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
 			Value =
 			{
 				BaseValue = 0.80,
@@ -2146,7 +2146,7 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
-				WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+				WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
 				BaseValue = 0.80,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
@@ -2745,6 +2745,24 @@ game.OnWeaponChargeCanceled{ "WeaponStaffSwing5",
 }
 
 game.OnWeaponChargeCanceled{ "WeaponSuitCharged",
+	function( triggerArgs )
+		if game.MapState.DaggerBlockShieldActive then
+			game.MapState.DaggerBlockShieldActive = false
+			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
+			game.SetPlayerInterruptible("DaggerBlock")
+			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+			if chargeFunctionArgs.Vfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+			if chargeFunctionArgs.BackVfx then
+				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
+			end
+		end
+	end
+}
+
+game.OnWeaponChargeCanceled{ "WeaponLob",
 	function( triggerArgs )
 		if game.MapState.DaggerBlockShieldActive then
 			game.MapState.DaggerBlockShieldActive = false
