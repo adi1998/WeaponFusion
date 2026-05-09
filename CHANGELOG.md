@@ -5,9 +5,9 @@
 - Adds the Argent Skull with Aspect of Persephone available as a secondary aspect
 - Add option for random fusion every run
 - Fix Shiva not boosting some omega attacks
-- Fusion now triggers a save
 - Fusing weapons now instantly swaps to the fused weapon, primary aspect still needs to be changed using the in-game UI
-- Fix for SkyFall not unequipping properly in the Crossroads
+- Fusion now triggers a save
+- Fix for SkyFall not unequipping properly in the Crossroads, when switching weapons
 
 ## [0.1.3] - 2026-05-08
 

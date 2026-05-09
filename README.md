@@ -20,6 +20,8 @@ Fusion can only be performed in the Crossroads training grounds.
 
 ![Imgui menu](images/imgui.png)
 
+The primary aspect needs to be chosen in the in-game UI before/after fusion.
+
 If it feels like the fusion didn't apply properly try starting a run/reloading the room.
 
 If it still seems bugged would really appreciate a bug report :).
