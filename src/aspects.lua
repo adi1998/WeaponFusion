@@ -582,7 +582,7 @@ mod.AspectTraitData = {
 		OnProjectileCreationFunction =
 		{
 			ValidProjectiles = {
-				"ProjectileSwing5", "ProjectileAxeSpin", "ProjectileTorchWave", "ProjectileTorchGhostLarge", "ProjectileTorchSupayBallEx", "ProjectileTorchBallEos",
+				"ProjectileSwing5", "ProjectileStaffWall", "ProjectileAxeSpin", "ProjectileTorchWave", "ProjectileTorchGhostLarge", "ProjectileTorchSupayBallEx", "ProjectileTorchBallEos",
 				"ProjectileLobCharged", "ProjectileLobOverheat"
 			},
 			Name = _PLUGIN.guid .. "." .. "CheckSuitComboAttackBuff",
@@ -2566,7 +2566,9 @@ modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, fu
 			game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) then
 		if weaponData.Name == "WeaponStaffSwing5" then
 			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
-			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
+			if not game.HeroHasTrait("StaffRaiseDeadAspect") then
+				game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
+			end
 			if game.HeroHasTrait("StaffExAoETrait") then
 				game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
 				game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")

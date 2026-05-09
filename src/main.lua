@@ -61,6 +61,7 @@ local function on_ready()
     import 'aspects.lua'
     import 'ready.lua'
     import 'powers.lua'
+    import 'startrun.lua'
 end
 
 local function on_reload()

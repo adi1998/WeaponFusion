@@ -6,6 +6,7 @@ local config = {
   last_primary = "WeaponStaffSwing";
   last_secondary = "WeaponStaffSwing";
   last_aspect = "None";
+  random_fusion_each_run = false;
 }
 
 local configDesc = {

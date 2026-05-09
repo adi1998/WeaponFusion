@@ -1,4 +1,3 @@
-
 rom.gui.add_imgui(function()
     if rom.ImGui.Begin("Weapon Fusion") then
         DrawMenu()
@@ -21,67 +20,6 @@ local WeaponNameDisplayNameMap = {
     ["WeaponSuit"] = "Xinth",
     ["WeaponLob"] = "Argent Skull",
 }
-
-WeaponMinorAspectData = {}
-
-for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
-    WeaponMinorAspectData[weaponName] = {"None"}
-    print(weaponName)
-    for _, aspectName in ipairs(aspectNameList) do
-        if mod.AspectTraitData[aspectName .. "_Secondary"] then
-            table.insert(WeaponMinorAspectData[weaponName], aspectName .. "_Secondary")
-        end
-    end
-end
-
-function mod.UnequipWeapons()
-    game.UnequipWeaponUpgrade()
-    local toUnequip = {}
-    local heroId = game.CurrentRun.Hero.ObjectId
-	for k, weaponName in ipairs( game.WeaponSets.HeroPrimaryWeapons ) do
-        game.CurrentRun.Hero.Weapons[weaponName] = nil
-        local unequipWeaponData = game.WeaponData[weaponName]
-        if unequipWeaponData.SecondaryWeapon ~= nil then
-            game.CurrentRun.Hero.Weapons[unequipWeaponData.SecondaryWeapon] = nil
-        end
-        table.insert( toUnequip, weaponName )
-        game.ConcatTableValues( toUnequip, game.WeaponSets.HeroWeaponSets[weaponName] )
-        if unequipWeaponData.DummyTraitName ~= nil then
-            game.RemoveTrait( game.CurrentRun.Hero, unequipWeaponData.DummyTraitName )
-        end
-        if unequipWeaponData.UnequipFunctionName then
-            game.thread( game.CallFunctionName, unequipWeaponData.UnequipFunctionName )
-        end
-	end
-    game.UnequipWeapon({ DestinationId = heroId, Names = toUnequip, UnloadPackages = false })
-	game.RemoveTableValues( game.MapState.EquippedWeapons, toUnequip )
-end
-
-function mod.EquipWeapons()
-    local weaponKit = game.WeaponData[config.last_primary]
-    local args = {}
-	game.AddInputBlock({ Name = "PickupWeaponKit" })
-	if game.GameState.ActiveObjectiveSet == nil or game.ObjectiveSetData[game.GameState.ActiveObjectiveSet] == nil or not game.ObjectiveSetData[game.GameState.ActiveObjectiveSet].BlockWeaponObjectives then
-		game.ClearObjectives()
-	end
-	game.Halt({ Id = game.CurrentRun.Hero.ObjectId })
-	game.EndRamWeapons({ Id = game.CurrentRun.Hero.ObjectId })
-	local weaponUntouched = game.IsWeaponUntouched( weaponKit.Name )
-	game.UnequipWeaponUpgrade()
-	game.EquipPlayerWeapon( weaponKit, args )
-	game.EquipWeaponUpgrade( game.CurrentRun.Hero )
-
-	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponKit.Name)
-	game.RunEventsGeneric( weaponData.StartRoomEvents, weaponData )
-	if weaponUntouched then
-		game.FirstTimeWeaponPickupPresentation( weaponKit )
-	end
-
-	game.thread( game.UpdateWeaponKits )
-	game.thread( game.SpawnSkelly, 1.0 )
-
-	game.RemoveInputBlock({ Name = "PickupWeaponKit" })
-end
 
 function DrawMenu()
     if game.CurrentHubRoom and game.CurrentHubRoom.Name == "Hub_PreRun" then
@@ -181,5 +119,9 @@ function DrawMenu()
         end
     else
         rom.ImGui.Text("Fusion only allowed in the\nCrossroads Training Grounds.")
+    end
+    local value, checked = rom.ImGui.Checkbox("Random fusion each run", config.random_fusion_each_run)
+    if checked then
+        config.random_fusion_each_run = value
     end
 end
