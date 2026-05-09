@@ -78,7 +78,13 @@ local traitTextList = {
         Id = "DaggerBlockAspect_Secondary",
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Artemis",
-        Description = "While you {$Keywords.Hold} your {$Keywords.AttackEX}, you occasionally {$Keywords.Block}, then {$Keywords.DaggerBlockBuff} right after."
+        Description = "While you {$Keywords.Hold} your {$Keywords.AttackEX}, you occasionally {$Keywords.Block}, then {$Keywords.DaggerBlockBuff} right after.",
+    },
+    {
+        Id = "LobImpulseAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Persephone",
+        Description = "Your {$Keywords.SpecialEX} is {$Keywords.Fuel}, and lets you change direction; {$Keywords.GodBoonPlural} start with {$Keywords.PomLevel}",
     }
 }
 
@@ -103,6 +109,7 @@ WeaponDisplayOrder = {
     "WeaponTorch",
     "WeaponAxe",
     "WeaponSuit",
+    "WeaponLob"
 }
 
 local weaponAnimationFile = rom.path.combine(rom.paths.Content, "Game\\Animations\\Model\\Weapon_Animation.sjson")

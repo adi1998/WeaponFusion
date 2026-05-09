@@ -19,6 +19,7 @@ local WeaponNameDisplayNameMap = {
     ["WeaponTorch"] = "Ygnium",
     ["WeaponAxe"] = "Zorephet",
     ["WeaponSuit"] = "Xinth",
+    ["WeaponLob"] = "Argent Skull",
 }
 
 WeaponMinorAspectData = {}
@@ -165,6 +166,7 @@ function DrawMenu()
             config.last_aspect = config.aspect
             FuseWeapon(config.primary, config.secondary, config.aspect)
             mod.EquipWeapons()
+            game.RequestPreRunLoadoutChangeSave()
         end
 
         rom.ImGui.SameLine(); clicked = rom.ImGui.Button("Unfuse")
@@ -175,6 +177,7 @@ function DrawMenu()
             config.last_aspect = "None"
             UnfuseWeapons()
             mod.EquipWeapons()
+            game.RequestPreRunLoadoutChangeSave()
         end
     else
         rom.ImGui.Text("Fusion only allowed in the\nCrossroads Training Grounds.")

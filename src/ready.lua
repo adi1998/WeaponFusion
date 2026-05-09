@@ -118,32 +118,37 @@ mod.WeaponData = {
         },
     },
 
-    -- WeaponLob = {
-    --     Primary = {
-    --         "WeaponLobChargedPulse",
-    --     },
-    --     Secondary = {
-    --         "WeaponLobSpecial", "WeaponSkullImpulse"
-    --     },
-    --     PrimaryHammers = {
-    --         "LobAmmoTrait",
-    --         "LobAmmoMagnetismTrait",
-    --         "LobSpreadShotTrait",
-    --         "LobPulseAmmoCollectTrait",
-    --         "LobPulseAmmoTrait",
-    --         "LobGrowthTrait",
-    --         "LobStraightShotTrait",
+    WeaponLob = {
+        Primary = {
+            "WeaponLobChargedPulse",
+        },
+        Secondary = {
+            "WeaponLobSpecial", "WeaponSkullImpulse"
+        },
+        PrimaryHammers = {
+            "LobAmmoTrait",
+            "LobAmmoMagnetismTrait",
+            "LobSpreadShotTrait",
+            "LobPulseAmmoCollectTrait",
+            "LobPulseAmmoTrait", -- funky requirements
+            "LobGrowthTrait",
+            "LobStraightShotTrait",
 
-    --     },
-    --     SecondaryHammers = {
-    --         "LobRushArmorTrait",
-    --         "LobOneSideTrait",
-    --         "LobSturdySpecialTrait",
-    --         "LobSpecialSpeedTrait",
-    --         "LobInOutSpecialExTrait",
+            "LobGunOverheatTrait",
+            "LobGunBounceTrait",
+            "LobGunAttackRangeTrait",
+            "LobGunAttackDoublerTrait"
+        },
+        SecondaryHammers = {
+            "LobRushArmorTrait",
+            "LobOneSideTrait",
+            "LobSturdySpecialTrait",
+            "LobSpecialSpeedTrait",
+            "LobInOutSpecialExTrait",
 
-    --     }
-    -- },
+            "LobGunSpecialBounceTrait"
+        }
+    },
 
     WeaponSuit = {
         Primary = {
@@ -474,7 +479,7 @@ if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary]
 end
 
 modutil.mod.Path.Wrap("SetupMap", function(base, ...)
-    game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit"}})
+    game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit", "WeaponLob"}})
     return base(...)
 end)
 

@@ -174,6 +174,52 @@ modutil.mod.Path.Context.Wrap.Static("CheckDaggerCritCharges", function (weaponD
 	end)
 end)
 
+modutil.mod.Path.Context.Wrap.Static("SkullImpulseTransform", function (weaponData, functionArgs, triggerArgs)
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "LobImpulseAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("ChargeSkullImpulse", function (victim, args, triggerArgs)
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "LobImpulseAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("UpdateLobUI", function ( spellItem, args, user )
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "LobImpulseAspect")
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("EmptyThrowCharge", function ( weaponName, stageReached )
+	local orig_HeroHasTrait = modutil.mod.Path.Get("HeroHasTrait")
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "LobImpulseAspect")
+	end)
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "LobImpulseAspect" and orig_HeroHasTrait(traitName .. "_Secondary") then
+			return base(traitName .. "_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("CheckSkullImpulseStart", function ()
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "LobImpulseAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+		return base(traitName)
+	end)
+end)
+
 modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1.Call", function ()
 	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
 		if traitName == "DaggerBlockAspect" then
@@ -183,5 +229,23 @@ modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1
 	end)
 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
 		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
+	end)
+end)
+
+modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnBlinkFinished.WeaponLogic.2.Call", function (triggerArgs)
+	modutil.mod.Path.Wrap("GetWeaponDataValue", function (base, args)
+		local dataValue = base(args)
+		if not dataValue then
+			if args.WeaponName == "WeaponLob" and args.Property == "ChargeTime" then
+				return 0.23
+			end
+			if args.WeaponName == "WeaponLob" and args.Property == "MinChargeToFire" then
+				return 0.04
+			end
+		end
+		return dataValue
+	end)
+	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+		return HeroHasTraitWrap(base, traitName, "LobImpulseAspect")
 	end)
 end)
