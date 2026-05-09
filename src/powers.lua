@@ -297,17 +297,95 @@ function mod.StartTorchSpecialRepeatThread(startX, startY, angle, args)
 	game.SessionMapState.OriginMarkers[weaponName] = nil
 end
 
+function mod.StartLobSpecialRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileThrowCharged"
+	local threadName = "RepeatSpecialThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+		MatchProjectileName = true,
+	})
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		local dropLocations = {}
+		local index = 1
+		local ex_interval = 0
+		local time
+		while game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"] and game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"][index] do
+			local throwExRecord = game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"][index]
+			if time then
+				ex_interval = throwExRecord.Time-time
+			end
+			game.waitUnmodified(ex_interval, threadName)
+			local angle_record = throwExRecord.Angle
+			local location = throwExRecord.Location
+			time = throwExRecord.Time
+			local dropLocation = game.SpawnObstacle({ Name = "BlankObstacle", LocationX = location.X, LocationY = location.Y})
+			table.insert(dropLocations, dropLocation)
+			game.CreateProjectileFromUnit({
+				WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				FireFromTarget = true,
+				Angle = angle_record + 90,
+				DataProperties = derivedValues.PropertyChanges,
+				ThingProperties = derivedValues.ThingPropertyChanges,
+				ProjectileCap = 12
+			})
+			game.CreateProjectileFromUnit({
+				WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				FireFromTarget = true,
+				Angle = angle_record - 90,
+				DataProperties = derivedValues.PropertyChanges,
+				ThingProperties = derivedValues.ThingPropertyChanges,
+				ProjectileCap = 12
+			})
+			index = index + 1
+		end
+		game.Destroy({Ids = dropLocations })
+		repeats = repeats + 1
+	end
+	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
 mod.WeaponThreadMap = {
 	["WeaponAxeSpecialSwing"] = mod.StartAxeSpecialRepeatThread,
 	["WeaponDaggerThrow"] = mod.StartDaggerSpecialRepeatThread,
 	["WeaponSuitRanged"] = mod.StartSuitSpecialRepeatThread,
 	["WeaponTorchSpecial"] = mod.StartTorchSpecialRepeatThread,
+	["WeaponLobSpecial"] = mod.StartLobSpecialRepeatThread,
 }
 
 local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", "WeaponLobSpecial"}
 
 modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionArgs, triggerArgs )
-    if game.Contains(dropOriginWeapons, weaponData.Name) then
+    if mod.WeaponThreadMap[weaponData.Name] then
         if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) or triggerArgs.DisjointExCast then
             -- print(mod.dump(weaponData))
             -- print(mod.dump(triggerArgs))
@@ -331,7 +409,7 @@ modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionAr
                     game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
                     game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
                 end
-                game.thread(mod.WeaponThreadMap[weaponName] or mod.StartSpecialRepeatThread, startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
+                game.thread(mod.WeaponThreadMap[weaponName], startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
             end
             local zOffset = 90
 
@@ -345,91 +423,9 @@ modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionAr
     end
 end)
 
-function mod.StartSpecialRepeatThread(startX, startY, angle, args )
-    args = args or {}
-    local functionArgs, triggerArgs, weaponName, projectileName = args[1], args[2], args[3], args[4]
-	functionArgs = functionArgs or {}
-	functionArgs.Repeats = functionArgs.Repeats or 3
-	functionArgs.Interval = functionArgs.Interval or 3.5
-	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
-	local threadName = "RepeatSpecialThread"
-	projectileName = projectileName or "ProjectileDaggerThrowCharged"
-	local repeats = 1
-	local useSecondStageCharacteristics = false
-	local weaponData = GetWeaponData( CurrentRun.Hero, weaponName )
-	
-	local derivedValues = GetDerivedPropertyChangeValues({
-		ProjectileName = projectileName,
-		WeaponName = weaponName,
-		Type = "Projectile",
-	})
-	local traitData = GetHeroTrait("StaffSelfHitAspect")
-	local animationName = "WitchGrenadeRecallSphere"
-	if traitData and traitData.OnWeaponFiredFunctions and traitData.OnWeaponFiredFunctions.FunctionArgs and traitData.OnWeaponFiredFunctions.FunctionArgs.AnimationName then
-		animationName = traitData.OnWeaponFiredFunctions.FunctionArgs.AnimationName
+modutil.mod.Path.Wrap("DoThrowEx", function (base, weaponName)
+	if game.HeroHasTrait("StaffSelfHitAspect") then
+		game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"] = {}
 	end
-	
-	if HeroHasTrait("StaffSecondStageTrait") and (SessionMapState.ProjectileChargeStageReached[triggerArgs.ProjectileVolley] or 0) >= 2 then
-		useSecondStageCharacteristics = true
-			-- TODO: extract these from a version of derive property change values on the weapon
-		derivedValues.PropertyChanges.DamageRadius = 550
-		derivedValues.PropertyChanges.BlastSpeed = 2500
-	end		
-	local logProjectileIdForMagicCrit = false
-	if SessionMapState.DifferentOmegaVolleys[weaponName] and SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
-		SessionMapState.DifferentOmegaProjectileIds[weaponName] = SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
-		logProjectileIdForMagicCrit = true
-	end	
-	while repeats < functionArgs.Repeats do
-		waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
-		if functionArgs.AttackAnimationName then
-			SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = SessionMapState.OriginMarkers[weaponName] })
-		end
-		waitUnmodified(functionArgs.PreAttackDuration, threadName )
-		local dropLocation = SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
-		if (CurrentRun.Hero.IsDead and (not CurrentHubRoom or not CurrentHubRoom.AllowEnemyAIActive)) or ( CurrentRun.CurrentRoom.Encounter and CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
-			break
-		end
-		if HeroHasTrait("StaffTripleShotTrait") then
-			-- TODO: extract these from a version of derive property change values on the weapon
-			local numProjectiles = 2
-			local delay = 0.12
-			if weaponData.RepeatFireSound then
-				PlaySound({ Name = weaponData.RepeatFireSound, Id = SessionMapState.OriginMarkers[weaponName] })
-			end
-			local projectileId = CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = CurrentRun.Hero.ObjectId, DestinationId = dropLocation, FireFromTarget = true, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle })
-			if logProjectileIdForMagicCrit then
-				SessionMapState.DifferentOmegaProjectileIds[weaponName] = SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
-				SessionMapState.DifferentOmegaProjectileIds[weaponName][projectileId] = true
-			end
-			waitUnmodified( delay, threadName )
-		end
-		if (CurrentRun.Hero.IsDead and (not CurrentHubRoom or not CurrentHubRoom.AllowEnemyAIActive)) or ( CurrentRun.CurrentRoom.Encounter and CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
-			break
-		end
-		local animationName = GetWeaponDataValue({ Id = CurrentRun.Hero.ObjectId, WeaponName = weaponName, Property = "FireFx"})
-		if animationName then
-			CreateAnimation({ Name = animationName, DestinationId = SessionMapState.OriginMarkers[weaponName] })
-		end
-		if weaponData.RepeatFireSound then
-			PlaySound({ Name = weaponData.RepeatFireSound, Id = SessionMapState.OriginMarkers[weaponName] })
-		end
-		local projectileId = CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = CurrentRun.Hero.ObjectId, DestinationId = dropLocation, FireFromTarget = true, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle })
-		if logProjectileIdForMagicCrit then
-			SessionMapState.DifferentOmegaProjectileIds[weaponName] = SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
-			SessionMapState.DifferentOmegaProjectileIds[weaponName][projectileId] = true
-		end
-		if useSecondStageCharacteristics then
-			local currentVolley = GetWeaponProperty({ Id = CurrentRun.Hero.ObjectId, WeaponName = weaponName, Property = "Volley" })
-			SessionMapState.ProjectileChargeStageReached[currentVolley] = 2
-		end
-		Destroy({Id = dropLocation })
-		repeats = repeats + 1
-	end
-	wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
-	local id = SessionMapState.OriginMarkers[weaponName]
-	SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
-	thread( DestroyOnDelay, {id} , functionArgs.DestroyDelay )
-	
-	SessionMapState.OriginMarkers[weaponName] = nil
-end
+	return base(weaponName)
+end)

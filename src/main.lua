@@ -76,6 +76,7 @@ end
 local function on_ready_late()
     if config.enabled == false then return end
     import "ready_late.lua"
+    import "powers_late.lua"
 end
 
 local function on_reload_late()
