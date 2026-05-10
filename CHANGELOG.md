@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-05-10
+
 - Moros now doesn't destroy the special projectiles immediately
 - Fix skulls and Shiva not detonating Moros flames
 - Slightly reduce Artemis omega attack speed
@@ -38,7 +40,8 @@
 
 ## [0.0.1] - 2026-05-07
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.2.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/adi1998/WeaponFusion/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/adi1998/WeaponFusion/compare/0.1.3...0.2.0
 [0.1.3]: https://github.com/adi1998/WeaponFusion/compare/0.1.2...0.1.3
 [0.1.2]: https://github.com/adi1998/WeaponFusion/compare/0.1.1...0.1.2
