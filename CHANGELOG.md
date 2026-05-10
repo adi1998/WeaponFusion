@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-09
+
 - Adds the Argent Skull with Aspect of Persephone available as a secondary aspect
 - Add option for random fusion every run
 - Fix Shiva not boosting some omega attacks
@@ -31,7 +33,8 @@
 
 ## [0.0.1] - 2026-05-07
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.1.3...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/adi1998/WeaponFusion/compare/0.1.3...0.2.0
 [0.1.3]: https://github.com/adi1998/WeaponFusion/compare/0.1.2...0.1.3
 [0.1.2]: https://github.com/adi1998/WeaponFusion/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/adi1998/WeaponFusion/compare/0.1.0...0.1.1
