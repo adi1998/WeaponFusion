@@ -2073,23 +2073,23 @@ mod.AspectTraitData = {
 			},
 			Rare =
 			{
-				Multiplier = 1.5
+				Multiplier = 1.3
 			},
 			Epic =
 			{
-				Multiplier = 2.0
+				Multiplier = 1.7
 			},
 			Heroic =
 			{
-				Multiplier = 2.5
+				Multiplier = 2
 			},
 			Legendary =
 			{
-				Multiplier = 3.0
+				Multiplier = 2.666
 			},
 			Perfect =
 			{
-				Multiplier = 4.5,
+				Multiplier = 3.3333,
 			},
 		},
 		AddOutgoingCritModifiers =
@@ -2135,10 +2135,10 @@ mod.AspectTraitData = {
 		},
 		WeaponSpeedMultiplier =
 		{
-			WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
+			WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
 			Value =
 			{
-				BaseValue = 0.80,
+				BaseValue = 0.85,
 				SourceIsMultiplier = true,
 			},
 			ReportValues = { ReportedSpeedIncrease = "Value" }
@@ -2146,8 +2146,8 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
-				WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
-				BaseValue = 0.80,
+				WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
+				BaseValue = 0.85,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
 			}

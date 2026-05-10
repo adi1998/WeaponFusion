@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- Moros now doesn't destroy the special projectiles immediately
+- Fix skulls and Shiva not detonating Moros flames
+- Slightly reduce Artemis omega attack speed
+- Artemis now also boosts staff omega attack speed
+
 ## [0.2.0] - 2026-05-09
 
 - Adds the Argent Skull with Aspect of Persephone available as a secondary aspect
