@@ -206,8 +206,33 @@ function MorosSpecialDetonatePatches()
             "ProjectileSuitRangedChargedUnguided",
             "ProjectileSuitRangedGuidedSplit",
             "ProjectileSuitRangedChargedSplit",
+
+            "ProjectileSuitGrenade",
+            "ProjectileSuitBomb",
+            "ProjectileSuitGrenadeStraight",
+            "ProjectileSuitBombStraight"
         },
+        ["WeaponLobSpecial"] = {
+            "ProjectileThrowBlink",
+            "ProjectileThrowCharged"
+        }
     }
+    local detonateSkip = game.ToLookup({
+        "ProjectileStaffBallCharged",
+
+        "ProjectileSuitRangedGuided",
+        "ProjectileSuitRangedUnguided",
+        "ProjectileSuitRangedCharged",
+        "ProjectileSuitRangedChargedUnguided",
+        "ProjectileSuitRangedGuidedSplit",
+        "ProjectileSuitRangedChargedSplit",
+
+        "ProjectileSuitGrenade",
+        "ProjectileSuitBomb",
+        "ProjectileSuitGrenadeStraight",
+        "ProjectileSuitBombStraight"
+    })
+
     for weaponName, projectiles in pairs(specialWeaponProjectileMap) do
         for _, projectileName in ipairs(projectiles) do
             table.insert(game.TraitData.TorchDetonateAspect.PropertyChanges, {
@@ -224,6 +249,15 @@ function MorosSpecialDetonatePatches()
 				ChangeValue = true,
 				ChangeType = "Absolute",
 			})
+            if not detonateSkip[projectileName] then
+                table.insert(game.TraitData.TorchDetonateAspect.PropertyChanges, {
+                    WeaponName = weaponName,
+                    ProjectileName = projectileName,
+                    ProjectileProperty = "DetonateOnImpact",
+                    ChangeValue = false,
+                    ChangeType = "Absolute",
+                })
+            end
         end
     end
 end
