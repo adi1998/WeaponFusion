@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 - Trick Knives now gets properly boosted by special boons
-- Replace projectiles spawned by Trick Knives for some torch, staff and coat
+- Replace projectiles spawned by Trick Knives for axe, torch, staff and coat
 
 ## [0.2.2] - 2026-05-11
 
