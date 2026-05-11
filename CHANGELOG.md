@@ -2,10 +2,12 @@
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-05-11
+
 - Counter Barrage(Xinth) now correctly fires special rockets when in a fused state
 - Current fusion status is always shown in the imgui window
 - Fixed biome transition maps being disabled (oops)
-- Imgui shouldn't allow same weapon fusion anymore (it already did nothing expect cause con _fusion_)
+- Imgui shouldn't allow same weapon fusion anymore (it already did nothing expect cause con-_fusion_)
 
 ## [0.2.1] - 2026-05-10
 
@@ -45,7 +47,8 @@
 
 ## [0.0.1] - 2026-05-07
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.2.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.2.2...HEAD
+[0.2.2]: https://github.com/adi1998/WeaponFusion/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/adi1998/WeaponFusion/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/adi1998/WeaponFusion/compare/0.1.3...0.2.0
 [0.1.3]: https://github.com/adi1998/WeaponFusion/compare/0.1.2...0.1.3
