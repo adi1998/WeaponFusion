@@ -51,11 +51,14 @@ function DrawMenu()
         -- rom.ImGui.SetCursorPosX(width)
 
         if rom.ImGui.BeginCombo("###primary", WeaponNameDisplayNameMap[config.primary]) then
-            for _, weaponName in ipairs(WeaponDisplayOrder) do
+            for index, weaponName in ipairs(WeaponDisplayOrder) do
                 local displayName = WeaponNameDisplayNameMap[weaponName]
                 if rom.ImGui.Selectable(displayName, weaponName == config.primary) then
                     if weaponName ~= config.primary then
                         config.primary = weaponName
+                        if config.secondary == config.primary then
+                            config.secondary = WeaponDisplayOrder[ index%(#WeaponDisplayOrder) + 1 ]
+                        end
                     end
                     rom.ImGui.SetItemDefaultFocus()
                 end
@@ -69,7 +72,7 @@ function DrawMenu()
         if rom.ImGui.BeginCombo("###secondary", WeaponNameDisplayNameMap[config.secondary]) then
             for _, weaponName in ipairs(WeaponDisplayOrder) do
                 local displayName = WeaponNameDisplayNameMap[weaponName]
-                if rom.ImGui.Selectable(displayName, weaponName == config.secondary) then
+                if weaponName ~= config.primary and rom.ImGui.Selectable(displayName, weaponName == config.secondary) then
                     if weaponName ~= config.secondary then
                         config.secondary = weaponName
                         config.aspect = WeaponMinorAspectData[weaponName][1] or "None"
