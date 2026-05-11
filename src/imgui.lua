@@ -22,28 +22,29 @@ local WeaponNameDisplayNameMap = {
 }
 
 function DrawMenu()
+    rom.ImGui.Text("Try to not have either of the two       \nweapons equipped while fusing.")
+    rom.ImGui.Text("If the weapons feel like they haven'       \nbeen swapped properly try exiting and         \nentering the room or starting a new run")
+
+    rom.ImGui.Separator()
+    rom.ImGui.Text("Currently fused weapon")
+
+    local width = rom.ImGui.CalcTextSize("Secondary: ") + 60
+
+    rom.ImGui.Text("Primary"); rom.ImGui.SameLine()
+    rom.ImGui.SetCursorPosX(width)
+    rom.ImGui.Text(WeaponNameDisplayNameMap[config.last_primary])
+
+    rom.ImGui.Text("Secondary"); rom.ImGui.SameLine()
+    rom.ImGui.SetCursorPosX(width)
+    rom.ImGui.Text(WeaponNameDisplayNameMap[config.last_secondary])
+
+    rom.ImGui.Text("Second Aspect"); rom.ImGui.SameLine()
+    rom.ImGui.SetCursorPosX(width)
+    rom.ImGui.Text((mod.AspectDisplayNameMap[config.last_aspect] or "None"))
+
+    rom.ImGui.Separator()
+
     if game.CurrentHubRoom and game.CurrentHubRoom.Name == "Hub_PreRun" then
-        rom.ImGui.Text("Try to not have either of the two       \nweapons equipped while fusing.")
-        rom.ImGui.Text("If the weapons feel like they haven'       \nbeen swapped properly try exiting and         \nentering the room or starting a new run")
-
-        rom.ImGui.Separator()
-        rom.ImGui.Text("Currently fused weapon")
-
-        local width = rom.ImGui.CalcTextSize("Secondary: ") + 60
-
-        rom.ImGui.Text("Primary"); rom.ImGui.SameLine()
-        rom.ImGui.SetCursorPosX(width)
-        rom.ImGui.Text(WeaponNameDisplayNameMap[config.last_primary])
-
-        rom.ImGui.Text("Secondary"); rom.ImGui.SameLine()
-        rom.ImGui.SetCursorPosX(width)
-        rom.ImGui.Text(WeaponNameDisplayNameMap[config.last_secondary])
-
-        rom.ImGui.Text("Second Aspect"); rom.ImGui.SameLine()
-        rom.ImGui.SetCursorPosX(width)
-        rom.ImGui.Text((mod.AspectDisplayNameMap[config.last_aspect] or "None"))
-
-        rom.ImGui.Separator()
         rom.ImGui.Text("Select Weapons to fuse")
 
         rom.ImGui.Text("Primary"); rom.ImGui.SameLine()
