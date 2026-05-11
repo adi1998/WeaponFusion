@@ -504,3 +504,46 @@ modutil.mod.Path.Wrap("BlockLaunchMissile", function (base, blocker, args, trigg
 	end
 	return base(blocker, args, triggerArgs)
 end)
+
+modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs, triggerArgs)
+	if game.CurrentRun.Hero.Weapons.WeaponDagger and not game.CurrentRun.Hero.Weapons.WeaponDaggerThrow then
+		local weaponProjectileMap = {
+			WeaponStaffBall = "ProjectileStaffBall",
+			WeaponTorchSpecial = "ProjectileTorchOrbit",
+			WeaponAxeSpecial = "ProjectileDaggerThrow",
+			WeaponSuitRanged = "ProjectileSuitRangedUnguided",
+			WeaponLobSpecial = "ProjectileDaggerThrow",
+			WeaponDaggerThrow = "ProjectileDaggerThrow",
+		}
+		local secondWeapon = game.WeaponData["WeaponDagger"].SecondaryWeapon
+		local chosenProjectile = weaponProjectileMap[secondWeapon]
+		if secondWeapon == "WeaponSuitRanged" and game.HeroHasTrait("SuitComboAspect_Secondary") then
+			chosenProjectile = "ProjectileSuitGrenade"
+			if game.HeroHasTrait("SuitComboForwardRocketTrait") then
+				chosenProjectile = "ProjectileSuitGrenadeStraight"
+			end
+		end
+		local startAngle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
+
+		local propertyWeapon = secondWeapon
+		if chosenProjectile == "ProjectileDaggerThrow" then
+			propertyWeapon = "WeaponDaggerThrow"
+		end
+		local derivedValues = game.GetDerivedPropertyChangeValues({
+			ProjectileName = chosenProjectile,
+			WeaponName = propertyWeapon,
+			Type = "Projectile",
+		})
+
+		local spread = traitArgs.Spread
+		if chosenProjectile == "ProjectileTorchOrbit" then
+			spread = 240
+		end
+		for i=1, traitArgs.Projectiles do
+			local projectileId = game.CreateProjectileFromUnit({ WeaponName = secondWeapon, Name = chosenProjectile, Id = game.CurrentRun.Hero.ObjectId,
+				Angle = startAngle - spread/2 + (i - 1) * spread/(traitArgs.Projectiles - 1 ), DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges })
+		end
+	else
+		base(weaponData, traitArgs, triggerArgs)
+	end
+end)
