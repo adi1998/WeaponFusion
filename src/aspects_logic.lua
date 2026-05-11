@@ -510,7 +510,7 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 		local weaponProjectileMap = {
 			WeaponStaffBall = "ProjectileStaffBall",
 			WeaponTorchSpecial = "ProjectileTorchOrbit",
-			WeaponAxeSpecial = "ProjectileDaggerThrow",
+			WeaponAxeSpecial = "ProjectileAxeSpecial",
 			WeaponSuitRanged = "ProjectileSuitRangedUnguided",
 			WeaponLobSpecial = "ProjectileDaggerThrow",
 			WeaponDaggerThrow = "ProjectileDaggerThrow",
@@ -535,10 +535,17 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 			Type = "Projectile",
 		})
 
+		if chosenProjectile == "ProjectileAxeSpecial" and secondWeapon == "WeaponAxeSpecial" and not derivedValues.PropertyChanges.StartFx then
+			derivedValues.PropertyChanges.StartFx = "AxeSwipeUpper"
+		end
+
 		local spread = traitArgs.Spread
 		if chosenProjectile == "ProjectileTorchOrbit" then
 			spread = 240
+		elseif chosenProjectile == "ProjectileAxeSpecial" then
+			spread = 90
 		end
+
 		for i=1, traitArgs.Projectiles do
 			local projectileId = game.CreateProjectileFromUnit({ WeaponName = secondWeapon, Name = chosenProjectile, Id = game.CurrentRun.Hero.ObjectId,
 				Angle = startAngle - spread/2 + (i - 1) * spread/(traitArgs.Projectiles - 1 ), DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges })
