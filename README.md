@@ -12,7 +12,7 @@ There's almost no way I could have tested every combo here :) so it is recommend
 
 ## Usage
 
-Use the Imgui menu (default toggle keybind: INSERT). It's recommended to only use this if you atleast have every weapon unlocked.
+Use the Imgui menu (default toggle keybind: INSERT). It's recommended to only use this if you atleast have every weapon unlocked. If you do not have every weapon unlocked, just don't fuse them.
 
 If the Imgui window seem unresponsive try disabling V-sync and any external frame limiters if enabled.
 
