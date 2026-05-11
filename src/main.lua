@@ -61,7 +61,7 @@ local function on_ready()
     import 'aspects.lua'
     import 'aspects_logic.lua'
     import 'ready.lua'
-    import 'powers.lua'
+    import 'momus.lua'
     import 'startrun.lua'
 end
 
@@ -77,7 +77,7 @@ end
 local function on_ready_late()
     if config.enabled == false then return end
     import "ready_late.lua"
-    import "powers_late.lua"
+    import "momus_late.lua"
 end
 
 local function on_reload_late()

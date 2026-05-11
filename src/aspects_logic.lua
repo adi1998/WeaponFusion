@@ -475,7 +475,6 @@ modutil.mod.Path.Wrap("BlockLaunchMissile", function (base, blocker, args, trigg
 			local weaponData = game.GetWeaponData( game.CurrentRun.Hero, "WeaponSuitRanged" )
 
 			for i=1, projectileCount do
-
 				enemyId = game.GetClosest({
 					Id = game.CurrentRun.Hero.ObjectId,
 					DestinationName = "EnemyTeam",
