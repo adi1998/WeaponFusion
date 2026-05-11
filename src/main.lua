@@ -59,6 +59,7 @@ local function on_ready()
     end
     import 'sjson.lua'
     import 'aspects.lua'
+    import 'aspects_logic.lua'
     import 'ready.lua'
     import 'powers.lua'
     import 'startrun.lua'
