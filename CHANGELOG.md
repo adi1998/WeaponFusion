@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Trick Knives now gets properly boosted by special boons
+- Replace projectiles spawned by Trick Knives for some torch, staff and coat
+
 ## [0.2.2] - 2026-05-11
 
 - Counter Barrage(Xinth) now correctly fires special rockets when in a fused state
