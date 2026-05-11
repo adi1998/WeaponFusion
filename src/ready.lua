@@ -582,10 +582,6 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     return val
 end)
 
-modutil.mod.Path.Override("BiomeMapPresentation", function (base, ...)
-    return
-end)
-
 modutil.mod.Path.Wrap("TorchSpecialAutofire", function (base, ...)
     if not game.CurrentRun.Hero.Weapons["WeaponTorchSpecial"] then
         return

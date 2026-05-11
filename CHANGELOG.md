@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Counter Barrage(Xinth) now correctly fires special rockets when in a fused state
+- Current fusion status is always shown in the imgui window
+- Fixed biome transition maps being disabled (oops)
+
 ## [0.2.1] - 2026-05-10
 
 - Moros now doesn't destroy the special projectiles immediately

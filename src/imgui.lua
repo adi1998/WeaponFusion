@@ -23,7 +23,7 @@ local WeaponNameDisplayNameMap = {
 
 function DrawMenu()
     rom.ImGui.Text("Try to not have either of the two       \nweapons equipped while fusing.")
-    rom.ImGui.Text("If the weapons feel like they haven'       \nbeen swapped properly try exiting and         \nentering the room or starting a new run")
+    rom.ImGui.Text("If the weapons feel like they haven't       \nbeen swapped properly try exiting and         \nentering the room or starting a new run")
 
     rom.ImGui.Separator()
     rom.ImGui.Text("Currently fused weapon")
