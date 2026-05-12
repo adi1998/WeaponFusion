@@ -6,6 +6,7 @@ Gameplay examples of what it looks like in action:
 
 - [Xinth plus Persephone](https://www.youtube.com/watch?v=OkgxMJ7DG9Y)
 - [Moros plus Xinth](https://www.youtube.com/watch?v=6Wv3l-xk-m4)
+- [UI Test](https://www.youtube.com/watch?v=ZmoIs2aW9iM)
 
 ## Installation
 
@@ -21,7 +22,8 @@ If the ImGui window seem unresponsive try disabling V-sync and any external fram
 
 Fusion can only be performed in the Crossroads training grounds.
 
-![Ingame UI](images/ingame.png)
+![Pool Interact](images/pool.png)
+![Ingame UI](images/menu.png)
 
 ![ImGui menu](images/imgui.png)
 

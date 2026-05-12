@@ -411,7 +411,7 @@ mod.AspectTraitData = {
 	},
 
 	SuitComboAspect_Secondary =
-	{	
+	{
 		Name = "SuitComboAspect_Secondary",
 		InheritFrom = { "BaseTrait" },
 		Icon = "Hammer_Suit_16",
@@ -541,11 +541,11 @@ mod.AspectTraitData = {
 				},
 			},
 		},
-		PropertyChanges = 
+		PropertyChanges =
 		{
 			{
 				WeaponName = "WeaponSuitRanged",
-				WeaponProperties = 
+				WeaponProperties =
 				{
 					Projectile = "ProjectileSuitGrenade",
 					ChargeStartAnimation = "Melinoe_Suit_Shiva_SpecialMissile_Start",

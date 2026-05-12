@@ -398,7 +398,6 @@ function mod.CreateAspectInfoItem(button)
 	local detailsData = game.DeepCopyTable( game.ScreenData.UpgradeChoice.DescriptionText )
 	detailsData.Id = components.DetailsBacking.Id
 	detailsData.TextSymbolScale = traitData.DescriptionTextSymbolScale or detailsData.TextSymbolScale
-	detailsData.BlockTooltip = true
 	game.CreateTextBoxWithFormat( detailsData )
 
 	components.StatlineBackings = {}
