@@ -365,6 +365,138 @@ function mod.OpenWeaponFusionScreen()
 	game.HandleScreenInput( screen )
 end
 
+function mod.CreateAspectInfoItem(button)
+	local componentIds = game.GetAllIds( button.Screen.BoonInfoBox or {} )
+	game.Destroy({ Ids = componentIds })
+
+	local screen = button.Screen
+	local components = {}
+	local backingAnim = "WeaponSlotBase"
+	local index = button.Index
+	local weaponName = screen.WeaponList[index].WeaponName
+	local traitData
+	local groupName = "Combat_Menu"
+	local offset = {X = 960, Y = 840}
+	local textOffset = -70 - 350
+	local titleBoxYOffset = -20
+
+
+	if button.WeaponType == "Primary" then
+		local aspectIndex = screen.ScrollState[index].PrimaryIndex
+		local rawTraitData = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][aspectIndex]]
+		traitData = game.GetProcessedTraitData({ Unit = game.CurrentRun.Hero, TraitName = rawTraitData.Name, Rarity = game.GetRarityKey( game.GetWeaponUpgradeLevel( rawTraitData.Name ), game.TraitRarityData.WeaponRarityUpgradeOrder ) })
+		game.SetTraitTextData( traitData )
+	else
+		local aspectIndex = screen.ScrollState[index].SecondaryIndex
+		local traitName = WeaponMinorAspectData[weaponName][aspectIndex]
+		local rawTraitData = game.TraitData[traitName] or game.TraitData[game.ScreenData.GameStats.WeaponBaseAspectMapping[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]]
+		traitData = game.GetProcessedTraitData({ Unit = game.CurrentRun.Hero, TraitName = rawTraitData.Name, Rarity = game.GetRarityKey( game.GetWeaponUpgradeLevel( string.gsub(rawTraitData.Name, "_Secondary", "") ), game.TraitRarityData.WeaponRarityUpgradeOrder ) })
+		game.SetTraitTextData( traitData )
+	end
+	components.DetailsBacking = game.CreateScreenComponent({ Name = "BoonSlotBase", Group = "Combat_Menu", X = offset.X, Y = offset.Y, Animation = backingAnim })
+	game.SetInteractProperty({ DestinationId = components.DetailsBacking.Id, Property = "FreeFormSelectable", Value = false })
+	local detailsData = game.DeepCopyTable( game.ScreenData.UpgradeChoice.DescriptionText )
+	detailsData.Id = components.DetailsBacking.Id
+	detailsData.TextSymbolScale = traitData.DescriptionTextSymbolScale or detailsData.TextSymbolScale
+	detailsData.BlockTooltip = true
+	game.CreateTextBoxWithFormat( detailsData )
+
+	components.StatlineBackings = {}
+	for lineNum = 1, 2 do
+
+		screen.LineHeight = game.ScreenData.UpgradeChoice.LineHeight
+
+		local columnOffset = math.abs( (game.ScreenData.UpgradeChoice.StatLineRight.OffsetX or 0) - (game.ScreenData.UpgradeChoice.StatLineLeft.OffsetX or 0) )
+		local offsetY = (lineNum - 1) * screen.LineHeight
+		local statLineKey = "StatlineBackings"..lineNum
+		components[statLineKey.."Left"] = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X + textOffset, Y = offset.Y })
+
+		local statLineLeft = game.ShallowCopyTable( game.ScreenData.UpgradeChoice.StatLineLeft )
+		if traitData ~= nil and traitData.FlavorText ~= nil and traitData.StatLines and #(traitData.StatLines) > 1 then
+			offsetY = offsetY + game.GetLocalizedValue( 0, statLineLeft.LangDoubleStatLineAndFlavorTextOffsetY )
+		end
+		statLineLeft.Id = components[statLineKey.."Left"].Id
+		statLineLeft.OffsetX = 0
+		statLineLeft.OffsetY = offsetY
+		game.CreateTextBoxWithFormat( statLineLeft )
+
+		components[statLineKey.."Right"] = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X + textOffset, Y = offset.Y })
+		local statLineRight = game.ShallowCopyTable( game.ScreenData.UpgradeChoice.StatLineRight )
+		statLineRight.Id = components[statLineKey.."Right"].Id
+		statLineRight.OffsetX = (statLineRight.OffsetX or 0) + columnOffset
+		statLineRight.OffsetY = offsetY
+		game.CreateTextBoxWithFormat( statLineRight )
+		table.insert( components.StatlineBackings, { components[statLineKey.."Left"].Id, components[statLineKey.."Right"].Id } )
+	end
+	components.TitleBox = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X + textOffset, Y = offset.Y - 30 })
+	game.CreateTextBox({
+		Id = components.TitleBox.Id,
+		FontSize = 25,
+		OffsetY = -17 + titleBoxYOffset,
+		Font = "P22UndergroundSCMedium",
+		ShadowBlur = 0, ShadowColor = {0,0,0,1}, ShadowOffset={0, 2},
+		Justification = "Left",
+	})
+
+	components.RarityBox = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X, Y = offset.Y - 10 })
+	local rarityTextBox = game.ShallowCopyTable( game.ScreenData.UpgradeChoice.RarityText )
+
+	rarityTextBox.Id = components.RarityBox.Id
+	rarityTextBox.DataProperties =
+	{
+		TextSymbolOffsetY = traitData.RarityTextSymbolOffset or 0.0
+	}
+	game.CreateTextBox( rarityTextBox )
+
+	components.FlavorText = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X, Y = offset.Y})
+
+	local flavorTextData = game.MergeTables(
+		{
+			Id = components.FlavorText.Id,
+		},
+		game.ScreenData.UpgradeChoice.FlavorText )
+	flavorTextData.LineSpacingBottom = game.GetLocalizedValue(0, game.ScreenData.UpgradeChoice.FlavorText.LangLineSpacingBottom )
+	flavorTextData.OffsetY = game.GetLocalizedValue( game.ScreenData.UpgradeChoice.FlavorText.OffsetY, game.ScreenData.UpgradeChoice.FlavorText.LangOffsetY )
+
+	game.CreateTextBox( flavorTextData )
+	game.Attach({ Id = components.FlavorText.Id, DestinationId = components.DetailsBacking.Id })
+
+	local iconOffsetX = game.ScreenData.UpgradeChoice.IconoffsetX
+	local iconOffsetY = game.ScreenData.UpgradeChoice.IconoffsetX
+	local iconOffset = { X = -500, Y = -50 }
+	local overlayLayer = "Combat_Menu_Overlay_Backing"
+
+	if traitData.Icon ~= nil then
+		components.Icon = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X + iconOffset.X, Y = offset.Y + iconOffset.Y, Scale = 0.6 })
+		game.SetAnimation({ DestinationId = components.Icon.Id, Name = button.Icon or traitData.Icon })
+	end
+
+	if not traitData.MetaUpgrade then
+		components.Frame = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X + iconOffset.X, Y = offset.Y + iconOffset.Y, Scale = 0.6 })
+		local frameAnim = game.GetTraitFrame( traitData )
+		if frameAnim ~= nil then
+			game.SetAnimation({ DestinationId = components.Frame.Id, Name = frameAnim })
+		end
+	end
+
+	game.SetTraitTrayDetails(
+	{
+		Button = {},
+		DetailsBox = components.DetailsBacking,
+		BlessingsBox = components.BlessingBacking,
+		RarityBox = components.RarityBox,
+		TitleBox = components.TitleBox,
+		--Patch = components.Patch, 
+		Icon = components.Icon,
+		StatLines = components.StatlineBackings,
+		ElementalIcon = components.ElementalIcon,
+		FlavorText = components.FlavorText,
+		TraitData = traitData
+	})
+
+	screen.BoonInfoBox = components
+end
+
 function mod.CloseWeaponFusionScreen(screen)
     if screen == nil or not screen.CanClose then
 		return
@@ -377,6 +509,8 @@ function mod.CloseWeaponFusionScreen(screen)
 	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = nil })
 	SetConfigOption({ Name = "FreeFormSelectStepDistance", Value = 16.0 })
 
+	local componentIds = game.GetAllIds( screen.BoonInfoBox or {} )
+	game.Destroy({ Ids = componentIds })
 
     OnScreenCloseStarted( screen )
 	CloseScreen( GetAllIds( screen.Components ), 0.15 )
@@ -455,10 +589,13 @@ function mod.MouseOverMinorAspect(button)
 		outlineData.Id = components[button.WeaponKey].Id
 		game.AddOutline( outlineData )
 	end
+	mod.CreateAspectInfoItem(button)
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.15})
 end
 
 function mod.MouseOffMinorAspect(button)
+	local componentIds = game.GetAllIds( button.Screen.BoonInfoBox or {} )
+	game.Destroy({ Ids = componentIds })
 	-- print(mod.dump(button))
 	print(button.WeaponKey)
 	local screen = button.Screen
@@ -509,6 +646,7 @@ function mod.CycleAspectsDown(screen)
 		screen.ScrollState[index].PrimaryIndex = newAspectIndex
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 	end
+	mod.CreateAspectInfoItem(button)
 end
 
 function mod.CycleAspectsUp(screen)
@@ -540,6 +678,7 @@ function mod.CycleAspectsUp(screen)
 		screen.ScrollState[index].PrimaryIndex = newAspectIndex
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 	end
+	mod.CreateAspectInfoItem(button)
 end
 
 function mod.FuseAndExit(screen)
