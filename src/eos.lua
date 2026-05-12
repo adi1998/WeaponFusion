@@ -95,7 +95,6 @@ function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
 					ThingProperties = derivedValues.ThingPropertyChanges,
 				})
 			end
-		
 		end
 		if weaponData.Name == "WeaponAxeSpecial" and not isEx then
 			local weaponName = weaponData.Name
@@ -105,15 +104,20 @@ function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
 				WeaponName = weaponName,
 				Type = "Projectile",
 			})
-			print(mod.dump(derivedValues))
+			local location = game.GetLocation({Id = game.SessionMapState.CurrentExProjectile, IsProjectile = true })
+			local startX = location.X
+			local startY = location.Y
+			local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+
 			local angle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
 			game.CreateProjectileFromUnit({
 				WeaponName = weaponName,
 				Name = projectileName,
 				Angle = angle,
 				Id = game.CurrentRun.Hero.ObjectId,
-				ProjectileDestinationId = game.SessionMapState.CurrentExProjectile,
+				DestinationId = dropLocation,
 				FireFromTarget = true,
+				AttachToTarget = true,
 				DataProperties = derivedValues.PropertyChanges,
 				ThingProperties = derivedValues.ThingPropertyChanges,
 			})

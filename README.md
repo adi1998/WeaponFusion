@@ -31,7 +31,7 @@ If it still seems bugged would really appreciate a bug report :).
 - No ingame UI (yet)
 - Some aspects which didn't make sense to have just its special didn't make it in (Eos, Moros, Medea, Hel)
 - [WIP] Momus is currently unavailable for the secondary weapon; however, having it as primary does properly work for fused omega specials
-- [WIP] Eos currently dosen't have every weapon's special being replicated, the charged attack still works if fused
+- [DONE] ~~Eos currently dosen't have every weapon's special being replicated, the charged attack still works if fused~~
 
 ## Issues and feedback
 

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Aspect of Eos' Daybreaker will now correctly duplicate all Specials
 - Trick Knives now gets properly boosted by special boons
 - Replace projectiles spawned by Trick Knives for axe, torch, staff and coat
 
