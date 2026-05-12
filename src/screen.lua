@@ -195,6 +195,7 @@ mod.FusionScreenData = {
 			{
 				"CloseButton",
 				"CycleAspectButton",
+				"FuseAndExitButton"
 			},
 
 			Children =
@@ -221,10 +222,22 @@ mod.FusionScreenData = {
 						OnMouseOverFunctionName = "MouseOverContextualAction",
 						OnMouseOffFunctionName = "MouseOffContextualAction",
 						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CycleAspects",
-						ControlHotkeys = { "Gift" },
-						MouseControlHotkeys = { "Gift", "MenuDown" }
+						ControlHotkeys = { "MenuRight" },
+						MouseControlHotkeys = { "MenuRight", "MenuDown" }
 					},
-					Text = "{G} CYCLE ASPECT",
+					Text = "{MR} CYCLE ASPECT",
+					TextArgs = game.UIData.ContextualButtonFormatRight,
+				},
+
+				FuseAndExitButton =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnPressedFunctionName = _PLUGIN.guid .. "." .. "FuseAndExit",
+						ControlHotkeys = { "ItemPin" },
+					},
+					Text = "{IP} FUSE AND EXIT",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				}
 			},
@@ -263,12 +276,12 @@ function mod.OpenWeaponFusionScreen()
         local weaponData = game.WeaponData[weaponName]
         local traitData1 = game.TraitData[game.GameState.LastWeaponUpgradeName[weaponName]]
         local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
-		state.PrimaryIndex = game.GetIndex(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName], traitData1)
+		state.PrimaryIndex = game.GetIndex(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName], traitData1.Name)
 		state.SecondaryIndex = 1
 		print(traitData2.WeaponKitGrannyModel, traitData2.Name, config.aspect, mod.dump(WeaponMinorAspectData[weaponName]))
 		if game.TraitData[config.last_aspect] and game.Contains(WeaponMinorAspectData[weaponName], config.last_aspect) then
 			traitData2 = game.TraitData[config.last_aspect:gsub("_Secondary$", "")]
-			state.SecondaryIndex = game.GetIndex(WeaponMinorAspectData[weaponName], traitData2.Name)
+			state.SecondaryIndex = game.GetIndex(WeaponMinorAspectData[weaponName], traitData2.Name.."_Secondary")
 		end
 		print(traitData2.WeaponKitGrannyModel, traitData2.Name)
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
@@ -375,13 +388,20 @@ function mod.SetAspectConfig(screen)
 		if button.WeaponType == "Primary" and screen.SelectedPrimary ~= button.Index then
 			game.RemoveOutline( {Id = components["WeaponImageData1"..screen.WeaponList[screen.SelectedPrimary].WeaponName].Id} )
 			screen.SelectedPrimary = button.Index
+			local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
+			outlineData.Id = components[button.WeaponKey].Id
+			game.AddOutline( outlineData )
 		end
 		if button.WeaponType == "Secondary" and screen.SelectedSecondary ~= button.Index then
 			game.RemoveOutline( {Id = components["WeaponImageData2"..screen.WeaponList[screen.SelectedSecondary].WeaponName].Id} )
 			screen.SelectedSecondary = button.Index
+			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
+			outlineData.Id = components[button.WeaponKey].Id
+			game.AddOutline( outlineData )
 		end
+
 		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.2, Duration = 0.06})
-		game.wait(0.05)
+		game.wait(0.06)
 		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.06})
 	end
 end
@@ -392,9 +412,12 @@ function mod.MouseOverMinorAspect(button)
 	screen.SelectedItem = button
 	print(button.WeaponKey)
 	local components = button.Screen.Components
-	local outlineData = game.ShallowCopyTable( mod.HoverWeaponOutlin )
-	outlineData.Id = components[button.WeaponKey].Id
-	game.AddOutline( outlineData )
+	if not ( button.Index == screen.SelectedPrimary and button.WeaponType == "Primary" or
+			 button.Index == screen.SelectedSecondary and button.WeaponType == "Secondary" ) then
+		local outlineData = game.ShallowCopyTable( mod.HoverWeaponOutlin )
+		outlineData.Id = components[button.WeaponKey].Id
+		game.AddOutline( outlineData )
+	end
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.15})
 end
 
@@ -408,13 +431,11 @@ function mod.MouseOffMinorAspect(button)
 	-- outlineData.Id = components[button.WeaponKey].Id
 	game.RemoveOutline( {Id = components[button.WeaponKey].Id} )
 	if button.Index == screen.SelectedPrimary and button.WeaponType == "Primary" then
-		local components = button.Screen.Components
 		local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 		outlineData.Id = components[button.WeaponKey].Id
 		game.AddOutline( outlineData )
 	end
 	if button.Index == screen.SelectedSecondary and button.WeaponType == "Secondary" then
-		local components = button.Screen.Components
 		local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
 		outlineData.Id = components[button.WeaponKey].Id
 		game.AddOutline( outlineData )
@@ -422,14 +443,57 @@ function mod.MouseOffMinorAspect(button)
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.3, Duration = 0.15})
 end
 
-function mod.CycleAspects(screen, button)
-	if not button or not screen.SelectedItem then
+function mod.CycleAspects(screen)
+	if not screen.SelectedItem then
 		return
 	end
+	local button = screen.SelectedItem
+	local components = screen.Components
 	local row = (button.WeaponType == "Primary" and 1) or 2
 	local index = button.Index
+	local weaponName = screen.WeaponList[index].WeaponName
+	local weaponData = game.WeaponData[weaponName]
+	if row == 2 then
+		local aspectIndex = screen.ScrollState[index].SecondaryIndex
+		local numAspects = #(WeaponMinorAspectData[weaponName])
+		local newAspectIndex =  aspectIndex % numAspects + 1
+		screen.ScrollState[index].SecondaryIndex = newAspectIndex
+		local traitName = WeaponMinorAspectData[weaponName][newAspectIndex]
+		local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
+		if game.TraitData[traitName] and game.Contains(WeaponMinorAspectData[weaponName], traitName) then
+			traitData2 = game.TraitData[traitName:gsub("_Secondary$", "")]
+		end
+		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData"..row..weaponName].Id })
+	else
+		local aspectIndex = screen.ScrollState[index].PrimaryIndex
+		local numAspects = #(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName])
+		local newAspectIndex =  aspectIndex % numAspects + 1
+		local traitData1 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][newAspectIndex]]
+		screen.ScrollState[index].PrimaryIndex = newAspectIndex
+		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
+	end
+end
 
+function mod.FuseAndExit(screen)
+	if  screen.SelectedPrimary == screen.SelectedSecondary then
+		return
+	end
+	local state = screen.ScrollState
+	local primaryWeapon = screen.WeaponList[screen.SelectedPrimary].WeaponName
+	local secondaryWeapon = screen.WeaponList[screen.SelectedSecondary].WeaponName
+	local primaryAspect = game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primaryWeapon][state[screen.SelectedPrimary].PrimaryIndex]
+	local secondaryAspect = WeaponMinorAspectData[secondaryWeapon][state[screen.SelectedSecondary].SecondaryIndex]
 
+	print(primaryAspect, primaryWeapon, secondaryAspect, secondaryWeapon)
+
+	mod.UnequipWeapons()
+    UnfuseWeapons()
+    config.last_primary = primaryWeapon
+    config.last_secondary = secondaryWeapon
+    config.last_aspect = secondaryAspect
+    FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
+    mod.EquipWeapons({PrimaryUpgrade = primaryAspect})
+	mod.CloseWeaponFusionScreen(screen)
 end
 
 game.UnloadPackages({Names = {_PLUGIN.guid}})
