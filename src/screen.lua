@@ -572,3 +572,6 @@ function mod.ToggleRandomEachRun(screen, button)
 		game.MouseOffContextualAction(button)
 	end
 end
+
+game.HubRoomData.Hub_PreRun.ObstacleData[558210].UseTextTalkAndSpecial = "{I} Inspect \n {SI} Weapon Fusion"
+game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractFunctionName = _PLUGIN.guid .. "." .. "OpenWeaponFusionScreen"

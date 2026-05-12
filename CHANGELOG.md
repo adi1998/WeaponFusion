@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add ingame menu for weapon fusion accessible by saluting the silver pool
+
 ## [0.3.0] - 2026-05-12
 
 - Aspect of Eos' Daybreaker will now correctly duplicate all Specials
