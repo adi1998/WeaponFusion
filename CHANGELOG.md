@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-05-12
+
 - Aspect of Eos' Daybreaker will now correctly duplicate all Specials
 - Trick Knives now gets properly boosted by special boons
 - Replace projectiles spawned by Trick Knives for axe, torch, staff and coat
@@ -51,7 +53,8 @@
 
 ## [0.0.1] - 2026-05-07
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.2.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/adi1998/WeaponFusion/compare/0.2.2...0.3.0
 [0.2.2]: https://github.com/adi1998/WeaponFusion/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/adi1998/WeaponFusion/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/adi1998/WeaponFusion/compare/0.1.3...0.2.0
