@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- Add ingame menu for weapon fusion accessible by saluting the silver pool
+- Add ingame menu for weapon fusion, accessible by saluting the silver pool
 
 ## [0.3.0] - 2026-05-12
 
