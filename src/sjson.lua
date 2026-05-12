@@ -127,7 +127,6 @@ sjson.hook(weaponAnimationFile, function (data)
             newEntry.Name = newEntry.Name .. "_FusionScreen"
             newEntry.ZWobbleSpeed = 0
             newEntry.ZWobbleDistance = 0
-            print(newEntry.Name, newEntry.Scale)
             table.insert(newData, newEntry)
         end
     end

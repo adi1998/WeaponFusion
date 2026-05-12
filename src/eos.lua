@@ -2,7 +2,6 @@ game.TraitData.TorchSprintRecallAspect.ChargeStageModifiers.ValidWeapons = {"Wea
 
 function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
     local isEx = game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs )
-	print(weaponData.Name)
 	if game.SessionMapState.CurrentExProjectile then
 		if weaponData.Name == "WeaponStaffBall" then
 			local weaponName = weaponData.Name
@@ -233,7 +232,6 @@ function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
 			local angle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
 			local location = game.GetLocation({Id = game.SessionMapState.CurrentExProjectile, IsProjectile = true })
 			local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = location.X, LocationY = location.Y })
-			print("projectileName", projectileName, dropLocation, mod.dump(location))
 			if projectileName ~= "ProjectileSuitRangedUnguided" then
 				game.CreateProjectileFromUnit({ WeaponName = weaponName,
 					Name = projectileName,

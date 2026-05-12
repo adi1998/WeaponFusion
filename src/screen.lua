@@ -309,30 +309,26 @@ function mod.OpenWeaponFusionScreen()
         local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
 		state.PrimaryIndex = game.GetIndex(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName], traitData1.Name)
 		state.SecondaryIndex = 1
-		print(traitData2.WeaponKitGrannyModel, traitData2.Name, config.aspect, mod.dump(WeaponMinorAspectData[weaponName]))
 		if game.TraitData[config.last_aspect] and game.Contains(WeaponMinorAspectData[weaponName], config.last_aspect) then
 			traitData2 = game.TraitData[config.last_aspect:gsub("_Secondary$", "")]
 			state.SecondaryIndex = game.GetIndex(WeaponMinorAspectData[weaponName], traitData2.Name.."_Secondary")
 		end
-		print(traitData2.WeaponKitGrannyModel, traitData2.Name)
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 		if config.last_primary == weaponName then
-			local outlineData = ShallowCopyTable( mod.PrimaryWeaponOutline )
+			local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData1"..weaponName].Id
-			AddOutline( outlineData )
+			game.AddOutline( outlineData )
 			screen.SelectedPrimary = index
 		end
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData2"..weaponName].Id })
 		if config.last_secondary == weaponName then
-			local outlineData = ShallowCopyTable( mod.SecondaryWeaponOutline )
+			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData2"..weaponName].Id
-			AddOutline( outlineData )
+			game.AddOutline( outlineData )
 			screen.SelectedSecondary = index
 		end
 		table.insert(screen.ScrollState, state)
     end
-
-	print(mod.dump(screen.ScrollState))
 
 	screen.WeaponList = {}
 
@@ -350,7 +346,6 @@ function mod.OpenWeaponFusionScreen()
 	for _, weaponName in ipairs(WeaponDisplayOrder) do
 		table.insert(screen.WeaponList,{ WeaponName = weaponName, PrimaryAspects = weaponUpgrades[weaponName], SecondaryAspects = WeaponMinorAspectData[weaponName] })
 	end
-	mod.dump(screen.WeaponList)
 
 	mod.CreateMinorAspectButtons(screen)
 
@@ -460,10 +455,7 @@ function mod.CreateAspectInfoItem(button)
 	game.CreateTextBox( flavorTextData )
 	game.Attach({ Id = components.FlavorText.Id, DestinationId = components.DetailsBacking.Id })
 
-	local iconOffsetX = game.ScreenData.UpgradeChoice.IconoffsetX
-	local iconOffsetY = game.ScreenData.UpgradeChoice.IconoffsetX
 	local iconOffset = { X = -500, Y = -50 }
-	local overlayLayer = "Combat_Menu_Overlay_Backing"
 
 	if traitData.Icon ~= nil then
 		components.Icon = game.CreateScreenComponent({ Name = "BlankObstacle", Group = groupName, X = offset.X + iconOffset.X, Y = offset.Y + iconOffset.Y, Scale = 0.6 })
@@ -503,19 +495,19 @@ function mod.CloseWeaponFusionScreen(screen)
     screen.CanClose = false
 	game.SetAnimation({ DestinationId = screen.Components.Background.Id, Name = "WeaponUpgradeOut" })
 
-    PlaySound({ Name = "/SFX/Menu Sounds/GeneralWhooshMENULoudLow" })
+    game.PlaySound({ Name = "/SFX/Menu Sounds/GeneralWhooshMENULoudLow" })
 
-	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = nil })
-	SetConfigOption({ Name = "FreeFormSelectStepDistance", Value = 16.0 })
+	game.SetConfigOption({ Name = "ExclusiveInteractGroup", Value = nil })
+	game.SetConfigOption({ Name = "FreeFormSelectStepDistance", Value = 16.0 })
 
 	local componentIds = game.GetAllIds( screen.BoonInfoBox or {} )
 	game.Destroy({ Ids = componentIds })
 
-    OnScreenCloseStarted( screen )
-	CloseScreen( GetAllIds( screen.Components ), 0.15 )
-    OnScreenCloseFinished( screen )
-	ShowCombatUI( screen.Name )
-	wait( 0.3 )
+    game.OnScreenCloseStarted( screen )
+	game.CloseScreen( game.GetAllIds( screen.Components ), 0.15 )
+    game.OnScreenCloseFinished( screen )
+	game.ShowCombatUI( screen.Name )
+	game.wait( 0.3 )
 end
 
 function mod.CreateMinorAspectButtons( screen, args )
@@ -577,10 +569,8 @@ function mod.SetAspectConfig(screen)
 end
 
 function mod.MouseOverMinorAspect(button)
-	-- print(mod.dump(button))
 	local screen = button.Screen
 	screen.SelectedItem = button
-	print(button.WeaponKey)
 	local components = button.Screen.Components
 	if not ( button.Index == screen.SelectedPrimary and button.WeaponType == "Primary" or
 			 button.Index == screen.SelectedSecondary and button.WeaponType == "Secondary" ) then
@@ -595,13 +585,9 @@ end
 function mod.MouseOffMinorAspect(button)
 	local componentIds = game.GetAllIds( button.Screen.BoonInfoBox or {} )
 	game.Destroy({ Ids = componentIds })
-	-- print(mod.dump(button))
-	print(button.WeaponKey)
 	local screen = button.Screen
 	screen.SelectedItem = nil
 	local components = button.Screen.Components
-	-- local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
-	-- outlineData.Id = components[button.WeaponKey].Id
 	game.RemoveOutline( {Id = components[button.WeaponKey].Id} )
 	if button.Index == screen.SelectedPrimary and button.WeaponType == "Primary" then
 		local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
@@ -690,7 +676,7 @@ function mod.FuseAndExit(screen)
 	local primaryAspect = game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primaryWeapon][state[screen.SelectedPrimary].PrimaryIndex]
 	local secondaryAspect = WeaponMinorAspectData[secondaryWeapon][state[screen.SelectedSecondary].SecondaryIndex]
 
-	print(primaryAspect, primaryWeapon, secondaryAspect, secondaryWeapon)
+	print("Fusing", primaryAspect, primaryWeapon, secondaryAspect, secondaryWeapon)
 
 	mod.UnequipWeapons()
     UnfuseWeapons()
