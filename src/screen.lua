@@ -194,8 +194,10 @@ mod.FusionScreenData = {
 			ChildrenOrder =
 			{
 				"CloseButton",
-				"CycleAspectButton",
-				"FuseAndExitButton"
+				"CycleAspectButtonDown",
+				"CycleAspectButtonUp",
+				"FuseAndExitButton",
+				"RandomToggle"
 			},
 
 			Children =
@@ -214,19 +216,29 @@ mod.FusionScreenData = {
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				},
 
-				CycleAspectButton =
+				CycleAspectButtonDown =
 				{
 					Graphic = "ContextualActionButton",
 					Data =
 					{
-						OnMouseOverFunctionName = "MouseOverContextualAction",
-						OnMouseOffFunctionName = "MouseOffContextualAction",
-						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CycleAspects",
+						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CycleAspectsDown",
 						ControlHotkeys = { "MenuRight" },
-						MouseControlHotkeys = { "MenuRight", "MenuDown" }
+						MouseControlHotkeys = { "MenuDown" }
 					},
-					Text = "{MR} CYCLE ASPECT",
+					Text = "{ML}/{MR} CYCLE ASPECT",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
+				},
+
+				CycleAspectButtonUp =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CycleAspectsUp",
+						ControlHotkeys = { "MenuLeft" },
+						MouseControlHotkeys = { "MenuUp" }
+					},
+					Text = " ",
 				},
 
 				FuseAndExitButton =
@@ -234,10 +246,24 @@ mod.FusionScreenData = {
 					Graphic = "ContextualActionButton",
 					Data =
 					{
+						OnMouseOverFunctionName = "MouseOverContextualAction",
+						OnMouseOffFunctionName = "MouseOffContextualAction",
 						OnPressedFunctionName = _PLUGIN.guid .. "." .. "FuseAndExit",
 						ControlHotkeys = { "ItemPin" },
 					},
 					Text = "{IP} FUSE AND EXIT",
+					TextArgs = game.UIData.ContextualButtonFormatRight,
+				},
+
+				RandomToggle =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnPressedFunctionName = _PLUGIN.guid .. "." .. "ToggleRandomEachRun",
+						ControlHotkeys = { "Reroll" }
+					},
+					Text = "{G} RANDOM EACH RUN",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				}
 			},
@@ -259,12 +285,17 @@ function mod.OpenWeaponFusionScreen()
         screen.ComponentData["WeaponImageData2"..weaponName] = weaponComponent
     end
 
+	
+
     game.HideCombatUI( screen.Name )
 	game.wait( 0.1 )
 	game.OnScreenOpened( screen )
 	game.CreateScreenFromData( screen, screen.ComponentData )
 
     local components = screen.Components
+
+	-- print("compnents")
+	-- print(mod.dump(screen.Components, 0, 2))
 
 	screen.ScrollState = {}
 
@@ -322,6 +353,12 @@ function mod.OpenWeaponFusionScreen()
 	mod.dump(screen.WeaponList)
 
 	mod.CreateMinorAspectButtons(screen)
+
+	game.TeleportCursor({ OffsetX = screen.ItemStartX + screen.ButtonOffsetX, OffsetY = screen.ItemStartY, ForceUseCheck = true })
+
+	if config.random_fusion_each_run then
+		game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
+	end
 
     screen.KeepOpen = true
 	screen.CanClose = true
@@ -443,7 +480,7 @@ function mod.MouseOffMinorAspect(button)
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.3, Duration = 0.15})
 end
 
-function mod.CycleAspects(screen)
+function mod.CycleAspectsDown(screen)
 	if not screen.SelectedItem then
 		return
 	end
@@ -474,6 +511,37 @@ function mod.CycleAspects(screen)
 	end
 end
 
+function mod.CycleAspectsUp(screen)
+	if not screen.SelectedItem then
+		return
+	end
+	local button = screen.SelectedItem
+	local components = screen.Components
+	local row = (button.WeaponType == "Primary" and 1) or 2
+	local index = button.Index
+	local weaponName = screen.WeaponList[index].WeaponName
+	local weaponData = game.WeaponData[weaponName]
+	if row == 2 then
+		local aspectIndex = screen.ScrollState[index].SecondaryIndex
+		local numAspects = #(WeaponMinorAspectData[weaponName])
+		local newAspectIndex =  (aspectIndex - 2) % numAspects + 1
+		screen.ScrollState[index].SecondaryIndex = newAspectIndex
+		local traitName = WeaponMinorAspectData[weaponName][newAspectIndex]
+		local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
+		if game.TraitData[traitName] and game.Contains(WeaponMinorAspectData[weaponName], traitName) then
+			traitData2 = game.TraitData[traitName:gsub("_Secondary$", "")]
+		end
+		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData"..row..weaponName].Id })
+	else
+		local aspectIndex = screen.ScrollState[index].PrimaryIndex
+		local numAspects = #(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName])
+		local newAspectIndex =  (aspectIndex - 2) % numAspects + 1
+		local traitData1 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][newAspectIndex]]
+		screen.ScrollState[index].PrimaryIndex = newAspectIndex
+		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
+	end
+end
+
 function mod.FuseAndExit(screen)
 	if  screen.SelectedPrimary == screen.SelectedSecondary then
 		return
@@ -496,5 +564,11 @@ function mod.FuseAndExit(screen)
 	mod.CloseWeaponFusionScreen(screen)
 end
 
-game.UnloadPackages({Names = {_PLUGIN.guid}})
-game.LoadPackages({Names = {_PLUGIN.guid}})
+function mod.ToggleRandomEachRun(screen, button)
+	config.random_fusion_each_run = config.random_fusion_each_run == false
+	if config.random_fusion_each_run then
+		game.MouseOverContextualAction(button)
+	else
+		game.MouseOffContextualAction(button)
+	end
+end
