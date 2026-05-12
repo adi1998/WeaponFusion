@@ -62,6 +62,7 @@ local function on_ready()
     import 'aspects_logic.lua'
     import 'ready.lua'
     import 'momus.lua'
+    import 'eos.lua'
     import 'startrun.lua'
 end
 
