@@ -127,10 +127,73 @@ sjson.hook(weaponAnimationFile, function (data)
             newEntry.Name = newEntry.Name .. "_FusionScreen"
             newEntry.ZWobbleSpeed = 0
             newEntry.ZWobbleDistance = 0
+            print(newEntry.Name, newEntry.Scale)
             table.insert(newData, newEntry)
         end
     end
     for index, value in ipairs(newData) do
+        table.insert(data.Animations, value)
+    end
+    return data
+end)
+
+local guiFile = rom.path.combine(rom.paths.Content, "Game\\Obstacles\\GUI.sjson")
+
+sjson.hook(guiFile, function (data)
+    local blankButton = {
+      Name = _PLUGIN.guid .. "BlankButton",
+      InheritFrom = "BaseInteractableButton",
+      DisplayInEditor = true,
+      Thing =
+      {
+        EditorOutlineDrawBounds = false,
+        Graphic = _PLUGIN.guid .. "Button_Default",
+        Interact =
+        {
+          DisabledUseSound = "/Leftovers/SFX/OutOfAmmo2",
+          HighlightOffAnimation = _PLUGIN.guid .. "Button_HighlightOff",
+          HighlightOnAnimation = _PLUGIN.guid .. "Button_HighlightOn",
+        }
+      }
+    }
+
+    table.insert(data.Obstacles, blankButton)
+    return data
+end)
+
+local guiAnimationFile = rom.path.combine(rom.paths.Context, "Game\\Animations\\GUI_Screens_VFX.sjson")
+
+local buttonGraphic = {
+    {
+        Name = _PLUGIN.guid .. "Button_Default",
+        FilePath = _PLUGIN.guid .. "\\Square100",
+        EndFrame = 1,
+        HoldLastFrame = true,
+        NumFrames = 1,
+        StartFrame = 1,
+        Material = "Unlit",
+    },
+
+    {
+		Name = _PLUGIN.guid .. "Button_HighlightOn",
+		FilePath = _PLUGIN.guid .. "\\Square100",
+		EndFrame = 1,
+		HoldLastFrame = true,
+		NumFrames = 1,
+		StartFrame = 1,
+	},
+
+	{
+		Name = _PLUGIN.guid .. "Button_HighlightOff",
+		FilePath = _PLUGIN.guid .. "\\Square100",
+		EndFrame = 1,
+		NumFrames = 1,
+		StartFrame = 1,
+	}
+}
+
+sjson.hook(guiAnimationFile, function (data)
+    for index, value in ipairs(buttonGraphic) do
         table.insert(data.Animations, value)
     end
     return data

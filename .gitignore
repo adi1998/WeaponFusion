@@ -14,6 +14,9 @@
 # For the Thunderstore CLI executable itself, if you include it in your root folder
 tcli.exe
 
+# ignore unpacked package contents
+/data/zerp-WeaponFusion
+
 *.psd
 *.spec
 *.exe

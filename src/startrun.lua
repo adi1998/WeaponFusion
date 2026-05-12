@@ -73,7 +73,7 @@ function PickRandomFusion()
     local weaponUpgrades = game.DeepCopyTable(game.ScreenData.WeaponUpgradeScreen.DisplayOrder)
     for weaponKit, upgradeList in pairs(weaponUpgrades) do
         for index, upgrade in ipairs(upgradeList) do
-            if not game.GameState.WeaponsUnlocked then
+            if not game.GameState.WeaponsUnlocked[upgrade] then
                 upgradeList[index] = nil
             end
         end
