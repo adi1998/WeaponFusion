@@ -546,13 +546,17 @@ end
 function mod.SetAspectConfig(screen)
 	local button = screen.SelectedItem
 	local components = screen.Components
-	if button  then
+	local index = button.Index
+	local row = (button.WeaponType == "Primary" and 1) or 2
+	if button then
+		local playAnim
 		if button.WeaponType == "Primary" and screen.SelectedPrimary ~= button.Index then
 			game.RemoveOutline( {Id = components["WeaponImageData1"..screen.WeaponList[screen.SelectedPrimary].WeaponName].Id} )
 			screen.SelectedPrimary = button.Index
 			local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 			outlineData.Id = components[button.WeaponKey].Id
 			game.AddOutline( outlineData )
+			playAnim = true
 		end
 		if button.WeaponType == "Secondary" and screen.SelectedSecondary ~= button.Index then
 			game.RemoveOutline( {Id = components["WeaponImageData2"..screen.WeaponList[screen.SelectedSecondary].WeaponName].Id} )
@@ -560,11 +564,18 @@ function mod.SetAspectConfig(screen)
 			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
 			outlineData.Id = components[button.WeaponKey].Id
 			game.AddOutline( outlineData )
+			playAnim = true
+		end
+
+		if playAnim then
+			local weaponUpgradeSwitchFx = CreateScreenObstacle({ Name = "BlankObstacle", X = screen.ItemStartX + (index-1)*screen.ItemSpacingX + 50, Y = screen.ItemStartY + (row-1)*screen.ItemSpacingY, Group = "Combat_Menu_Overlay_Additive", Scale = 0.6})
+			SetAnimation({ Name = "WeaponUpgradeSwitchFx", DestinationId = weaponUpgradeSwitchFx })
+			DestroyOnDelay({ Id = weaponUpgradeSwitchFx, 3 })
 		end
 
 		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.2, Duration = 0.06})
 		game.wait(0.06)
-		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.06})
+		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.06, EaseIn = 0.9, EaseOut = 1.0})
 	end
 	if screen.SelectedPrimary == screen.SelectedSecondary then
 		game.ModifyTextBox({ Id = components.FuseAndExitButton.Id, Text = "{IP} UNFUSE AND EXIT" })
