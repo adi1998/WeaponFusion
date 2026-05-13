@@ -4,6 +4,9 @@
 
 ## [0.4.1] - 2026-05-13
 
+- Add some audio and visual flourishes to the menu
+- Fix a crash in cases were no aspect is equipepd for a weapon
+
 ## [0.4.0] - 2026-05-12
 
 - Add ingame menu for weapon fusion, accessible by saluting the silver pool
