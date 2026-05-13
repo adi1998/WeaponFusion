@@ -29,6 +29,10 @@ Fusion can only be performed in the Crossroads training grounds.
 
 The primary aspect needs to be changed in the in-game UI before/after fusion if you're using ImGui.
 
+To unfuse weapons using the in-game UI select the same weapon for both primary and secondary and it should change the fuse button to unfuse.
+
+![Unfuse](images/unfuse.png)
+
 If it feels like the fusion didn't apply properly try starting a run/reloading the room.
 
 If it still seems bugged would really appreciate a bug report :).

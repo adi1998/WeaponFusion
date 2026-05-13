@@ -225,7 +225,7 @@ mod.FusionScreenData = {
 						ControlHotkeys = { "MenuRight" },
 						MouseControlHotkeys = { "MenuDown" }
 					},
-					Text = "{ML}/{MR} CYCLE ASPECT",
+					Text = "{ML} {MR} CYCLE ASPECT",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				},
 
@@ -238,7 +238,7 @@ mod.FusionScreenData = {
 						ControlHotkeys = { "MenuLeft" },
 						MouseControlHotkeys = { "MenuUp" }
 					},
-					Text = " ",
+					Text = "",
 				},
 
 				FuseAndExitButton =
@@ -545,8 +545,8 @@ end
 
 function mod.SetAspectConfig(screen)
 	local button = screen.SelectedItem
+	local components = screen.Components
 	if button  then
-		local components = button.Screen.Components
 		if button.WeaponType == "Primary" and screen.SelectedPrimary ~= button.Index then
 			game.RemoveOutline( {Id = components["WeaponImageData1"..screen.WeaponList[screen.SelectedPrimary].WeaponName].Id} )
 			screen.SelectedPrimary = button.Index
@@ -565,6 +565,11 @@ function mod.SetAspectConfig(screen)
 		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.2, Duration = 0.06})
 		game.wait(0.06)
 		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.06})
+	end
+	if screen.SelectedPrimary == screen.SelectedSecondary then
+		game.ModifyTextBox({ Id = components.FuseAndExitButton.Id, Text = "{IP} UNFUSE AND EXIT" })
+	else
+		game.ModifyTextBox({ Id = components.FuseAndExitButton.Id, Text = "{IP} FUSE AND EXIT" })
 	end
 end
 
@@ -668,6 +673,14 @@ end
 
 function mod.FuseAndExit(screen)
 	if  screen.SelectedPrimary == screen.SelectedSecondary then
+		mod.UnequipWeapons()
+		config.last_primary = "WeaponStaffSwing"
+		config.last_secondary = "WeaponStaffSwing"
+		config.last_aspect = "None"
+		UnfuseWeapons()
+		mod.EquipWeapons()
+		game.RequestPreRunLoadoutChangeSave()
+		mod.CloseWeaponFusionScreen(screen)
 		return
 	end
 	local state = screen.ScrollState
@@ -685,6 +698,7 @@ function mod.FuseAndExit(screen)
     config.last_aspect = secondaryAspect
     FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
     mod.EquipWeapons({PrimaryUpgrade = primaryAspect})
+	game.RequestPreRunLoadoutChangeSave()
 	mod.CloseWeaponFusionScreen(screen)
 end
 
