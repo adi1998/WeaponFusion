@@ -522,7 +522,7 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
     args = args or {}
 	local currentWeaponName = game.GetEquippedWeapon()
 	local currentWeaponData = game.WeaponData[currentWeaponName]
-	local traitName = game.GameState.LastWeaponUpgradeName[currentWeaponName]
+	local traitName = game.GameState.LastWeaponUpgradeName[currentWeaponName] or game.ScreenData.WeaponUpgradeScreen.DisplayOrder[currentWeaponName][1]
     if traitName then
         local traitData = game.TraitData[traitName]
         local aspectTraitName = traitData[_PLUGIN.guid .. "SecondaryAspect"]

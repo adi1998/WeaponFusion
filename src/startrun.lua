@@ -112,7 +112,7 @@ modutil.mod.Path.Wrap("StartOver", function (base, args)
         config.last_secondary = weaponKit
         config.last_aspect = "None"
         UnfuseWeapons()
-        mod.EquipWeapons({PrimaryUpgrade = game.GameState.LastWeaponUpgradeName[weaponKit]})
+        mod.EquipWeapons({ PrimaryUpgrade = game.GameState.LastWeaponUpgradeName[weaponKit] or game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponKit][1] })
     end
     return base(args)
 end)
