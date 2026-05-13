@@ -581,6 +581,13 @@ function mod.MouseOverMinorAspect(button)
 	end
 	mod.CreateAspectInfoItem(button)
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.15})
+	if game.GetConfigOptionValue({ Name = "UseMouse" }) then
+		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 0, Duration = 0.14})
+		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 0, Duration = 0.14})
+	else
+		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 1, Duration = 0.14})
+		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 1, Duration = 0.14})
+	end
 end
 
 function mod.MouseOffMinorAspect(button)
@@ -601,6 +608,13 @@ function mod.MouseOffMinorAspect(button)
 		game.AddOutline( outlineData )
 	end
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.3, Duration = 0.15})
+	if game.GetConfigOptionValue({ Name = "UseMouse" }) then
+		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 0, Duration = 0.14})
+		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 0, Duration = 0.14})
+	else
+		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 1, Duration = 0.14})
+		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 1, Duration = 0.14})
+	end
 end
 
 function mod.CycleAspectsDown(screen)
