@@ -55,23 +55,6 @@ mod.FusionScreenData = {
 
 	BlockPause = true,
 
-	Highlight =
-	{
-		Name = "BlankObstacle",
-		Group = "Combat_Menu",
-	},
-
-	EquippedIcon =
-	{
-		Name = "BlankObstacle",
-		Animation = "ActiveAspectLoop",
-		Group = "Combat_Menu_Additive",
-		Alpha = 0.0,
-		Scale = 1.2,
-		OffsetX = -504,
-		OffsetY = -54,
-	},
-
     ButtonSlotData =
 	{
 		Graphic = _PLUGIN.guid .. "BlankButton",
@@ -568,9 +551,10 @@ function mod.SetAspectConfig(screen)
 		end
 
 		if playAnim then
-			local weaponUpgradeSwitchFx = CreateScreenObstacle({ Name = "BlankObstacle", X = screen.ItemStartX + (index-1)*screen.ItemSpacingX + 50, Y = screen.ItemStartY + (row-1)*screen.ItemSpacingY, Group = "Combat_Menu_Overlay_Additive", Scale = 0.6})
-			SetAnimation({ Name = "WeaponUpgradeSwitchFx", DestinationId = weaponUpgradeSwitchFx })
-			DestroyOnDelay({ Id = weaponUpgradeSwitchFx, 3 })
+			local weaponUpgradeSwitchFx = game.CreateScreenObstacle({ Name = "BlankObstacle", X = screen.ItemStartX + (index-1)*screen.ItemSpacingX + 50, Y = screen.ItemStartY + (row-1)*screen.ItemSpacingY, Group = "Combat_Menu_Overlay_Additive", Scale = 0.6})
+			game.SetAnimation({ Name = _PLUGIN.guid .. "WeaponUpgradeSwitchFx", DestinationId = weaponUpgradeSwitchFx })
+			game.DestroyOnDelay({ Id = weaponUpgradeSwitchFx, 3 })
+			game.PlaySound({ Name = "/Leftovers/SFX/PerfectTiming" })
 		end
 
 		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.2, Duration = 0.06})
@@ -585,6 +569,7 @@ function mod.SetAspectConfig(screen)
 end
 
 function mod.MouseOverMinorAspect(button)
+	game.GenericMouseOverPresentation(button)
 	local screen = button.Screen
 	screen.SelectedItem = button
 	local components = button.Screen.Components
@@ -647,6 +632,7 @@ function mod.CycleAspectsDown(screen)
 		screen.ScrollState[index].PrimaryIndex = newAspectIndex
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 	end
+	game.PlaySound({ Name = "/SFX/Menu Sounds/GeneralWhooshMENU" })
 	mod.CreateAspectInfoItem(button)
 end
 
@@ -679,11 +665,12 @@ function mod.CycleAspectsUp(screen)
 		screen.ScrollState[index].PrimaryIndex = newAspectIndex
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 	end
+	game.PlaySound({ Name = "/SFX/Menu Sounds/GeneralWhooshMENU" })
 	mod.CreateAspectInfoItem(button)
 end
 
 function mod.FuseAndExit(screen)
-	if  screen.SelectedPrimary == screen.SelectedSecondary then
+	if screen.SelectedPrimary == screen.SelectedSecondary then
 		mod.UnequipWeapons()
 		config.last_primary = "WeaponStaffSwing"
 		config.last_secondary = "WeaponStaffSwing"

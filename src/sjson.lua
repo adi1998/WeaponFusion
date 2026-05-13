@@ -188,7 +188,42 @@ local buttonGraphic = {
 		EndFrame = 1,
 		NumFrames = 1,
 		StartFrame = 1,
-	}
+	},
+
+    {
+		Name = _PLUGIN.guid .. "WeaponUpgradeSwitchFx",
+		FilePath = "Fx\\TintableRadialFlare\\TintableRadialFlare",
+		NumFrames = 45,
+		Material = "Unlit",
+		AddColor = true,
+		GroupName = "Combat_Menu_Overlay_Additive",
+		StartRed = 0.1,
+		StartGreen = 0.5,
+		StartBlue = 0.35,
+		EndRed = 0,
+		EndGreen = 0.3,
+		EndBlue = 0.5,
+		UseOwnAngle = false,
+		AngleFromOwner = "Ignore",
+		Scale = 1.5,
+		VisualFx = "WeaponUpgradeSwitchFxColorStreaks",
+		VisualFxIntervalMin = 0.01,
+		VisualFxIntervalMax = 0.01,
+		VisualFxCap = 8,
+		StartScale = 1,
+		EndScale = 0.5,
+		EaseIn = 0,
+		EaseOut = 0.001,
+		CreateAnimations = {
+			{ Name = "WeaponUpgradeSwitchFxGlow" },
+			{ Name = "WeaponUpgradeSwitchFxSpectral" },
+			{ Name = "WeaponUpgradeSwitchFxDarkA" },
+			{ Name = "WeaponUpgradeSwitchFxDarkB" },
+			{ Name = "WeaponUpgradeSwitchFxDarkC" },
+			{ Name = "WeaponUpgradeSwitchFxDarkD" },
+        },
+	},
+
 }
 
 sjson.hook(guiAnimationFile, function (data)
