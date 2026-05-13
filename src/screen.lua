@@ -305,7 +305,7 @@ function mod.OpenWeaponFusionScreen()
     for index, weaponName in ipairs(WeaponDisplayOrder) do
 		local state = {}
         local weaponData = game.WeaponData[weaponName]
-        local traitData1 = game.TraitData[game.GameState.LastWeaponUpgradeName[weaponName]]
+        local traitData1 = game.TraitData[game.GameState.LastWeaponUpgradeName[weaponName]] or game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
         local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
 		state.PrimaryIndex = game.GetIndex(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName], traitData1.Name)
 		state.SecondaryIndex = 1
