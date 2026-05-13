@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-05-13
+
 ## [0.4.0] - 2026-05-12
 
 - Add ingame menu for weapon fusion, accessible by saluting the silver pool
@@ -57,7 +59,8 @@
 
 ## [0.0.1] - 2026-05-07
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.4.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/adi1998/WeaponFusion/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/adi1998/WeaponFusion/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/adi1998/WeaponFusion/compare/0.2.2...0.3.0
 [0.2.2]: https://github.com/adi1998/WeaponFusion/compare/0.2.1...0.2.2
