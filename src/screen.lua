@@ -113,25 +113,25 @@ mod.FusionScreenData = {
 			"StatsBox",
 		},
 
-        BackgroundDim = 
+        BackgroundDim =
 		{
 			Graphic = "rectangle01",
 			ScaleX = 10.0,
 			ScaleY = 20.0,
-			X = ScreenCenterX,
-			Y = ScreenCenterY,
+			X = game.ScreenCenterX,
+			Y = game.ScreenCenterY,
 			Color = {0.090, 0.055, 0.157, 0.6},
 		},
 
 		Background =
 		{
 			AnimationName = "WeaponUpgradeIn",
-			X = ScreenCenterX,
-			Y = ScreenCenterY,
+			X = game.ScreenCenterX,
+			Y = game.ScreenCenterY,
 			Alpha = 1,
-			Children = 
+			Children =
 			{
-				TitleText = 
+				TitleText =
 				{
 					TextArgs =
 					{
@@ -140,7 +140,7 @@ mod.FusionScreenData = {
 						OffsetX = -747,
 						OffsetY = 120,
 						Justification = "Center",
-						Color = Color.White,
+						Color = game.Color.White,
 						ShadowBlur = 0,
 						ShadowColor = {0,0,0,1},
 						ShadowOffset={0, 2},
