@@ -509,7 +509,6 @@ function mod.CreateMinorAspectButtons( screen, args )
 			slotData.ScaleY = 3
 			slotData.Alpha = 1
 
-			print("creating button")
 			local button = game.CreateComponentFromData( screen, slotData )
 			components[weaponButtonKey.."Button"] = button
 			button.OnPressedFunctionName = _PLUGIN.guid .. "." .. "SetAspectConfig"
@@ -520,8 +519,6 @@ function mod.CreateMinorAspectButtons( screen, args )
 			button.WeaponType = (row == 1 and "Primary") or "Secondary"
 			button.WeaponKey = weaponButtonKey
 			button.Index = itemIndex
-			-- print(mod.dump(button))
-			-- game.AttachLua({ Id = button.Id, Table = button })
 		end
 	end
 end
