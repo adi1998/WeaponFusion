@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Block Pan and Charon from appearing as primary aspect in random fusions
+- Minor UI adjustments
 
 ## [0.4.1] - 2026-05-13
 

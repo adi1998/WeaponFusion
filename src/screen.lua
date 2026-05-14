@@ -33,6 +33,10 @@ mod.FusionScreenData = {
     Components = {},
     OpenSound = "/SFX/Menu Sounds/MirrorMenuOpen",
 	CloseSound = "/SFX/Menu Sounds/AspectMenuClose",
+
+	ToggleOnSound = "/SFX/Menu Sounds/IrisMenuConfirm",
+    ToggleOffSound = "/SFX/Menu Sounds/IrisMenuBack",
+
     GamepadNavigation =
 	{
 		FreeFormSelectWrapY = false,
@@ -340,6 +344,9 @@ function mod.OpenWeaponFusionScreen()
 
     screen.KeepOpen = true
 	screen.CanClose = true
+
+	screen.RandomButtonCache = config.random_fusion_each_run
+
 	game.HandleScreenInput( screen )
 end
 
@@ -491,6 +498,10 @@ function mod.CloseWeaponFusionScreen(screen)
     game.OnScreenCloseFinished( screen )
 	game.ShowCombatUI( screen.Name )
 	game.wait( 0.3 )
+	if config.random_fusion_each_run ~= screen.RandomButtonCache then
+		local fusionStatus = config.random_fusion_each_run and "{#AltUpgradeFormat}ON" or "{#AltPenaltyFormat}OFF"
+		game.thread( game.InCombatTextArgs, { TargetId= game.CurrentRun.Hero.ObjectId, Text = "Random fusion turned "..fusionStatus, SkipRise = false, SkipFlash = false, Duration = 1.5, ShadowScaleX = 1.2})
+	end
 end
 
 function mod.CreateMinorAspectButtons( screen, args )
@@ -715,8 +726,10 @@ function mod.ToggleRandomEachRun(screen, button)
 	config.random_fusion_each_run = config.random_fusion_each_run == false
 	if config.random_fusion_each_run then
 		game.MouseOverContextualAction(button)
+		game.PlaySound({ Name = screen.ToggleOffSound, Id = button.Id })
 	else
 		game.MouseOffContextualAction(button)
+		game.PlaySound({ Name = screen.ToggleOnSound, Id = button.Id })
 	end
 end
 
