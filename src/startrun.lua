@@ -61,6 +61,11 @@ for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.Disp
     end
 end
 
+local bannedPrimaryAspects = {
+    ["DaggerHomingThrowAspect"] = true,
+    ["AxeArmCastAspect"] = true,
+}
+
 function PickRandomFusion()
     local weaponKits = game.DeepCopyTable(game.BountyData.BasePackageBountyRandom.RandomWeaponKitNames)
     for index, value in ipairs(weaponKits) do
@@ -72,7 +77,7 @@ function PickRandomFusion()
     local weaponUpgrades = game.DeepCopyTable(game.ScreenData.WeaponUpgradeScreen.DisplayOrder)
     for weaponKit, upgradeList in pairs(weaponUpgrades) do
         for index, upgrade in ipairs(upgradeList) do
-            if not game.GameState.WeaponsUnlocked[upgrade] then
+            if not game.GameState.WeaponsUnlocked[upgrade] or bannedPrimaryAspects[upgrade] then
                 upgradeList[index] = nil
             end
         end

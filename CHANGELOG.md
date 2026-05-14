@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Block Pan and Charon from appearing as primary aspect in random fusions
+
 ## [0.4.1] - 2026-05-13
 
 - Add some audio and visual flourishes to the menu
