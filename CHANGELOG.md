@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-05-14
+
 ## [0.4.2] - 2026-05-14
 
 - Block Pan and Charon from appearing as primary aspect in random fusions
@@ -67,7 +69,8 @@
 
 ## [0.0.1] - 2026-05-07
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.4.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.4.3...HEAD
+[0.4.3]: https://github.com/adi1998/WeaponFusion/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/adi1998/WeaponFusion/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/adi1998/WeaponFusion/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/adi1998/WeaponFusion/compare/0.3.0...0.4.0
