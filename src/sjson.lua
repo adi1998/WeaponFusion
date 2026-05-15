@@ -232,3 +232,48 @@ sjson.hook(guiAnimationFile, function (data)
     end
     return data
 end)
+
+local daggerTargetGreen = {
+    {
+		Name = _PLUGIN.guid .. "DaggerMarkStatus_Green",
+		CreateAnimation = _PLUGIN.guid .. "DaggerMarkStatusBack_Green",
+		FilePath = "Fx\\DaggerMarkStatus\\DaggerMarkStatus_Front",
+		GroupName = "Combat_UI",
+		AngleFromOwner = "Ignore",
+		ColorFromOwner = "Ignore",
+		Hue = 0.5,
+		PingPongColor = true,
+		Duration = 0.5,
+		EaseOut = 1.0,
+		EndFrame = 1,
+		Loop = true,
+		NumFrames = 1,
+		StartFrame = 1,
+		OffsetZ = 30.0,
+		SortMode = "FromParent",
+		EndScale = 0.9,
+		PingPongScale = true,
+		Scale = 0.66,
+		ScaleFromOwner = "Ignore",
+		Ambient = 0.0,
+		UseAttachedFlasher = false,
+	},
+	{
+		Name = _PLUGIN.guid .. "DaggerMarkStatusBack_Green",
+		InheritFrom = _PLUGIN.guid .. "DaggerMarkStatus_Green",
+		CreateAnimation = "null",
+		FilePath = "Fx\\DaggerMarkStatus\\DaggerMarkStatus_Back",
+		GroupName = "FX_Dark",
+		DieWithOwner = true,
+		DrawBehindOwner = true,
+	},
+}
+
+local daggerVfxFile = rom.path.combine(rom.paths.Context, "Game\\Animations\\Melinoe_Dagger_VFX.sjson")
+
+sjson.hook(daggerVfxFile, function (data)
+    for index, value in ipairs(daggerTargetGreen) do
+        table.insert(data.Animations, value)
+    end
+    return data
+end)
