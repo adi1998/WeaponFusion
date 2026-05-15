@@ -735,3 +735,137 @@ end
 
 game.HubRoomData.Hub_PreRun.ObstacleData[558210].UseTextTalkAndSpecial = "{I} Inspect \n {SI} Weapon Fusion"
 game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractFunctionName = _PLUGIN.guid .. "." .. "OpenWeaponFusionScreen"
+
+function mod.StartTorchPrimaryRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileTorchWave"
+	if game.HeroHasTrait("TorchDetonateAspect") then
+		projectileName = "ProjectileTorchGhostLarge"
+	elseif game.HeroHasTrait("TorchSprintRecallAspect") then
+		projectileName = "ProjectileTorchRepeatStrike"
+	end
+	local threadName = "RepeatWeaponThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+	-- print(mod.dump(derivedValues))
+	local logProjectileIdForMagicCrit = false
+	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
+		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
+		logProjectileIdForMagicCrit = true
+	end
+
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+		game.Destroy({Id = dropLocation })
+		repeats = repeats + 1
+	end
+	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
+function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileAxeSpin"
+
+	local projectileInterval = 0.22
+	local scaleIncrement = 0
+	local damageMultiplier = 1
+	local damageIncrement = 0
+	local numProjectiles = triggerArgs.NumProjectiles or 5
+	numProjectiles = math.min(numProjectiles or 7)
+
+	if game.HeroHasTrait("AxeRallyAspect") then
+		projectileInterval = 0.44
+		scaleIncrement = 0.15
+		damageMultiplier = 2
+		damageIncrement = 0.2
+		if numProjectiles == 1 then
+			damageMultiplier = 3
+		end
+	end
+
+	local threadName = "RepeatWeaponThread"
+	local repeats = 1
+	local scale = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+	derivedValues.PropertyChanges.DamageRadius = 410
+	print(mod.dump(derivedValues))
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		for i = 1, numProjectiles do
+			derivedValues.PropertyChanges.DamageRadius = 410 * scale
+			game.CreateProjectileFromUnit({ WeaponName = "WeaponAxe",
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				DataProperties = derivedValues.PropertyChanges,
+				ThingProperties = derivedValues.ThingPropertyChanges,
+				FireFromTarget = true,
+				AttachToTarget = true,
+				Angle = angle,
+				DamageMultiplier = damageMultiplier*( 1 + damageIncrement*(i-1) )
+			})
+			game.waitUnmodified(projectileInterval, threadName)
+			scale = scale + scaleIncrement
+		end
+		game.Destroy({Id = dropLocation })
+		repeats = repeats + 1
+		scale = 1
+	end
+	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
+mod.WeaponThreadMap = {
+	["WeaponDagger5"] = mod.StartDaggerPrimaryRepeatThread,
+	["WeaponTorch"] = mod.StartTorchPrimaryRepeatThread,
+	["WeaponAxeSpin"] = mod.StartAxePrimaryRepeatThread,
+	["WeaponLobChargedPulse"] = mod.StartSkullPrimaryRepeatThread,
+	["WeaponSuitCharged"] = mod.StartSuitPrimaryRepeatThread,
+}

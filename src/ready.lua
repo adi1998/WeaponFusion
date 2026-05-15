@@ -604,3 +604,10 @@ end)
 -- game.OnControlPressed({'Gift', function()
 -- 	return mod.OpenWeaponFusionScreen()
 -- end})
+
+modutil.mod.Path.Wrap("addDamageMultiplier", function (base, data, multiplier)
+    if multiplier ~= multiplier then
+        return
+    end
+    return base(data, multiplier)
+end)

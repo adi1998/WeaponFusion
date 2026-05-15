@@ -23,6 +23,7 @@ If the ImGui window seem unresponsive try disabling V-sync and any external fram
 Fusion can only be performed in the Crossroads training grounds.
 
 ![Pool Interact](images/pool.png)
+<br>
 ![Ingame UI](images/menu.png)
 
 ![ImGui menu](images/imgui.png)

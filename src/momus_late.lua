@@ -37,3 +37,12 @@ modutil.mod.Path.Context.Wrap.Static("DoThrowEx", function (weaponName)
         return derivedValues
     end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("StartCastRepeatThread", function (triggerArgs, functionArgs)
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		if traitName == "StaffSelfHitAspect" then
+			return base(traitName) or base(traitName.."_Secondary")
+		end
+		return base(traitName)
+	end)
+end)

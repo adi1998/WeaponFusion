@@ -2362,6 +2362,95 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "LobImpulseAspect_FlavorText",
+	},
+
+	StaffSelfHitAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 3.5/4,
+			},
+			Epic =
+			{
+				Multiplier = 3.0/4,
+			},
+			Heroic =
+			{
+				Multiplier = 2.5/4,
+			},
+			Legendary =
+			{
+				Multiplier = 2.0/4,
+			},
+			Perfect =
+			{
+				Multiplier = 1.0/4,
+			},
+		},
+		Icon = "Hammer_Staff_41",
+		ReplacementGrannyModels =
+		{
+			WeaponStaff_Mesh = "WeaponStaff_Asclepius_Mesh"
+		},
+		OnWeaponFiredFunctions =
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			FunctionName = "DropOriginMarker",
+			FunctionArgs =
+			{
+				AnimationName = "MomusCastPointSpawn",
+				AttackAnimationName = "MomusCastPointAttack",
+				PreAttackDuration = 0.25,
+				ExpiringAnimationName = "MomusCastPointOut",
+				DestroyDelay = 0.5,
+				Repeats = 3,
+				Interval = { BaseValue = 4.0 },
+				ReportValues = { ReportedStrikeCount = "Repeats"},
+			},
+		},
+		OnProjectileDeathFunction =
+		{
+			Name = "ClearOriginMarker",
+			Args =
+			{
+				AttackAnimationName = "MomusCastPointAttack",
+				PreAttackDuration = 0.25,
+				ExpiringAnimationName = "MomusCastPointOut",
+				DestroyDelay = 0.5,
+				CastRepeats = 3,
+				Interval = { BaseValue = 4 },
+				ReportValues = { ReportedPulseInterval = "Interval"},
+			},
+		},
+		OnExpire =
+		{
+			FunctionName = "ClearAllOriginMarkers"
+		},
+		StatLines =
+		{
+			"PulseIntervalStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedPulseInterval",
+				ExtractAs = "PulseInterval",
+				DecimalPlaces = 1,
+			},
+			{
+				Key = "ReportedStrikeCount",
+				ExtractAs = "StrikeCount",
+				SkipAutoExtract = true
+			}
+		},
+		FlavorText = "StaffSelfHitAspect_FlavorText",
 	}
 }
 

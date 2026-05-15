@@ -374,7 +374,22 @@ function mod.StartLobSpecialRepeatThread(startX, startY, angle, args)
 	game.SessionMapState.OriginMarkers[weaponName] = nil
 end
 
+function mod.StartDaggerPrimaryRepeatThread() end
+function mod.StartTorchPrimaryRepeatThread() end
+function mod.StartAxePrimaryRepeatThread() end
+function mod.StartSkullPrimaryRepeatThread() end
+function mod.StartSuitPrimaryRepeatThread() end
+
+
 mod.WeaponThreadMap = {
+	["WeaponDagger5"] = mod.StartDaggerPrimaryRepeatThread,
+	["WeaponTorch"] = mod.StartTorchPrimaryRepeatThread,
+	["WeaponAxeSpin"] = mod.StartAxePrimaryRepeatThread,
+	["WeaponLobChargedPulse"] = mod.StartSkullPrimaryRepeatThread,
+	["WeaponSuitCharged"] = mod.StartSuitPrimaryRepeatThread,
+}
+
+mod.SpecialWeaponThreadMap = {
 	["WeaponAxeSpecialSwing"] = mod.StartAxeSpecialRepeatThread,
 	["WeaponDaggerThrow"] = mod.StartDaggerSpecialRepeatThread,
 	["WeaponSuitRanged"] = mod.StartSuitSpecialRepeatThread,
@@ -382,10 +397,8 @@ mod.WeaponThreadMap = {
 	["WeaponLobSpecial"] = mod.StartLobSpecialRepeatThread,
 }
 
-local dropOriginWeapons = {"WeaponDaggerThrow", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponTorchSpecial", "WeaponSuitRanged", "WeaponLobSpecial"}
-
 modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionArgs, triggerArgs )
-    if mod.WeaponThreadMap[weaponData.Name] then
+	if mod.SpecialWeaponThreadMap[weaponData.Name] or mod.WeaponThreadMap[weaponData.Name] then
         if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) or triggerArgs.DisjointExCast then
             -- print(mod.dump(weaponData))
             -- print(mod.dump(triggerArgs))
@@ -393,13 +406,13 @@ modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionAr
             local startX = triggerArgs.ProjectileX or playerLocation.X
             local startY = triggerArgs.ProjectileY or playerLocation.Y
             local weaponName = weaponData.Name
-            if game.Contains(dropOriginWeapons, weaponName) then
+            if mod.SpecialWeaponThreadMap[weaponName] or mod.WeaponThreadMap[weaponName] then
                 game.SessionMapState.OriginMarkers = game.SessionMapState.OriginMarkers or {}
                 if game.SessionMapState.OriginMarkers[weaponName] then
                     game.Destroy({ Id = game.SessionMapState.OriginMarkers[weaponName] })
                 end
             end
-            if  game.Contains(dropOriginWeapons, weaponData.Name) then
+            if  mod.SpecialWeaponThreadMap[weaponName] then
                 local threadName = "RepeatSpecialThread"
                 if game.HasThread( threadName ) then
                     game.killTaggedThreads( threadName )
@@ -409,8 +422,20 @@ modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionAr
                     game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
                     game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
                 end
-                game.thread(mod.WeaponThreadMap[weaponName], startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
+                game.thread(mod.SpecialWeaponThreadMap[weaponName], startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
             end
+			if  mod.WeaponThreadMap[weaponName] then
+				local threadName = "RepeatWeaponThread"
+				if game.HasThread( threadName ) then
+                    game.killTaggedThreads( threadName )
+                    game.waitUnmodified(0.1)
+                    local id = game.SessionMapState.OriginMarkers[weaponName]
+                    game.SessionMapState.OriginMarkers[weaponName] = nil
+                    game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+                    game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+                end
+                game.thread(mod.WeaponThreadMap[weaponName], startX, startY, game.GetAngle({Id = game.CurrentRun.Hero.ObjectId}), {functionArgs, triggerArgs, weaponName} )
+			end
             local zOffset = 90
 
             local originMarkerId = game.SpawnObstacle({ Name = "BlankObstacle", Group = "FX_Standing", LocationX = startX, LocationY = startY, OffsetZ = zOffset })
