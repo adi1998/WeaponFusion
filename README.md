@@ -42,7 +42,6 @@ If it still seems bugged would really appreciate a bug report :).
 
 - A weapon cannot be fused with another aspect of itself.
 - Some aspects which didn't make sense to have just its special didn't make it in (Eos, Moros, Medea, Hel)
-- [WIP] Momus is currently unavailable for the secondary weapon; however, having it as primary does properly work for fused omega specials
 
 ## Issues and feedback
 

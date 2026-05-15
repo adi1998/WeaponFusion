@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add Minor Aspect of Momus, able to duplicate every omega attack
+
 ## [0.4.2] - 2026-05-14
 
 - Block Pan and Charon from appearing as primary aspect in random fusions
