@@ -53,7 +53,7 @@ end
 WeaponMinorAspectData = {}
 
 for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
-    WeaponMinorAspectData[weaponName] = {"None"}
+    WeaponMinorAspectData[weaponName] = {}
     for _, aspectName in ipairs(aspectNameList) do
         if mod.AspectTraitData[aspectName .. "_Secondary"] then
             table.insert(WeaponMinorAspectData[weaponName], aspectName .. "_Secondary")

@@ -91,12 +91,46 @@ local traitTextList = {
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Momus",
         Description = "Whenever you use {$Keywords.Omega}, each fires in place up to {$TooltipData.ExtractData.StrikeCount} times until you use it again."
+    },
+    {
+        Id = "BaseStaffAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Melinoë",
+        Description = "Gain {!Icons.ManaUp} and greater {$Keywords.BaseDamage} for your {$Keywords.SpecialSet}."
+    },
+    {
+        Id = "DaggerBackstabAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Melinoë",
+        Description = "Your {$Keywords.AttackSet} and {$Keywords.SpecialSet} deal more damage by striking foes from behind."
+    },
+    {
+        Id = "TorchSpecialDurationAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Melinoë",
+        Description = "Your {$Keywords.AttackSet} and {$Keywords.SpecialSet} may deal {$Keywords.Crit} damage."
+    },
+    {
+        Id = "AxeRecoveryAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Melinoë",
+        Description = "Gain bonus {$Keywords.Attack} {$Keywords.BaseDamage} and {!Icons.HealthUp}."
+    },
+    {
+        Id = "BaseSuitAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Melinoë",
+        Description = "Your {$Keywords.AttackSet}, {$Keywords.Sprint}, and move speed are faster."
+    },
+    {
+        Id = "LobAmmoBoostAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Melinoë",
+        Description = "Your {$Keywords.AttackSet} have more {$Keywords.BaseDamage} for each {$Keywords.Shell} fired and not yet retrieved."
     }
 }
 
-mod.AspectDisplayNameMap = {
-    ["None"] = "None",
-}
+mod.AspectDisplayNameMap = {}
 
 for index, value in ipairs(traitTextList) do
     mod.AspectDisplayNameMap[value.Id] = value.DisplayName

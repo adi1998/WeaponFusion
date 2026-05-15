@@ -4,6 +4,7 @@
 
 - Add Minor Aspect of Momus, able to duplicate every omega attack
 - Add support for Charon as primary aspect, all other weapons' omega specials will trigger cleave-cast
+- Add Minor Aspects of Melinoe for all weapons except skulls
 - Fix Eos' duplicate skull omega specials not being created properly
 
 ## [0.4.2] - 2026-05-14

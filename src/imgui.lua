@@ -75,7 +75,7 @@ function DrawMenu()
                 if weaponName ~= config.primary and rom.ImGui.Selectable(displayName, weaponName == config.secondary) then
                     if weaponName ~= config.secondary then
                         config.secondary = weaponName
-                        config.aspect = WeaponMinorAspectData[weaponName][1] or "None"
+                        config.aspect = WeaponMinorAspectData[weaponName][1]
                     end
                     rom.ImGui.SetItemDefaultFocus()
                 end
@@ -116,7 +116,7 @@ function DrawMenu()
             mod.UnequipWeapons()
             config.last_primary = "WeaponStaffSwing"
             config.last_secondary = "WeaponStaffSwing"
-            config.last_aspect = "None"
+            config.last_aspect = "BaseStaffAspect_Secondary"
             UnfuseWeapons()
             mod.EquipWeapons()
             game.RequestPreRunLoadoutChangeSave()

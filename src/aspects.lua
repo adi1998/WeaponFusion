@@ -2451,6 +2451,389 @@ mod.AspectTraitData = {
 			}
 		},
 		FlavorText = "StaffSelfHitAspect_FlavorText",
+	},
+
+	BaseStaffAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Staff_39",
+		ReplacementGrannyModels = 
+		{
+			WeaponStaff_Mesh = "WeaponStaff_Mesh"
+		},
+		AddOutgoingDamageModifiers = 
+		{
+			ValidWeapons = game.WeaponSets.HeroSecondaryWeapons,
+			ValidBaseDamageAddition = { BaseValue = 10 },
+			ReportValues = { ReportedBonus = "ValidBaseDamageAddition" }
+		},
+		PropertyChanges =
+		{
+			{
+				LuaProperty = "MaxMana",
+				BaseValue = 10,
+				ChangeType = "Add",
+			},
+		},
+		StatLines =
+		{
+			"SpecialAndManaStatDisplay1",
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				MinMultiplier = 0,
+				MaxMultiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 3,
+			},
+			Legendary =
+			{
+				Multiplier = 4,
+			},
+			Perfect =
+			{
+				Multiplier = 5,
+			},
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedBonus",
+				ExtractAs = "DamageBonus",
+				IncludeSigns = true,
+			},
+		},
+		FlavorText = "BaseStaffAspect_FlavorText",
+	},
+
+	DaggerBackstabAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Daggers_38",
+		ReplacementGrannyModels = 
+		{
+			WeaponDaggerA_Mesh = "WeaponDaggerA_Mesh",
+			WeaponDaggerB_Mesh = "WeaponDaggerB_Mesh"
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 1.5,
+			},
+			Heroic =
+			{
+				Multiplier = 2.0,
+			},
+			Legendary =
+			{
+				Multiplier = 2.5,
+			},
+			Perfect =
+			{
+				Multiplier = 5,
+			},
+		},
+		AddOutgoingDamageModifiers =
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
+			HitVulnerabilityMultiplier =
+			{
+				BaseValue = 1.40,
+				SourceIsMultiplier = true,
+			},
+			ReportValues = { ReportedMultiplier = "HitVulnerabilityMultiplier"},
+
+		},
+		StatLines =
+		{
+			"BackstabStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedMultiplier",
+				ExtractAs = "Damage",
+				Format = "PercentDelta",
+			},
+		},
+		FlavorText = "DaggerBackstabAspect_FlavorText",
+	},
+
+	TorchSpecialDurationAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 1.5,
+			},
+			Heroic =
+			{
+				Multiplier = 2,
+			},
+			Legendary =
+			{
+				Multiplier = 2.5,
+			},
+			Perfect =
+			{
+				Multiplier = 4,
+			},
+		},
+		Icon = "Hammer_Torch_39",
+		ReplacementGrannyModels = 
+		{
+			WeaponTorchR_Mesh = "WeaponTorchR_Mesh",
+			WeaponTorchL_Mesh = "WeaponTorchL_Mesh"
+		},
+		AddOutgoingCritModifiers = 
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
+			Chance = { BaseValue = 0.04 },
+			ReportValues = {ReportedChance = "Chance"}
+		},
+		StatLines =
+		{
+			"SpecialDurationStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedChance",
+				ExtractAs = "Bonus",
+				Format = "LuckModifiedPercent",
+			},
+		},
+		FlavorText = "TorchSpecialDurationAspect_FlavorText",
+	},
+
+	AxeRecoveryAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 1.17,
+			},
+			Heroic =
+			{
+				Multiplier = 1.34,
+			},
+			Legendary =
+			{
+				Multiplier = 1.67,
+			},
+			Perfect =
+			{
+				Multiplier = 2.00,
+			},
+		},
+		Icon = "Hammer_Axe_40",
+		ReplacementGrannyModels = 
+		{
+			Melinoe_Axe_Mesh1 = "Melinoe_Axe_Mesh1"
+		},
+		AddOutgoingDamageModifiers = 
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimaryWeapons,
+			NonExBaseDamageAddition = { BaseValue = 30 },
+			ReportValues = 
+			{ 
+				ReportedDamage = "NonExBaseDamageAddition"
+			},
+		},
+		PropertyChanges =
+		{
+			{
+				LuaProperty = "MaxHealth",
+				BaseValue = 30,
+				ChangeType = "Add",
+			},
+		},
+		StatLines =
+		{
+			"AxeDamageHealthStatDisplay",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedDamage",
+				ExtractAs = "Damage",
+				IncludeSigns = true,
+			},
+		},
+		FlavorText = "AxeRecoveryAspect_FlavorText",
+	},
+
+	BaseSuitAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Suit_01",
+		ReplacementGrannyModels =
+		{
+			WeaponSuitR_Base_Mesh = "WeaponSuitR_Base_Mesh",
+			WeaponSuitL_Base_Mesh = "WeaponSuitL_Base_Mesh",
+			WeaponSuitB_Base_Mesh = "WeaponSuitB_Base_Mesh",
+		},
+
+		WeaponSpeedMultiplier =
+		{
+			WeaponNames = game.WeaponSets.HeroPrimaryWeapons,
+			Value =
+			{
+				BaseValue = 0.95,
+				SourceIsMultiplier = true,
+			},
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponNames = game.WeaponSets.HeroPrimaryWeapons,
+				BaseValue = 0.95,
+				SourceIsMultiplier = true,
+				SpeedPropertyChanges = true,
+				ExcludeLinked = true,
+			},
+			{
+				UnitProperty = "Speed",
+				BaseValue = 1.05,
+				SourceIsMultiplier = true,
+				ChangeType = "Multiply",
+				ReportValues = { ReportedChange = "ChangeValue" }
+			},
+			{
+				WeaponNames = { "WeaponSprint" },
+				WeaponProperty = "SelfVelocity",
+				BaseValue = 99,
+				ChangeType = "Add",
+				ExcludeLinked = true,
+			},
+			{
+				WeaponNames = { "WeaponSprint" },
+				WeaponProperty = "SelfVelocityCap",
+				BaseValue = 44.5,
+				ChangeType = "Add",
+				ExcludeLinked = true,
+			},
+		},
+		StatLines =
+		{
+			"MoveSprintAttackSpeedStatDisplay",
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				MinMultiplier = 0,
+				MaxMultiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 3,
+			},
+			Legendary =
+			{
+				Multiplier = 4,
+			},
+			Perfect =
+			{
+				Multiplier = 7,
+			},
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedChange",
+				ExtractAs = "SpeedBonus",
+				Format = "PercentDelta"
+			},
+		},
+		FlavorText = "BaseSuitAspect_FlavorText",
+	},
+
+	LobAmmoBoostAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 3,
+			},
+			Legendary =
+			{
+				Multiplier = 4,
+			},
+			Perfect =
+			{
+				Multiplier = 7,
+			},
+		},
+		Icon = "Hammer_Lob_13",
+		ReplacementGrannyModels =
+		{
+			WeaponLob_Mesh = "WeaponLob_Mesh"
+		},
+		FlavorText = "LobAmmoBoostAspect_FlavorText",
 	}
 }
 
