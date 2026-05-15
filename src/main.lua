@@ -64,6 +64,7 @@ local function on_ready()
     import 'sjson.lua'
     import 'aspects.lua'
     import 'aspects_logic.lua'
+    import 'charon.lua'
     import 'ready.lua'
     import 'momus.lua'
     import 'eos.lua'
