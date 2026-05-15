@@ -374,12 +374,382 @@ function mod.StartLobSpecialRepeatThread(startX, startY, angle, args)
 	game.SessionMapState.OriginMarkers[weaponName] = nil
 end
 
-function mod.StartDaggerPrimaryRepeatThread() end
-function mod.StartTorchPrimaryRepeatThread() end
-function mod.StartAxePrimaryRepeatThread() end
-function mod.StartSkullPrimaryRepeatThread() end
-function mod.StartSuitPrimaryRepeatThread() end
+function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileAxeSpin"
 
+	local projectileInterval = 0.22
+	local scaleIncrement = 0
+	local damageMultiplier = 1
+	local damageIncrement = 0
+	local numProjectiles = triggerArgs.NumProjectiles or 5
+	numProjectiles = math.min(numProjectiles or 7)
+
+	if game.HeroHasTrait("AxeRallyAspect") then
+		projectileInterval = 0.44
+		scaleIncrement = 0.15
+		damageMultiplier = 2
+		damageIncrement = 0.2
+		if numProjectiles == 1 then
+			damageMultiplier = 3
+		end
+	end
+
+	local threadName = "RepeatWeaponThread"
+	local repeats = 1
+	local scale = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+	derivedValues.PropertyChanges.DamageRadius = 410
+	print(mod.dump(derivedValues))
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		for i = 1, numProjectiles do
+			derivedValues.PropertyChanges.DamageRadius = 410 * scale
+			game.CreateProjectileFromUnit({ WeaponName = "WeaponAxe",
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				DataProperties = derivedValues.PropertyChanges,
+				ThingProperties = derivedValues.ThingPropertyChanges,
+				FireFromTarget = true,
+				AttachToTarget = true,
+				Angle = angle,
+				DamageMultiplier = damageMultiplier*( 1 + damageIncrement*(i-1) )
+			})
+			game.waitUnmodified(projectileInterval, threadName)
+			scale = scale + scaleIncrement
+		end
+		game.Destroy({Id = dropLocation })
+		repeats = repeats + 1
+		scale = 1
+	end
+	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
+function mod.GetClosestActiveEnemy(id, distance)
+	local nearestEnemyTargetIds = game.GetClosestIds({ Id = id, DestinationName = "EnemyTeam", IgnoreUntargetable = false, IgnoreHomingIneligible = false, Distance = distance })
+	print("id", id)
+	print("nearids", mod.dump(nearestEnemyTargetIds))
+	for _, enemyId in pairs( nearestEnemyTargetIds ) do
+		if game.ActiveEnemies[enemyId] then
+			return enemyId
+		end
+	end
+end
+
+function mod.MarkAdditionalDaggerTarget(triggerArgs, weaponName, dropLocation, traitArgs)
+	game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] = {}
+	game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] = {}
+	while game.MapState[_PLUGIN.guid .. "DaggerCharging"] do
+		if game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] then
+			local enemyIds = game.GetClosestIds({ Id = game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"], DestinationName = "EnemyTeam", IgnoreSelf = true, StopsProjectiles = true, IgnoreInvulnerable = true, IgnoreHomingIneligible = true, Distance = traitArgs.Range })
+			if not game.IsEmpty(enemyIds) then
+				local retarget = game.IsEmpty( game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] )
+				for _, id in pairs( game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] ) do
+					if not game.Contains( enemyIds, id ) then
+						retarget = true
+					end
+				end
+				if retarget then
+					game.Destroy({ Ids = game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] })
+					game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] = {}
+					game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] = {}
+					local targetsUsed = 0
+					for i, id in pairs(enemyIds) do
+						if game.ActiveEnemies[id] and ( targetsUsed < traitArgs.AdditionalTargets or game.ActiveEnemies[id].ActiveEffects[traitArgs.IndicatorEffect]) then
+							if not game.ActiveEnemies[id].ActiveEffects[traitArgs.IndicatorEffect] then
+								targetsUsed = targetsUsed + 1
+							end
+							local markImage = game.SpawnObstacle({ Name = "BlankObstacle" })
+							game.SetAnimation({ Name = _PLUGIN.guid .. "DaggerMarkStatus_Green", DestinationId = markImage })
+							game.Attach({ Id = markImage, DestinationId = enemyIds[i] })
+							table.insert( game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"], enemyIds[i] )
+							table.insert( game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"], markImage )
+						end
+					end
+				end
+			end
+			game.waitUnmodified(0.1, "RepeatWeaponThread")
+		else
+			game.Destroy({ Ids = game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] })
+			game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] = {}
+			game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] = {}
+			game.waitUnmodified(0.1, "RepeatWeaponThread")
+		end
+	end
+	game.Destroy({ Ids = game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] })
+end
+
+function mod.MarkDaggerTarget(triggerArgs, weaponData, dropLocation, args)
+	game.MapState[_PLUGIN.guid .. "DaggerCharging"] = true
+	if game.HeroHasTrait("DaggerTripleAspect") then
+		game.thread( mod.MarkAdditionalDaggerTarget, triggerArgs, weaponData, dropLocation, game.GetHeroTrait("DaggerTripleAspect").DaggerAdditionalTargetData )
+	end
+	while game.MapState[_PLUGIN.guid .. "DaggerCharging"] do
+		local targetId = mod.GetClosestActiveEnemy(dropLocation, 690)
+		print(targetId)
+		if targetId ~= 0 and game.ActiveEnemies[targetId] ~= nil and not game.ActiveEnemies[targetId].IsDead then
+			if game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] ~= targetId then
+				game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] = targetId
+				if game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"] then
+					game.Destroy({ Id = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"]  })
+				end
+				game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"] = game.SpawnObstacle({ Name = "BlankObstacle", DestinationId = targetId })
+				game.SetAnimation({ Name = _PLUGIN.guid .. "DaggerMarkStatus_Green", DestinationId = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"], Scale = game.ActiveEnemies[targetId].DaggerExScale })
+				game.Attach({ Id = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"], DestinationId = targetId, MarkerName = game.ActiveEnemies[targetId].DaggerExMarker })
+				local notifyName = _PLUGIN.guid .. "WeaponDagger5Mark"
+				game.NotifyOutsideDistance({ Id = dropLocation, Distance = 690, DestinationId = targetId, Notify = notifyName, Timeout = 0.1 })
+				game.waitUntil( notifyName, "RepeatWeaponThread" )
+			else
+				game.waitUnmodified(0.1, "RepeatWeaponThread")
+			end
+		elseif game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"] then
+			game.Destroy({ Id = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"]  })
+			game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] = nil
+			game.waitUnmodified(0.1, "RepeatWeaponThread")
+		else
+			game.waitUnmodified(0.1, "RepeatWeaponThread")
+		end
+	end
+end
+
+function mod.StartDaggerPrimaryRepeatThread(startX, startY, angle, args)
+	game.Destroy({ Id = game.MapState[_PLUGIN.guid.."MarkedDaggerTargetId"]  })
+	game.Destroy({ Ids = game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"]  })
+	game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] = nil
+	game.MapState[_PLUGIN.guid.."MarkedDaggerTargetId"] = nil
+	game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] = {}
+	game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] = {}
+
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileDaggerBackstab"
+	if game.HeroHasTrait("DaggerTripleAspect") then
+		projectileName = "ProjectileDaggerExecuteMorrigan"
+	end
+	local threadName = "RepeatWeaponThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+	-- print(mod.dump(derivedValues))
+	local logProjectileIdForMagicCrit = false
+	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
+		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
+		logProjectileIdForMagicCrit = true
+	end
+
+	while repeats < functionArgs.Repeats do
+		local autoTargetOrigin = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		game.thread( mod.MarkDaggerTarget, triggerArgs, weaponData, autoTargetOrigin )
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		local locX = startX
+		local locY = startY
+		if game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"] then
+			angle = game.GetAngleBetween({ DestinationId = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"], Id = autoTargetOrigin })
+			local location = game.GetLocation({Id = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"]})
+			locX = location.X
+			locY = location.Y
+		end
+		print(angle)
+		print(startX, startY)
+		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = locX, LocationY = locY })
+		game.CreateProjectileFromUnit({ WeaponName = weaponName,
+			Name = projectileName,
+			Id = game.CurrentRun.Hero.ObjectId,
+			DestinationId = dropLocation,
+			DataProperties = derivedValues.PropertyChanges,
+			ThingProperties = derivedValues.ThingPropertyChanges,
+			FireFromTarget = true,
+			AttachToTarget = true,
+			Angle = angle + 180,
+		})
+		game.MapState[_PLUGIN.guid .. "DaggerCharging"] = nil
+		game.killTaggedThreads(_PLUGIN.guid .. "WeaponDagger5Mark")
+		game.Destroy({ Id = game.MapState[_PLUGIN.guid.."MarkedDaggerTargetId"]  })
+		game.Destroy({ Ids = game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"]  })
+
+		if not game.IsEmpty(game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"]) then
+			local additionalTargetData = game.GetHeroTrait("DaggerTripleAspect").DaggerAdditionalTargetData
+			for key, id in pairs(game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"]) do
+				local addWait = 0.3
+				if key > 2 then
+					addWait = 0.1
+				end
+				game.waitUnmodified(addWait, threadName)
+				local addAngle = game.GetAngleBetween( { Id = dropLocation, DestinationId = id })
+				game.CreateProjectileFromUnit({
+					WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = id, FireFromTarget = true,
+					DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges,
+					Angle = addAngle + 180
+				})
+				local streakAnchor = game.SpawnObstacle({ Name = "BlankObstacle", DestinationId = id })
+				game.SetAngle({ Id = streakAnchor, Angle = addAngle })
+				game.CreateAnimation({ Name = additionalTargetData.Vfx, DestinationId = streakAnchor})
+				game.thread( game.DestroyOnDelay, {streakAnchor}, 0.2 )
+			end
+		end
+		game.Destroy({ Id = dropLocation })
+		game.Destroy({ Id = autoTargetOrigin })
+		game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] = nil
+		game.MapState[_PLUGIN.guid.."MarkedDaggerTargetId"] = nil
+		game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] = {}
+		game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] = {}
+		game.waitUnmodified(0.07, "RepeatWeaponThread")
+		repeats = repeats + 1
+	end
+	game.wait( 0.3 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
+function mod.StartSkullPrimaryRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileLobChargedPulse"
+	if game.HeroHasTrait("LobGunAspect") then
+		projectileName = "ProjectileLobOverheat"
+	end
+	local numProjectiles = 1
+	if game.HeroHasTrait("LobGunAttackDoublerTrait") then
+		numProjectiles = 3
+	end
+	local targetX = triggerArgs.TargetX
+	local targetY = triggerArgs.TargetY
+	local threadName = "RepeatWeaponThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+	print(mod.dump(triggerArgs))
+	local logProjectileIdForMagicCrit = false
+	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
+		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
+		logProjectileIdForMagicCrit = true
+	end
+
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		for i = 1, numProjectiles do
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.waitUnmodified(0.15, threadName)
+		end
+		game.Destroy({Id = dropLocation })
+		repeats = repeats + 1
+	end
+	game.wait( 0.3 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
+
+function mod.StartSuitPrimaryRepeatThread(startX, startY, angle, args)
+	args = args or {}
+    local functionArgs, triggerArgs, weaponName = args[1], args[2], args[3]
+	functionArgs.Repeats = functionArgs.Repeats or 3
+	functionArgs.Interval = functionArgs.Interval or 3.5
+	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
+	local projectileName = "ProjectileSuitCharged"
+	local threadName = "RepeatWeaponThread"
+	local repeats = 1
+	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
+	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
+
+	local derivedValues = game.GetDerivedPropertyChangeValues({
+		ProjectileName = projectileName,
+		WeaponName = weaponName,
+		Type = "Projectile",
+	})
+	local currentStage = game.MapState.WeaponCharge[weaponName] or 10
+	local stages = game.GetWeaponChargeStages(weaponData)
+	local damageMultiplier = stages[currentStage].WeaponProperties.DamageMultiplier
+
+	local logProjectileIdForMagicCrit = false
+	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
+		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
+		logProjectileIdForMagicCrit = true
+	end
+
+	while repeats < functionArgs.Repeats do
+		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
+		if functionArgs.AttackAnimationName then
+			game.SetAnimation({ Name = functionArgs.AttackAnimationName, DestinationId = game.SessionMapState.OriginMarkers[weaponName] })
+		end
+		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
+		if (game.CurrentRun.Hero.IsDead and (not game.CurrentHubRoom or not game.CurrentHubRoom.AllowEnemyAIActive)) or ( game.CurrentRun.CurrentRoom.Encounter and game.CurrentRun.CurrentRoom.Encounter.BossKillPresentation ) then
+			break
+		end
+		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		game.CreateProjectileFromUnit({ WeaponName = "WeaponSuit", Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, AttachToTarget = true, Angle = angle, DamageMultiplier = damageMultiplier })
+		game.Destroy({Id = dropLocation })
+		repeats = repeats + 1
+	end
+	game.wait( 0.3 ) -- Wait for final attack animation to finish before playing Expiring Animation
+	local id = game.SessionMapState.OriginMarkers[weaponName]
+	game.SetAnimation({ Name = functionArgs.ExpiringAnimationName, DestinationId = id })
+	game.thread( game.DestroyOnDelay, {id} , functionArgs.DestroyDelay )
+
+	game.SessionMapState.OriginMarkers[weaponName] = nil
+end
 
 mod.WeaponThreadMap = {
 	["WeaponDagger5"] = mod.StartDaggerPrimaryRepeatThread,
