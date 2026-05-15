@@ -85,6 +85,12 @@ local traitTextList = {
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Persephone",
         Description = "Your {$Keywords.SpecialEX} is {$Keywords.Fuel}, and lets you change direction; {$Keywords.GodBoonPlural} start with {$Keywords.PomLevel}",
+    },
+    {
+        Id = "StaffSelfHitAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Momus",
+        Description = "Whenever you use {$Keywords.Omega}, each fires in place up to {$TooltipData.ExtractData.StrikeCount} times until you use it again."
     }
 }
 
