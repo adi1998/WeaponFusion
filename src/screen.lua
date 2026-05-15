@@ -1046,7 +1046,7 @@ function mod.StartDaggerPrimaryRepeatThread(startX, startY, angle, args)
 		game.MapState[_PLUGIN.guid.."MarkedDaggerTargetId"] = nil
 		game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] = {}
 		game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] = {}
-		game.waitUnmodified(0.1, "RepeatWeaponThread")
+		game.waitUnmodified(0.07, "RepeatWeaponThread")
 		repeats = repeats + 1
 	end
 	game.wait( 0.3 ) -- Wait for final attack animation to finish before playing Expiring Animation
