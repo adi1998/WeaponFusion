@@ -385,7 +385,7 @@ mod.WeaponThreadMap = {
 	["WeaponDagger5"] = mod.StartDaggerPrimaryRepeatThread,
 	["WeaponTorch"] = mod.StartTorchPrimaryRepeatThread,
 	["WeaponAxeSpin"] = mod.StartAxePrimaryRepeatThread,
-	["WeaponLobChargedPulse"] = mod.StartSkullPrimaryRepeatThread,
+	["WeaponLob"] = mod.StartSkullPrimaryRepeatThread,
 	["WeaponSuitCharged"] = mod.StartSuitPrimaryRepeatThread,
 }
 
@@ -443,7 +443,7 @@ modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionAr
             game.SetAnimation({ Name = functionArgs.AnimationName, DestinationId = originMarkerId })
             game.SessionMapState.OriginMarkers[weaponName] = originMarkerId
         end
-    else
+    elseif weaponData.Name ~= "WeaponLobChargedPulse" then
         base(weaponData, functionArgs, triggerArgs)
     end
 end)
