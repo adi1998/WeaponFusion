@@ -897,7 +897,7 @@ function mod.MarkAdditionalDaggerTarget(triggerArgs, weaponName, dropLocation, t
 								targetsUsed = targetsUsed + 1
 							end
 							local markImage = game.SpawnObstacle({ Name = "BlankObstacle" })
-							game.SetAnimation({ Name = "DaggerMarkStatus_Green", DestinationId = markImage })
+							game.SetAnimation({ Name = _PLUGIN.guid .. "DaggerMarkStatus_Green", DestinationId = markImage })
 							game.Attach({ Id = markImage, DestinationId = enemyIds[i] })
 							table.insert( game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"], enemyIds[i] )
 							table.insert( game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"], markImage )
@@ -931,11 +931,11 @@ function mod.MarkDaggerTarget(triggerArgs, weaponData, dropLocation, args)
 					game.Destroy({ Id = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"]  })
 				end
 				game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"] = game.SpawnObstacle({ Name = "BlankObstacle", DestinationId = targetId })
-				game.SetAnimation({ Name = "DaggerMarkStatus_Green", DestinationId = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"], Scale = game.ActiveEnemies[targetId].DaggerExScale })
+				game.SetAnimation({ Name = _PLUGIN.guid .. "DaggerMarkStatus_Green", DestinationId = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"], Scale = game.ActiveEnemies[targetId].DaggerExScale })
 				game.Attach({ Id = game.MapState[_PLUGIN.guid .. "MarkedDaggerTargetId"], DestinationId = targetId, MarkerName = game.ActiveEnemies[targetId].DaggerExMarker })
 				local notifyName = _PLUGIN.guid .. "WeaponDagger5Mark"
 				game.NotifyOutsideDistance({ Id = dropLocation, Distance = 690, DestinationId = targetId, Notify = notifyName, Timeout = 0.1 })
-				game.waitUntil( notifyName )
+				game.waitUntil( notifyName, "RepeatWeaponThread" )
 			else
 				game.waitUnmodified(0.1, "RepeatWeaponThread")
 			end
@@ -1046,6 +1046,7 @@ function mod.StartDaggerPrimaryRepeatThread(startX, startY, angle, args)
 		game.MapState[_PLUGIN.guid.."MarkedDaggerTargetId"] = nil
 		game.MapState[_PLUGIN.guid .. "AdditionalTargetIds"] = {}
 		game.MapState[_PLUGIN.guid .. "AdditionalMarkIds"] = {}
+		game.waitUnmodified(0.1, "RepeatWeaponThread")
 		repeats = repeats + 1
 	end
 	game.wait( 0.3 ) -- Wait for final attack animation to finish before playing Expiring Animation
