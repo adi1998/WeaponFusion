@@ -63,7 +63,6 @@ end
 
 local bannedPrimaryAspects = {
     ["DaggerHomingThrowAspect"] = true,
-    ["AxeArmCastAspect"] = true,
 }
 
 function PickRandomFusion()

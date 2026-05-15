@@ -12,7 +12,7 @@ modutil.mod.Path.Context.Wrap.Static("DoThrowEx", function (weaponName)
             local angle_record = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
             local projectileName = "ProjectileThrowCharged"
             game.CreateProjectileFromUnit({
-				WeaponName = weaponName,
+				WeaponName = "WeaponLobSpecial",
 				Name = projectileName,
 				Id = game.CurrentRun.Hero.ObjectId,
 				ProjectileDestinationId = game.SessionMapState.CurrentExProjectile,
@@ -23,7 +23,7 @@ modutil.mod.Path.Context.Wrap.Static("DoThrowEx", function (weaponName)
 				ProjectileCap = 12
 			})
 			game.CreateProjectileFromUnit({
-				WeaponName = weaponName,
+				WeaponName = "WeaponLobSpecial",
 				Name = projectileName,
 				Id = game.CurrentRun.Hero.ObjectId,
 				ProjectileDestinationId = game.SessionMapState.CurrentExProjectile,
