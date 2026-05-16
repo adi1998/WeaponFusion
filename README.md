@@ -23,8 +23,12 @@ If the ImGui window seem unresponsive try disabling V-sync and any external fram
 Fusion can only be performed in the Crossroads training grounds.
 
 ![Pool Interact](images/pool.png)
+
 <br>
+
 ![Ingame UI](images/menu.png)
+
+<br>
 
 ![ImGui menu](images/imgui.png)
 
@@ -41,7 +45,8 @@ If it still seems bugged would really appreciate a bug report :).
 ## Some Limitations
 
 - A weapon cannot be fused with another aspect of itself.
-- Some aspects which didn't make sense to have just its special didn't make it in (Eos, Moros, Medea, Hel)
+- Aspect of Pan as primary does nothing
+- Some aspects which didn't make sense to have just its specials didn't make it in (Eos, Moros, Medea, Hel)
 
 ## Issues and feedback
 
