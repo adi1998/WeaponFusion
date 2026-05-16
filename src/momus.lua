@@ -499,8 +499,6 @@ end
 
 function mod.GetClosestActiveEnemy(id, distance)
 	local nearestEnemyTargetIds = game.GetClosestIds({ Id = id, DestinationName = "EnemyTeam", IgnoreUntargetable = false, IgnoreHomingIneligible = false, Distance = distance })
-	print("id", id)
-	print("nearids", mod.dump(nearestEnemyTargetIds))
 	for _, enemyId in pairs( nearestEnemyTargetIds ) do
 		if game.ActiveEnemies[enemyId] then
 			return enemyId
@@ -558,7 +556,6 @@ function mod.MarkDaggerTarget(triggerArgs, weaponData, dropLocation, args)
 	end
 	while game.MapState[_PLUGIN.guid .. "DaggerCharging"] do
 		local targetId = mod.GetClosestActiveEnemy(dropLocation, 690)
-		print(targetId)
 		if targetId ~= 0 and game.ActiveEnemies[targetId] ~= nil and not game.ActiveEnemies[targetId].IsDead then
 			if game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] ~= targetId then
 				game.MapState[_PLUGIN.guid .. "MarkDaggerEnemyId"] = targetId
@@ -637,8 +634,6 @@ function mod.StartDaggerPrimaryRepeatThread(startX, startY, angle, args)
 			locX = location.X
 			locY = location.Y
 		end
-		print(angle)
-		print(startX, startY)
 		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = locX, LocationY = locY })
 		game.CreateProjectileFromUnit({ WeaponName = weaponName,
 			Name = projectileName,
@@ -718,7 +713,6 @@ function mod.StartSkullPrimaryRepeatThread(startX, startY, angle, args)
 		WeaponName = weaponName,
 		Type = "Projectile",
 	})
-	print(mod.dump(triggerArgs))
 	local logProjectileIdForMagicCrit = false
 	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
 		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
