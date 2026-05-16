@@ -34,6 +34,44 @@ function mod.CheckFrenzyCount(victim, functionArgs, triggerArgs)
 	end
 end
 
+function mod.CheckPerfectAxeCrit( victim, args, triggerArgs )
+	if game.IsExWeapon( triggerArgs.SourceWeapon, { Combat = true }, triggerArgs ) then
+		return
+	end
+	if triggerArgs.SourceProjectile and game.ProjectileData[triggerArgs.SourceProjectile] and game.ProjectileData[triggerArgs.SourceProjectile].IsAdditionalCastProjectile then
+		return
+	end
+
+	local passesHitCheck = args.FirstHitOnly == nil or (args.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit" ))
+
+	if triggerArgs.SourceProjectile ~= nil and args.MultihitProjectileWhitelistLookup and args.MultihitProjectileWhitelistLookup[triggerArgs.SourceProjectile] and args.MultihitProjectileConditions[triggerArgs.SourceProjectile] then
+		local conditions = args.MultihitProjectileConditions[triggerArgs.SourceProjectile]
+		passesHitCheck = true
+		if conditions.Cooldown and not game.CheckCooldown( _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit", conditions.Cooldown ) then
+			passesHitCheck = false
+		end
+	end
+
+	if passesHitCheck then
+		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit")
+		local trait = game.GetHeroTrait( "AxePerfectCriticalAspect_Secondary")
+
+		local prevCritChance = game.round(trait.PerfectCritChance * 100, 1)
+		local maxCritChance = game.round(args.MaxCrit * 100, 1)
+
+		trait.PerfectCritChance = math.min( args.MaxCrit,  trait.PerfectCritChance + args.Increment )
+
+		local currCritChance = game.round(trait.PerfectCritChance * 100, 1)
+
+		if prevCritChance < maxCritChance and currCritChance == maxCritChance then
+			game.PlaySound({ Name = "/SFX/ThanatosCreepyBellStart", Id = game.CurrentRun.Hero.ObjectId })
+			game.CreateAnimation({ Name = "ThanatosMaxMortalityFx", DestinationId = game.CurrentRun.Hero.ObjectId, Group = "FX_Standing_Add" })
+		end
+
+		game.UpdateAxeUI( trait )
+	end
+end
+
 modutil.mod.Path.Wrap("SetupPerfectCritUI", function (base)
 	if game.SessionMapState.WeaponsDisabled then
 		return
