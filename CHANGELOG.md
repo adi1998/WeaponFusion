@@ -7,6 +7,7 @@
 - Add Minor Aspects of Melinoe for all weapons except skulls
 - Fix Eos' duplicate skull omega specials not being created properly
 - Fix Supay attack not auto firing when Melinoe puts the flames away to use another weapon
+- Fix Anubis base attack not increasing stacks for Thanatos and Nergal
 
 ## [0.4.2] - 2026-05-14
 

@@ -344,11 +344,19 @@ mod.AspectTraitData = {
 		{
 			FunctionName = _PLUGIN.guid .. "." .. "CheckFrenzyCount",
 			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
-			FirstHitOnly = true,
 			Args =
 			{
 				RequiredCount = { BaseValue = 21 },
 				EffectName = "Frenzy",
+				FirstHitOnly = true,
+				MultihitProjectileWhitelist =
+				{
+					"ProjectileStaffSingle",
+				},
+				MultihitProjectileConditions =
+				{
+					ProjectileStaffSingle = { Cooldown = 0.5 },
+				},
 				DataProperties =
 				{
 					Duration = 10,
@@ -1715,12 +1723,20 @@ mod.AspectTraitData = {
 		OnEnemyDamagedAction =
 		{
 			ValidWeapons = game.WeaponSets.HeroAllWeapons,
-			FunctionName = "CheckPerfectAxeCrit",
-			FirstHitOnly = true,
+			FunctionName = _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit",
 			Args =
 			{
 				Increment = 0.02,
 				MaxCrit = 0.20,
+				FirstHitOnly = true,
+				MultihitProjectileWhitelist =
+				{
+					"ProjectileStaffSingle",
+				},
+				MultihitProjectileConditions =
+				{
+					ProjectileStaffSingle = { Cooldown = 0.5 },
+				},
 				ReportValues =
 				{
 					ReportedIncrement = "Increment",
@@ -2130,7 +2146,7 @@ mod.AspectTraitData = {
 		},
 		OnWeaponFiredFunctions =
 		{
-			ValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack","WeaponTransformSpecial", } ),
+			ValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack", "WeaponTransformSpecial"} ),
 			FunctionName = "CheckDaggerCritCharges",
 		},
 		WeaponSpeedMultiplier =

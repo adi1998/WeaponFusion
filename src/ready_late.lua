@@ -76,15 +76,6 @@ modutil.mod.Path.Context.Wrap.Static("CleanupShadeMerc", function ( triggerArgs 
 	end)
 end)
 
-modutil.mod.Path.Context.Wrap.Static("CheckPerfectAxeCrit", function ( victim, args, triggerArgs )
-	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
-		if traitName == "AxePerfectCriticalAspect" and game.HeroHasTrait(traitName .. "_Secondary") then
-			return base(traitName .. "_Secondary")
-		end
-		return base(traitName)
-	end)
-end)
-
 modutil.mod.Path.Context.Wrap.Static("ResetPerfectAxeCrit", function ( attacker, args, triggerArgs )
 	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
 		if traitName == "AxePerfectCriticalAspect" and game.HeroHasTrait(traitName .. "_Secondary") then

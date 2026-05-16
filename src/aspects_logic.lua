@@ -1,23 +1,36 @@
 
 function mod.CheckFrenzyCount(victim, functionArgs, triggerArgs)
-	if game.IsEmpty( game.CurrentRun.Hero.ActiveEffects ) or not game.CurrentRun.Hero.ActiveEffects.Frenzy then
-		local startingCount = game.MapState.FrenzyHits or 0
-		game.IncrementTableValue( game.MapState, "FrenzyHits" )
-		local requiredCount = 21
-		local traitData = game.GetHeroTrait("AxeRallyAspect_Secondary")
-		if traitData.OnEnemyDamagedAction and traitData.OnEnemyDamagedAction.Args then
-			requiredCount = traitData.OnEnemyDamagedAction.Args.RequiredCount or requiredCount
-		end
-		if game.ScreenAnchors.AxeUIChargeAmount then
-			game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = game.MapState.FrenzyHits / requiredCount, Instant = true })
+
+	local passesHitCheck = functionArgs.FirstHitOnly == nil or (functionArgs.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckFrenzyCount" ))
+
+	if triggerArgs.SourceProjectile ~= nil and functionArgs.MultihitProjectileWhitelistLookup and functionArgs.MultihitProjectileWhitelistLookup[triggerArgs.SourceProjectile] and functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile] then
+		local conditions = functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile]
+		passesHitCheck = true
+		if conditions.Cooldown and not game.CheckCooldown( _PLUGIN.guid .. "." .. "CheckFrenzyCount", conditions.Cooldown ) then
+			passesHitCheck = false
 		end
 	end
+	if passesHitCheck then
+		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckFrenzyCount")
+		if game.IsEmpty( game.CurrentRun.Hero.ActiveEffects ) or not game.CurrentRun.Hero.ActiveEffects.Frenzy then
+			local startingCount = game.MapState.FrenzyHits or 0
+			game.IncrementTableValue( game.MapState, "FrenzyHits" )
+			local requiredCount = 21
+			local traitData = game.GetHeroTrait("AxeRallyAspect_Secondary")
+			if traitData.OnEnemyDamagedAction and traitData.OnEnemyDamagedAction.Args then
+				requiredCount = traitData.OnEnemyDamagedAction.Args.RequiredCount or requiredCount
+			end
+			if game.ScreenAnchors.AxeUIChargeAmount then
+				game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = game.MapState.FrenzyHits / requiredCount, Instant = true })
+			end
+		end
 
-	if game.MapState.FrenzyHits >= functionArgs.RequiredCount then
-		game.MapState.FrenzyHits = 0
-		local dataProperties = game.MergeTables(game.EffectData[functionArgs.EffectName].DataProperties, functionArgs.DataProperties)
-		dataProperties.Duration = dataProperties.Duration + game.GetTotalHeroTraitValue("FrenzyDurationBonus")
-		game.ApplyEffect( game.MergeTables({ DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = functionArgs.EffectName, DataProperties = dataProperties }))
+		if game.MapState.FrenzyHits >= functionArgs.RequiredCount then
+			game.MapState.FrenzyHits = 0
+			local dataProperties = game.MergeTables(game.EffectData[functionArgs.EffectName].DataProperties, functionArgs.DataProperties)
+			dataProperties.Duration = dataProperties.Duration + game.GetTotalHeroTraitValue("FrenzyDurationBonus")
+			game.ApplyEffect( game.MergeTables({ DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = functionArgs.EffectName, DataProperties = dataProperties }))
+		end
 	end
 end
 
