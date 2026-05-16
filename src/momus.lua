@@ -396,7 +396,6 @@ function mod.StartTorchPrimaryRepeatThread(startX, startY, angle, args)
 		WeaponName = weaponName,
 		Type = "Projectile",
 	})
-	-- print(mod.dump(derivedValues))
 	local logProjectileIdForMagicCrit = false
 	if game.SessionMapState.DifferentOmegaVolleys[weaponName] and game.SessionMapState.DifferentOmegaVolleys[weaponName][triggerArgs.ProjectileVolley] then
 		game.SessionMapState.DifferentOmegaProjectileIds[weaponName] = game.SessionMapState.DifferentOmegaProjectileIds[weaponName] or {}
@@ -413,6 +412,10 @@ function mod.StartTorchPrimaryRepeatThread(startX, startY, angle, args)
 			break
 		end
 		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+		local nearestEnemyId = game.GetClosest({ Id = dropLocation, DestinationName = "EnemyTeam", IgnoreInvulnerable = true, IgnoreHomingIneligible = true, StopsProjectiles = true, Distance = 1000 })
+		if nearestEnemyId and nearestEnemyId ~= 0 then
+			angle = game.GetAngleBetween({Id = nearestEnemyId, DestinationId = dropLocation})
+		end
 		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
 		game.Destroy({Id = dropLocation })
 		repeats = repeats + 1
