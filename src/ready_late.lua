@@ -251,3 +251,14 @@ modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnBlinkFinished.Wea
 		return HeroHasTraitWrap(base, traitName, "LobImpulseAspect")
 	end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("TorchPrimaryAutofire", function ()
+	modutil.mod.Path.Wrap("HasMarker", function (base, args)
+		if args.Id == game.CurrentRun.Hero.ObjectId and
+			  game.Contains({"WeaponHecateL_Rig:flame03_C_joint", "WeaponHecateR_Rig:flame03_C_joint"}, args.Name) and
+		      not game.CurrentRun.Hero.Weapons["WeaponTorchSpecial"] then
+			return true
+		end
+		return base(args)
+	end)
+end)
