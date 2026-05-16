@@ -436,7 +436,6 @@ function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
 	local projectileInterval = 0.22
 	local scaleIncrement = 0
 	local damageMultiplier = 1
-	local damageIncrement = 0
 	local numProjectiles = triggerArgs.NumProjectiles or 5
 	numProjectiles = math.min(numProjectiles or 7)
 
@@ -444,7 +443,6 @@ function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
 		projectileInterval = 0.44
 		scaleIncrement = 0.15
 		damageMultiplier = 2
-		damageIncrement = 0.2
 		if numProjectiles == 1 then
 			damageMultiplier = 3
 		end
@@ -461,8 +459,6 @@ function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
 		WeaponName = weaponName,
 		Type = "Projectile",
 	})
-	derivedValues.PropertyChanges.DamageRadius = 410
-	print(mod.dump(derivedValues))
 	while repeats < functionArgs.Repeats do
 		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
 		if functionArgs.AttackAnimationName then
@@ -474,8 +470,10 @@ function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
 		end
 		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
 		for i = 1, numProjectiles do
+			game.SessionMapState[_PLUGIN.guid .. "MomusAxeCurrentProjectileIndex"] = i
 			derivedValues.PropertyChanges.DamageRadius = 410 * scale
-			game.CreateProjectileFromUnit({ WeaponName = "WeaponAxe",
+			derivedValues.PropertyChanges.Damage = 50 * damageMultiplier
+			game.CreateProjectileFromUnit({ WeaponName = "WeaponAxeSpin",
 				Name = projectileName,
 				Id = game.CurrentRun.Hero.ObjectId,
 				DestinationId = dropLocation,
@@ -484,7 +482,6 @@ function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
 				FireFromTarget = true,
 				AttachToTarget = true,
 				Angle = angle,
-				DamageMultiplier = damageMultiplier*( 1 + damageIncrement*(i-1) )
 			})
 			game.waitUnmodified(projectileInterval, threadName)
 			scale = scale + scaleIncrement

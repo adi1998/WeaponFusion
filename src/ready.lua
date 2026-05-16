@@ -606,7 +606,10 @@ end)
 -- end})
 
 modutil.mod.Path.Wrap("addDamageMultiplier", function (base, data, multiplier)
-    if multiplier ~= multiplier then
+    if multiplier ~= multiplier and data.SuccessiveProjectileMultiplier then
+        if game.SessionMapState[_PLUGIN.guid .. "MomusAxeCurrentProjectileIndex"] then
+            return base(data, 1 + ( game.SessionMapState[_PLUGIN.guid .. "MomusAxeCurrentProjectileIndex"] - 1 ) * data.SuccessiveProjectileMultiplier)
+        end
         return
     end
     return base(data, multiplier)
