@@ -6,6 +6,7 @@
 - Add proper support for Charon as primary aspect, all other weapons' omega specials should trigger cleave-cast
 - Add Minor Aspects of Melinoe for all weapons except skulls
 - Fix Eos' duplicate skull omega specials not being created properly
+- Fix Supay attack not auto firing when Melinoe puts the flames away to use another weapon
 
 ## [0.4.2] - 2026-05-14
 
