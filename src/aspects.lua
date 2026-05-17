@@ -2162,7 +2162,7 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
-				WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
+				WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponSuitCharged", "WeaponLobChargedPulse"},
 				BaseValue = 0.85,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
