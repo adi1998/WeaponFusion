@@ -84,4 +84,4 @@
 [0.1.3]: https://github.com/adi1998/WeaponFusion/compare/0.1.2...0.1.3
 [0.1.2]: https://github.com/adi1998/WeaponFusion/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/adi1998/WeaponFusion/compare/0.1.0...0.1.1
-[0.1.0]: https://github.com/adi1998/WeaponFusion/compare/91cf19ed7fa8496bbf0322cb11a506825f6c4b16...0.1.0
+[0.1.0]: https://github.com/adi1998/WeaponFusion/compare/03f2884a625204f31ae0c34a05aae362fce0006e...0.1.0
