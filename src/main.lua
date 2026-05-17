@@ -65,6 +65,7 @@ local function on_ready()
     import 'aspects.lua'
     import 'aspects_logic.lua'
     import 'charon.lua'
+    import 'hel.lua'
     import 'ready.lua'
     import 'momus.lua'
     import 'eos.lua'

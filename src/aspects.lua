@@ -3044,6 +3044,216 @@ mod.AspectTraitData = {
 			}
 		},
 		FlavorText = "LobAmmoBoostAspect_FlavorText",
+	},
+
+	LobGunAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Lob_16",
+		RarityLevels =
+		{
+			-- Chance the 130/140/150 number to be the percent increase at each rarity
+			Common =
+			{
+				Multiplier = (1-(100/105))/0.5,
+			},
+			Rare =
+			{
+				Multiplier = (1-(100/110))/0.5,
+			},
+			Epic =
+			{
+				Multiplier = (1-(100/115))/0.5,
+			},
+			Heroic =
+			{
+				Multiplier = (1-(100/120))/0.5,
+			},
+			Legendary =
+			{
+				Multiplier = (1-(100/125))/0.5,
+			},
+			Perfect =
+			{
+				Multiplier = (1-(100/135))/0.5,
+			},
+		},
+		ReplacementGrannyModels =
+		{
+			WeaponLob_Mesh = "WeaponLob_Hel_Mesh"
+		},
+		WeaponDataOverride =
+		{
+			WeaponLobSpecial = 
+			{
+				ScaledFireEndEffects = {},
+				CustomThrowEx = true,
+				CompleteObjectivesOnNonStagedFire = { "WeaponLobSpecial_Hel" },
+				HitSimSlowParameters = "nil",
+				HitSimSlowCooldown = "nil",
+				ChargeWeaponStages = 
+				{
+					{
+						ManaCost = 50,
+						Wait = 1.1,
+						WeaponProperties =
+						{
+							Projectile = "ProjectileLobGunRift",
+							BlinkDetonateOnInterval = 0,
+							BlinkDetonateAtOrigin = true,
+							WeaponRange = 1,
+							BlinkMaxRange = 1,
+							BlinkSpeed = 3500,
+							ShowFreeAimLine = true,
+							AimLineDistanceOverride = 1200,
+							UnblockedBlinkFx = "null",
+							ProjectileAngleStartOffset = 0,
+						},
+						ChannelSlowEventOnStart = true,
+						--DeferRevert = true,
+						SkipManaSpendOnFire = true,
+					},
+				},
+
+				Sounds =
+				{
+					ChargeSounds =
+					{
+						{
+							Name = "/SFX/Player Sounds/ZagreusWeaponChargeup" ,
+							StoppedBy = { "TriggerRelease" }
+						},
+						{
+							Name = "/VO/MelinoeEmotes/AnubisEmoteCharging2" ,
+							StoppedBy = { "TriggerRelease" }
+						},
+					},
+					FireSounds =
+					{
+						PerfectChargeSounds =
+						{
+							{ Name = "/Leftovers/SFX/AuraPerfectThrow" },
+						},
+						{ Name = "/SFX/Player Sounds/MelSkullsDash" },
+						{
+							Name = "/VO/MelinoeEmotes/HelEmoteAttacking2",
+							Cooldown = 0.5
+						},
+					},
+					FireStageSounds =
+					{
+						{ Name = "/SFX/Player Sounds/MelSkullsOmegaSpecialFire" },
+						{ Name = "/VO/MelinoeEmotes/HelEmoteSpecial2" },
+					},
+					ImpactSounds =
+					{
+						Invulnerable = "/SFX/SwordWallHitClank",
+						Armored = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Bone = "/SFX/MetalBoneSmash",
+						Brick = "/SFX/MetalStoneClang",
+						Stone = "/SFX/MetalStoneClang",
+						Organic = "/SFX/FistImpactBig",
+						StoneObstacle = "/SFX/SwordWallHitClank",
+						BrickObstacle = "/SFX/SwordWallHitClank",
+						MetalObstacle = "/SFX/SwordWallHitClank",
+						BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
+						Shell = "/SFX/ShellImpact",
+					},
+				},
+			}
+		},
+		OnProjectileCreationFunction =
+		{
+			ValidProjectiles = { "ProjectileLobOverheat" },
+			Name = "OnGunOverheatCreated",
+		},
+		OnWeaponFiredFunctions =
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			FunctionName = _PLUGIN.guid .. "." .. "HandleGunBehavior",
+			FunctionArgs =
+			{
+				EffectName = "HelOverheat",
+				EffectData =
+				{
+					Modifier = { BaseValue = 0.5, SourceIsMultiplier = true, DecimalPlaces = 4,},
+					Duration = 3,
+					ReportValues =
+					{
+						ReportedDuration = "Duration",
+						ReportedSpeed = "Modifier",
+					},
+				},
+				ExAttackApplyEffects = { "WeaponLobHelAttackEXDisable", "WeaponLobHelAttackEXDisableCancellable", },
+				ClipSize = 3,
+				ClipReload = 0.48,
+				ClipRegenInterval = 0.48,
+			}
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "HideGunUI"
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponName = "WeaponLobSpecial",
+				WeaponProperties =
+				{
+					Projectile = "ProjectileLobSpecialBounce",
+					BlinkDetonateOnInterval = 0,
+					BlinkDetonateAtOrigin = true,
+					BlinkDisableBehavior = true,
+					ShowFreeAimLine = true,
+					UnblockedBlinkFx = "null",
+					ProjectileAngleStartOffset = 0,
+					ChargeRangeMultiplier = 0,
+					RemoveControlOnFire = "WeaponLobSpecial",
+					AutoLock = true,
+					AutoLockRange = 650,
+					AutoLockArcDistance = math.rad(40),
+				},
+			},
+			{
+				WeaponName = "WeaponLobSpecial",
+				ProjectileName = "ProjectileThrowCharged",
+				ProjectileProperties =
+				{
+					Graphic = "LobSpecialFx_Hel",
+				},
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponLobSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponLobSpecial",
+			}
+		},
+		StatLines =
+		{
+			"OverheatDamageStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				CheckAutomaticPropertyChanges = true,
+				Key = "ReportedDuration",
+				ExtractAs = "OverheatDuration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedSpeed",
+				ExtractAs = "AspectModifier",
+				Format = "PercentReciprocalDelta",
+			},
+		},
+		FlavorText = "LobGunAspect_FlavorText",
 	}
 }
 

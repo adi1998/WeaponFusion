@@ -14,6 +14,7 @@ mod.WeaponData = {
             "StaffAttackRecoveryTrait",
             "StaffExAoETrait",
             "StaffOneWayAttackTrait",
+
             "StaffRaiseDeadBigTrait",
             "StaffRaiseDeadDoubleTrait",
         },
@@ -134,7 +135,6 @@ mod.WeaponData = {
             "LobGrowthTrait",
             "LobStraightShotTrait",
 
-            "LobGunOverheatTrait",
             "LobGunBounceTrait",
             "LobGunAttackRangeTrait",
             "LobGunAttackDoublerTrait"
@@ -147,6 +147,9 @@ mod.WeaponData = {
             "LobInOutSpecialExTrait",
 
             "LobGunSpecialBounceTrait"
+        },
+        CommonHammers = {
+            "LobGunOverheatTrait",
         }
     },
 
@@ -165,6 +168,7 @@ mod.WeaponData = {
             "SuitFullChargeTrait",
             "SuitDashAttackTrait",
             "SuitSpecialBlockTrait",
+
             "SuitComboBlockBuffTrait",
             "SuitComboDashAttackTrait",
             "SuitPowershotTrait",

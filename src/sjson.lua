@@ -127,6 +127,12 @@ local traitTextList = {
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Melinoë",
         Description = "Your {$Keywords.AttackSet} have more {$Keywords.BaseDamage} for each {$Keywords.Shell} fired and not yet retrieved."
+    },
+    {
+        Id = "LobGunAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Hel",
+        Description = "You have {$Keywords.GunAspect}, which grants the way of the {$Keywords.Overheat} after your {$Keywords.SpecialEX}.",
     }
 }
 
