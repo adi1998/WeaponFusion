@@ -1,11 +1,13 @@
 game.TraitData.AxeArmCastAspect.OnProjectileDeathFunction = {
-    ValidProjectiles = { "ProjectileStaffBallCharged", "ProjectileSuitBomb", "ProjectileSuitBombStraight", "ProjectileThrowCharged", "ProjectileSuitRangedCharged", "ProjectileDaggerThrowCharged", "ProjectileTorchOrbitEx" },
+    ValidProjectiles = { "ProjectileStaffBallCharged", "ProjectileSuitBomb", "ProjectileSuitBombStraight", "ProjectileSuitRangedCharged", "ProjectileDaggerThrowCharged", "ProjectileTorchOrbitEx" },
     Name = _PLUGIN.guid .. "." .. "CheckAxeCastArm",
     Args = {
         BlastMultiplier = { BaseValue = 1.15, SourceIsMultiplier = true },
         Animation = "CharonAspectDetonateFx",
     }
 }
+
+table.insert(game.TraitData.AxeArmCastAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileThrowCharged")
 
 function mod.CheckAxeCastArm(triggerArgs, functionArgs)
     local intersectionProjectiles = game.GetInProjectilesBlast({ ProjectileId = triggerArgs.ProjectileId, DestinationName = "ProjectileCast", UseDamageRadius = true, })
@@ -30,3 +32,8 @@ function mod.CheckAxeCastArm(triggerArgs, functionArgs)
 		game.Destroy({ Id = dropLocationId })
     end
 end
+
+modutil.mod.Path.Wrap("CheckAxeCastArm", function (base, triggerArgs, args)
+	game.SessionMapState[_PLUGIN.guid .. "CheckAxeCastArmProjectileName"] = triggerArgs.name
+	return base(triggerArgs, args)
+end)
