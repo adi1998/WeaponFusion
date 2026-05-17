@@ -10,6 +10,7 @@
 - Fix Anubis base attack not increasing stacks for Thanatos and Nergal
 - Fix Minor Aspect of Artemis boosting regular attack speed for torches and skull
 - Primary Anubis no longer increases Mana cost for fused omega specials
+- Fix axe always having Psychic Whirlwind active for fused specials
 
 ## [0.4.2] - 2026-05-14
 

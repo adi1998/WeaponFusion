@@ -570,6 +570,17 @@ mod.AspectTraitData = {
 				},
 				ExcludeLinked = true,
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
 		},
 		OnWeaponFiredFunctions =
 		{
@@ -715,7 +726,6 @@ mod.AspectTraitData = {
 				}
 
 			},
-
 			{
 				WeaponName = "WeaponDaggerThrow",
 				ProjectileName = "ProjectileDaggerThrowCharged",
@@ -723,7 +733,17 @@ mod.AspectTraitData = {
 				ChangeValue = "DaggerProjectileFx_Pan",
 				ChangeType = "Absolute",
 			},
-
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
+			}
 		},
 		ExtractValues =
 		{
@@ -783,6 +803,20 @@ mod.AspectTraitData = {
 				ReportValues = { ReportedDamage = "DamageMultiplier" }
 			},
 			ExcludeLinked = true,
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
 		},
 		StatLines =
 		{
@@ -979,6 +1013,17 @@ mod.AspectTraitData = {
 					Damage = 20,
 				},
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
+			}
 		},
 		StatLines =
 		{
@@ -1212,6 +1257,17 @@ mod.AspectTraitData = {
 				ChangeValue = "TorchOrbitStartSwirl_Single_Supay",
 				ChangeType = "Absolute",
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponTorchSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponTorchSpecial",
+			}
 		},
 		SetupFunction =
 		{
@@ -1564,6 +1620,17 @@ mod.AspectTraitData = {
 				ChangeValue = true,
 				ExcludeLinked = true,
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
 		},
 		OnEnemyDamagedAction =
 		{
@@ -1855,6 +1922,20 @@ mod.AspectTraitData = {
 				},
 			},
 		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
+		},
 		OnWeaponFiredFunctions =
 		{
 			ValidWeapons = { "WeaponSprint"},
@@ -2026,6 +2107,20 @@ mod.AspectTraitData = {
 			Add = { BaseValue = -10 },
 			ReportValues = { ReportedManaCost = "Add" }
 		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
+		},
 		ExtractValues =
 		{
 			{
@@ -2166,6 +2261,17 @@ mod.AspectTraitData = {
 				BaseValue = 0.85,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
 			}
 		},
 		StatLines =
@@ -2236,6 +2342,17 @@ mod.AspectTraitData = {
 				ChangeValue = "DashLobTrailEmitter_Persephone",
 				ChangeType = "Absolute",
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponLobSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponLobSpecial",
+			}
 		},
 		RarityLevels =
 		{
@@ -2415,6 +2532,20 @@ mod.AspectTraitData = {
 		{
 			WeaponStaff_Mesh = "WeaponStaff_Asclepius_Mesh"
 		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
+		},
 		OnWeaponFiredFunctions =
 		{
 			ValidWeapons = game.WeaponSets.HeroAllWeapons,
@@ -2490,6 +2621,17 @@ mod.AspectTraitData = {
 				BaseValue = 10,
 				ChangeType = "Add",
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
 		},
 		StatLines =
 		{
@@ -2579,7 +2721,20 @@ mod.AspectTraitData = {
 				SourceIsMultiplier = true,
 			},
 			ReportValues = { ReportedMultiplier = "HitVulnerabilityMultiplier"},
-
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
+			}
 		},
 		StatLines =
 		{
@@ -2627,12 +2782,26 @@ mod.AspectTraitData = {
 			},
 		},
 		Icon = "Hammer_Torch_39",
-		ReplacementGrannyModels = 
+		ReplacementGrannyModels =
 		{
 			WeaponTorchR_Mesh = "WeaponTorchR_Mesh",
 			WeaponTorchL_Mesh = "WeaponTorchL_Mesh"
 		},
-		AddOutgoingCritModifiers = 
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponTorchSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponTorchSpecial",
+			}
+		},
+		AddOutgoingCritModifiers =
 		{
 			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
 			Chance = { BaseValue = 0.04 },
@@ -2770,6 +2939,17 @@ mod.AspectTraitData = {
 				ChangeType = "Add",
 				ExcludeLinked = true,
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
 		},
 		StatLines =
 		{
@@ -2848,6 +3028,20 @@ mod.AspectTraitData = {
 		ReplacementGrannyModels =
 		{
 			WeaponLob_Mesh = "WeaponLob_Mesh"
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponLobSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponLobSpecial",
+			}
 		},
 		FlavorText = "LobAmmoBoostAspect_FlavorText",
 	}
