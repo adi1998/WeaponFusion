@@ -9,6 +9,7 @@
 - Fix Supay attack not auto firing when Melinoe puts the flames away to use another weapon
 - Fix Anubis base attack not increasing stacks for Thanatos and Nergal
 - Fix Minor Aspect of Artemis boosting regular attack speed for torches and skull
+- Primary Anubis no longer increases Mana cost for fused omega specials
 
 ## [0.4.2] - 2026-05-14
 

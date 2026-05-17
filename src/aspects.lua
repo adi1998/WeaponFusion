@@ -2858,3 +2858,5 @@ game.OverwriteTableKeys( game.TraitData, mod.AspectTraitData )
 for traitName, traitData in pairs(mod.AspectTraitData) do
     game.ProcessDataInheritance( traitData, game.TraitData )
 end
+
+game.TraitData["StaffRaiseDeadAspect"].ManaCostModifiers.WeaponNames = {"WeaponStaffBall"}
