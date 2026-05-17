@@ -218,7 +218,9 @@ function MorosSpecialDetonatePatches()
         },
         ["WeaponLobSpecial"] = {
             "ProjectileThrowBlink",
-            "ProjectileThrowCharged"
+            "ProjectileThrowCharged",
+            "ProjectileLobGunRift",
+            "ProjectileLobSpecialBounce"
         }
     }
     local detonateSkip = game.ToLookup({

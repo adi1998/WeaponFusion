@@ -304,11 +304,13 @@ function mod.StartLobSpecialRepeatThread(startX, startY, angle, args)
 	functionArgs.Interval = functionArgs.Interval or 3.5
 	functionArgs.PreAttackDuration = functionArgs.PreAttackDuration or 0
 	local projectileName = "ProjectileThrowCharged"
+	if game.HeroHasTrait("LobGunAspect_Secondary") then
+		projectileName = "ProjectileLobGunRift"
+	end
 	local threadName = "RepeatSpecialThread"
 	local repeats = 1
 	local weaponData = game.GetWeaponData( game.CurrentRun.Hero, weaponName )
 	local traitData = game.GetHeroTrait("StaffSelfHitAspect")
-
 	local derivedValues = game.GetDerivedPropertyChangeValues({
 		ProjectileName = projectileName,
 		WeaponName = weaponName,
@@ -324,46 +326,57 @@ function mod.StartLobSpecialRepeatThread(startX, startY, angle, args)
 			break
 		end
 		game.waitUnmodified(functionArgs.PreAttackDuration, threadName )
-		local dropLocations = {}
-		local index = 1
-		local ex_interval = 0
-		local time
-		while game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"] and game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"][index] do
-			local throwExRecord = game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"][index]
-			if time then
-				ex_interval = throwExRecord.Time-time
+		if projectileName == "ProjectileThrowCharged" then
+			local dropLocations = {}
+			local index = 1
+			local ex_interval = 0
+			local time
+			while game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"] and game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"][index] do
+				local throwExRecord = game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"][index]
+				if time then
+					ex_interval = throwExRecord.Time-time
+				end
+				game.waitUnmodified(ex_interval, threadName)
+				local angle_record = throwExRecord.Angle
+				local location = throwExRecord.Location
+				time = throwExRecord.Time
+				local dropLocation = game.SpawnObstacle({ Name = "BlankObstacle", LocationX = location.X, LocationY = location.Y})
+				table.insert(dropLocations, dropLocation)
+				game.CreateProjectileFromUnit({
+					WeaponName = weaponName,
+					Name = projectileName,
+					Id = game.CurrentRun.Hero.ObjectId,
+					DestinationId = dropLocation,
+					FireFromTarget = true,
+					Angle = angle_record + 90,
+					DataProperties = derivedValues.PropertyChanges,
+					ThingProperties = derivedValues.ThingPropertyChanges,
+					ProjectileCap = 12
+				})
+				game.CreateProjectileFromUnit({
+					WeaponName = weaponName,
+					Name = projectileName,
+					Id = game.CurrentRun.Hero.ObjectId,
+					DestinationId = dropLocation,
+					FireFromTarget = true,
+					Angle = angle_record - 90,
+					DataProperties = derivedValues.PropertyChanges,
+					ThingProperties = derivedValues.ThingPropertyChanges,
+					ProjectileCap = 12
+				})
+				index = index + 1
 			end
-			game.waitUnmodified(ex_interval, threadName)
-			local angle_record = throwExRecord.Angle
-			local location = throwExRecord.Location
-			time = throwExRecord.Time
-			local dropLocation = game.SpawnObstacle({ Name = "BlankObstacle", LocationX = location.X, LocationY = location.Y})
-			table.insert(dropLocations, dropLocation)
-			game.CreateProjectileFromUnit({
+			game.Destroy({Ids = dropLocations })
+		else
+			derivedValues = game.GetDerivedPropertyChangeValues({
+				ProjectileName = projectileName,
 				WeaponName = weaponName,
-				Name = projectileName,
-				Id = game.CurrentRun.Hero.ObjectId,
-				DestinationId = dropLocation,
-				FireFromTarget = true,
-				Angle = angle_record + 90,
-				DataProperties = derivedValues.PropertyChanges,
-				ThingProperties = derivedValues.ThingPropertyChanges,
-				ProjectileCap = 12
+				Type = "Projectile",
 			})
-			game.CreateProjectileFromUnit({
-				WeaponName = weaponName,
-				Name = projectileName,
-				Id = game.CurrentRun.Hero.ObjectId,
-				DestinationId = dropLocation,
-				FireFromTarget = true,
-				Angle = angle_record - 90,
-				DataProperties = derivedValues.PropertyChanges,
-				ThingProperties = derivedValues.ThingPropertyChanges,
-				ProjectileCap = 12
-			})
-			index = index + 1
+			local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
+			game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
+			game.Destroy({Id = dropLocation })
 		end
-		game.Destroy({Ids = dropLocations })
 		repeats = repeats + 1
 	end
 	game.wait( 0.5 ) -- Wait for final attack animation to finish before playing Expiring Animation

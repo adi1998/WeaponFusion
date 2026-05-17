@@ -255,6 +255,28 @@ function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
 			end
 			game.Destroy({Id = dropLocation})
 		end
+		if weaponData.Name == "WeaponLobSpecial" and game.HeroHasTrait("LobGunAspect_Secondary") then
+			local weaponName = weaponData.Name
+			local projectileName = "ProjectileLobSpecialBounce"
+			if isEx then
+				projectileName = "ProjectileLobGunRift"
+			end
+			local derivedValues = game.GetDerivedPropertyChangeValues({
+				ProjectileName = projectileName,
+				WeaponName = weaponName,
+				Type = "Projectile",
+			})
+			local location = game.GetLocation({Id = game.SessionMapState.CurrentExProjectile, IsProjectile = true })
+			local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = location.X, LocationY = location.Y })
+			local angle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
+			game.CreateProjectileFromUnit({ WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+				DestinationId = dropLocation,
+				FireFromTarget = true,
+				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle
+			})
+		end
 	end
 end
 

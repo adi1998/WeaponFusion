@@ -566,6 +566,9 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 			WeaponLobSpecial = "ProjectileDaggerThrow",
 			WeaponDaggerThrow = "ProjectileDaggerThrow",
 		}
+		if game.HeroHasTrait("LobGunAspect_Secondary") then
+			weaponProjectileMap.WeaponLobSpecial = "ProjectileLobSpecialBounce"
+		end
 		local secondWeapon = game.WeaponData["WeaponDagger"].SecondaryWeapon
 		local chosenProjectile = weaponProjectileMap[secondWeapon]
 		if secondWeapon == "WeaponSuitRanged" and game.HeroHasTrait("SuitComboAspect_Secondary") then
