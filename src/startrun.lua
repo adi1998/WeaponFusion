@@ -103,6 +103,10 @@ modutil.mod.Path.Wrap("StartOver", function (base, args)
     args = args or {}
     if config.random_fusion_each_run and not args.ActiveBounty then
         PickRandomFusion()
+        if args.StartingRoomName == "Dream_Intro" then
+            game.GameState.StoredActiveShrineBounty = game.GameState.ActiveShrineBounty
+            game.GameState.ActiveShrineBounty = nil
+        end
     end
     if args.ActiveBounty then
         local weaponKit = "WeaponStaffSwing"

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-05-18
+
+- Fix for testaments sometimes getting enabled in Dream Dives if random fusion is enabled
+
 ## [0.5.0] - 2026-05-17
 
 - Add Minor Aspect of Momus, able to duplicate every omega attack
@@ -75,7 +79,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.5.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.5.1...HEAD
+[0.5.1]: https://github.com/adi1998/WeaponFusion/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/adi1998/WeaponFusion/compare/0.4.2...0.5.0
 [0.4.2]: https://github.com/adi1998/WeaponFusion/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/adi1998/WeaponFusion/compare/0.4.0...0.4.1
