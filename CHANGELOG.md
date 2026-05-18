@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix for testaments sometimes getting enabled in Dream Dives if random fusion is enabled
+
 ## [0.5.0] - 2026-05-17
 
 - Add Minor Aspect of Momus, able to duplicate every omega attack
