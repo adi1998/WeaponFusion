@@ -42,7 +42,7 @@ function mod.OverheatApply( triggerArgs )
                 "WeaponStaffSwing", "WeaponStaffSwing2", "WeaponStaffSwing3",
                 "WeaponDagger", "WeaponDaggerDash", "WeaponDagger2", "WeaponDaggerMultiStab", "WeaponDaggerDouble",
                 "WeaponTorch",
-                "WeaponAxe", "WeaponAxe2", "WeaponAxe3", "WeaponAxeDash",
+                "WeaponAxe", "WeaponAxe2", "WeaponAxe3", "WeaponAxeDash", "WeaponAxe4", "WeaponAxe5",
                 "WeaponSuit", "WeaponSuit2", "WeaponSuitDouble", "WeaponSuitDash"
             },
 			ChangeValue = totalSpeedChange,

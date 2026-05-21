@@ -42,11 +42,12 @@ If it feels like the fusion didn't apply properly try starting a run/reloading t
 
 If it still seems bugged would really appreciate a bug report :).
 
-## Some Limitations
+## Some Limitations/Issues
 
 - A weapon cannot be fused with another aspect of itself.
 - Aspect of Pan as primary does nothing
-- Some aspects which didn't make sense to have just its specials didn't make it in (Eos, Moros, Medea, Hel)
+- Minor Aspect of Hel doesn't disable some omega attacks during Valkyrie Form
+- Some aspects which didn't make sense to have just its specials didn't make it in (Eos, Moros, Medea)
 
 ## Issues and feedback
 
