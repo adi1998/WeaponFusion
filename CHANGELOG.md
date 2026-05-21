@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add Minor Aspect of Hel
+
 ## [0.5.1] - 2026-05-18
 
 - Fix for testaments sometimes getting enabled in Dream Dives if random fusion is enabled
