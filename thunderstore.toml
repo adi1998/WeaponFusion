@@ -46,11 +46,3 @@ communities = [ "hades-ii", ]
 
 [publish.categories]
 hades-ii = [ "mods", ]
-
-
-
-
-
-
-
-

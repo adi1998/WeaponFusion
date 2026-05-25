@@ -323,3 +323,22 @@ sjson.hook(daggerVfxFile, function (data)
     end
     return data
 end)
+
+local perfectString = sjson.to_object({
+    Id = "Boon_Perfect",
+    DisplayName = "Perfect"
+}, { "Id", "DisplayName" })
+
+local screenTextPath = rom.path.combine(rom.paths.Content, 'Game\\Text\\en\\ScreenText.en.sjson')
+
+sjson.hook(screenTextPath, function(data)
+    local boonPerfectFound
+    for _, text in pairs(data.Texts) do
+        if text.Id == "Boon_Perfect" then
+            boonPerfectFound = true
+        end
+    end
+    if not boonPerfectFound then
+        table.insert(data.Texts, perfectString)
+    end
+end)

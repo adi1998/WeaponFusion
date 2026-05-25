@@ -567,6 +567,32 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
     return val
 end)
 
+modutil.mod.Path.Wrap("UpgradeAspect", function (base, args, origTraitData)
+    base(args, origTraitData)
+
+    args = args or {}
+	local currentWeaponName = game.GetEquippedWeapon()
+
+	local traitName = game.GameState.LastWeaponUpgradeName[currentWeaponName]
+	if traitName == nil then
+		traitName = game.ScreenData.WeaponUpgradeScreen.FreeUnlocks[currentWeaponName]
+	end
+	if not traitName then
+		return
+	end
+    local traitData = game.TraitData[traitName] or {}
+    local minorTraitName = traitData[_PLUGIN.guid .. "SecondaryAspect"]
+    local minorTraitData = game.TraitData[minorTraitName]
+    if minorTraitData then
+        if minorTraitName and game.HeroHasTrait( minorTraitName ) then
+		    game.RemoveTrait( game.CurrentRun.Hero, minorTraitName )
+	    end
+        local numRanks = game.GetWeaponUpgradeLevel( string.gsub(minorTraitName, "_Secondary", "") ) + args.UpgradeLevels
+        local rarity = game.TraitRarityData.WeaponRarityUpgradeOrder[numRanks]
+        game.AddTraitToHero({ SkipNewTraitHighlight = args.SkipTraitHighlight, TraitName = minorTraitName, Rarity = rarity })
+    end
+end)
+
 modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     for traitName, _ in pairs(mod.AspectTraitData) do
         print("unequipping minor aspect", traitName)

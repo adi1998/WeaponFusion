@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Premium Service (Hephaeustus Legendary) will now also upgrade the Minor Aspects
+
 ## [0.6.1] - 2026-05-21
 
 - Add Minor Aspect of Hel
