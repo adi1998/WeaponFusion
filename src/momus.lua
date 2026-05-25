@@ -828,8 +828,6 @@ mod.SpecialWeaponThreadMap = {
 modutil.mod.Path.Wrap("DropOriginMarker", function (base, weaponData, functionArgs, triggerArgs )
 	if mod.SpecialWeaponThreadMap[weaponData.Name] or mod.WeaponThreadMap[weaponData.Name] then
         if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) or triggerArgs.DisjointExCast then
-            -- print(mod.dump(weaponData))
-            -- print(mod.dump(triggerArgs))
             local playerLocation = game.GetLocation({ Id = game.CurrentRun.Hero.ObjectId })
             local startX = triggerArgs.ProjectileX or playerLocation.X
             local startY = triggerArgs.ProjectileY or playerLocation.Y
