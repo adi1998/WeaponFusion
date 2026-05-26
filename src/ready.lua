@@ -492,7 +492,7 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     print("Fusing", primarySource, secondarySource, secondaryAspect)
 
-    if primarySource ~= secondarySource and mod.AspectTraitData[secondaryAspect] then
+    if (primarySource ~= secondarySource or config.allow_same_weapon_fusion) and mod.AspectTraitData[secondaryAspect] then
         for _, traitName in ipairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource]) do
             game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = secondaryAspect
         end
