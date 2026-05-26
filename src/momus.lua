@@ -885,6 +885,7 @@ modutil.mod.Path.Wrap("StartCastRepeatThread", function (base, triggerArgs, func
 	local startX = triggerArgs.LocationX
 	local startY = triggerArgs.LocationY
 	local zOffset = 90
+	game.SessionMapState.OriginMarkers = game.SessionMapState.OriginMarkers or {}
 	if not game.SessionMapState.OriginMarkers["WeaponCast"] or not game.IsAlive({ Id = game.SessionMapState.OriginMarkers["WeaponCast"] }) then
 		local originMarkerId = game.SpawnObstacle({ Name = "BlankObstacle", Group = "FX_Standing", LocationX = startX, LocationY = startY, OffsetZ = zOffset })
 		game.SetAnimation({ Name = "MomusCastPointSpawn", DestinationId = originMarkerId })
