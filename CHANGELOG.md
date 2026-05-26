@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Premium Service (Hephaeustus Legendary) will now also upgrade the Minor Aspects
+- Fix ranged charged casts and cleave-casts not having the momus cast animation with Minor Aspect of Momus
 
 ## [0.6.1] - 2026-05-21
 
