@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-05-26
+
 - Premium Service (Hephaeustus Legendary) will now also upgrade the Minor Aspects
 - Fix ranged charged casts and cleave-casts not having the momus cast animation with Minor Aspect of Momus
 
@@ -86,7 +88,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.6.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.6.2...HEAD
+[0.6.2]: https://github.com/adi1998/WeaponFusion/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/adi1998/WeaponFusion/compare/0.5.1...0.6.1
 [0.5.1]: https://github.com/adi1998/WeaponFusion/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/adi1998/WeaponFusion/compare/0.4.2...0.5.0
