@@ -344,11 +344,19 @@ mod.AspectTraitData = {
 		{
 			FunctionName = _PLUGIN.guid .. "." .. "CheckFrenzyCount",
 			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
-			FirstHitOnly = true,
 			Args =
 			{
 				RequiredCount = { BaseValue = 21 },
 				EffectName = "Frenzy",
+				FirstHitOnly = true,
+				MultihitProjectileWhitelist =
+				{
+					"ProjectileStaffSingle",
+				},
+				MultihitProjectileConditions =
+				{
+					ProjectileStaffSingle = { Cooldown = 0.5 },
+				},
 				DataProperties =
 				{
 					Duration = 10,
@@ -411,7 +419,7 @@ mod.AspectTraitData = {
 	},
 
 	SuitComboAspect_Secondary =
-	{	
+	{
 		Name = "SuitComboAspect_Secondary",
 		InheritFrom = { "BaseTrait" },
 		Icon = "Hammer_Suit_16",
@@ -455,7 +463,7 @@ mod.AspectTraitData = {
 		},
 		AddOutgoingDamageModifiers =
 		{
-			ValidWeapons = { "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5"},
+			ValidWeapons = { "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5", "WeaponTorch", "WeaponLob"},
 			ValidSuitProjectile = true,
 		},
 		OnProjectileDeathFunction =
@@ -541,11 +549,11 @@ mod.AspectTraitData = {
 				},
 			},
 		},
-		PropertyChanges = 
+		PropertyChanges =
 		{
 			{
 				WeaponName = "WeaponSuitRanged",
-				WeaponProperties = 
+				WeaponProperties =
 				{
 					Projectile = "ProjectileSuitGrenade",
 					ChargeStartAnimation = "Melinoe_Suit_Shiva_SpecialMissile_Start",
@@ -562,10 +570,21 @@ mod.AspectTraitData = {
 				},
 				ExcludeLinked = true,
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
 		},
 		OnWeaponFiredFunctions =
 		{
-			ValidWeapons = {"WeaponSuitCharged", "WeaponSuitRanged", "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5" },
+			ValidWeapons = {"WeaponSuitCharged", "WeaponSuitRanged", "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5", "WeaponLob", "WeaponTorch" },
 			FunctionName = "CheckSuitComboAttackBuff",
 			FunctionArgs =
 			{
@@ -581,7 +600,10 @@ mod.AspectTraitData = {
 		},
 		OnProjectileCreationFunction =
 		{
-			ValidProjectiles = { "ProjectileSwing5", "ProjectileAxeSpin" },
+			ValidProjectiles = {
+				"ProjectileSwing5", "ProjectileStaffWall", "ProjectileAxeSpin", "ProjectileTorchWave", "ProjectileTorchGhostLarge", "ProjectileTorchSupayBallEx", "ProjectileTorchBallEos",
+				"ProjectileLobCharged", "ProjectileLobOverheat"
+			},
 			Name = _PLUGIN.guid .. "." .. "CheckSuitComboAttackBuff",
 			Args =
 			{
@@ -704,7 +726,6 @@ mod.AspectTraitData = {
 				}
 
 			},
-
 			{
 				WeaponName = "WeaponDaggerThrow",
 				ProjectileName = "ProjectileDaggerThrowCharged",
@@ -712,7 +733,17 @@ mod.AspectTraitData = {
 				ChangeValue = "DaggerProjectileFx_Pan",
 				ChangeType = "Absolute",
 			},
-
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
+			}
 		},
 		ExtractValues =
 		{
@@ -772,6 +803,20 @@ mod.AspectTraitData = {
 				ReportValues = { ReportedDamage = "DamageMultiplier" }
 			},
 			ExcludeLinked = true,
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
 		},
 		StatLines =
 		{
@@ -968,6 +1013,17 @@ mod.AspectTraitData = {
 					Damage = 20,
 				},
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
+			}
 		},
 		StatLines =
 		{
@@ -1201,6 +1257,17 @@ mod.AspectTraitData = {
 				ChangeValue = "TorchOrbitStartSwirl_Single_Supay",
 				ChangeType = "Absolute",
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponTorchSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponTorchSpecial",
+			}
 		},
 		SetupFunction =
 		{
@@ -1553,6 +1620,17 @@ mod.AspectTraitData = {
 				ChangeValue = true,
 				ExcludeLinked = true,
 			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
 		},
 		OnEnemyDamagedAction =
 		{
@@ -1712,12 +1790,20 @@ mod.AspectTraitData = {
 		OnEnemyDamagedAction =
 		{
 			ValidWeapons = game.WeaponSets.HeroAllWeapons,
-			FunctionName = "CheckPerfectAxeCrit",
-			FirstHitOnly = true,
+			FunctionName = _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit",
 			Args =
 			{
 				Increment = 0.02,
 				MaxCrit = 0.20,
+				FirstHitOnly = true,
+				MultihitProjectileWhitelist =
+				{
+					"ProjectileStaffSingle",
+				},
+				MultihitProjectileConditions =
+				{
+					ProjectileStaffSingle = { Cooldown = 0.5 },
+				},
 				ReportValues =
 				{
 					ReportedIncrement = "Increment",
@@ -1835,6 +1921,20 @@ mod.AspectTraitData = {
 					},
 				},
 			},
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
 		},
 		OnWeaponFiredFunctions =
 		{
@@ -2007,6 +2107,20 @@ mod.AspectTraitData = {
 			Add = { BaseValue = -10 },
 			ReportValues = { ReportedManaCost = "Add" }
 		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
+		},
 		ExtractValues =
 		{
 			{
@@ -2070,23 +2184,23 @@ mod.AspectTraitData = {
 			},
 			Rare =
 			{
-				Multiplier = 1.5
+				Multiplier = 1.3
 			},
 			Epic =
 			{
-				Multiplier = 2.0
+				Multiplier = 1.7
 			},
 			Heroic =
 			{
-				Multiplier = 2.5
+				Multiplier = 2
 			},
 			Legendary =
 			{
-				Multiplier = 3.0
+				Multiplier = 2.666
 			},
 			Perfect =
 			{
-				Multiplier = 4.5,
+				Multiplier = 3.3333,
 			},
 		},
 		AddOutgoingCritModifiers =
@@ -2105,7 +2219,7 @@ mod.AspectTraitData = {
 		},
 		OnWeaponChargeFunctions =
 		{
-			ValidWeapons = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+			ValidWeapons = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
 			FunctionName = "CheckDaggerBlock",
 			FunctionArgs =
 			{
@@ -2127,15 +2241,15 @@ mod.AspectTraitData = {
 		},
 		OnWeaponFiredFunctions =
 		{
-			ValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack","WeaponTransformSpecial", } ),
+			ValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack", "WeaponTransformSpecial"} ),
 			FunctionName = "CheckDaggerCritCharges",
 		},
 		WeaponSpeedMultiplier =
 		{
-			WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
+			WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
 			Value =
 			{
-				BaseValue = 0.80,
+				BaseValue = 0.85,
 				SourceIsMultiplier = true,
 			},
 			ReportValues = { ReportedSpeedIncrease = "Value" }
@@ -2143,10 +2257,21 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
-				WeaponNames = {"WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged"},
-				BaseValue = 0.80,
+				WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponSuitCharged", "WeaponLobChargedPulse"},
+				BaseValue = 0.85,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
 			}
 		},
 		StatLines =
@@ -2183,6 +2308,952 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "DaggerBlockAspect_FlavorText",
+	},
+
+	LobImpulseAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		PreEquipWeapons = {"WeaponSkullImpulse"},
+		Icon = "Hammer_Lob_15",
+		ReplacementGrannyModels = 
+		{
+			WeaponLob_Mesh = "WeaponLob_Persephone_Mesh"
+		},
+		Charge = 0,
+		PropertyChanges = {
+			{
+				WeaponName = "WeaponLobSpecial",
+				ProjectileName = "ProjectileThrowCharged",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "LobSpecialFx_Persephone",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponLobSpecial",
+				ProjectileName = "ProjectileThrowBlink",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "DashLobTrailEmitter_Persephone",
+				ChangeType = "Absolute",
+			},
+			{
+				WeaponName = "WeaponSkullImpulse",
+				ProjectileName = "ProjectileSkullImpulse",
+				ProjectileProperty = "Graphic",
+				ChangeValue = "DashLobTrailEmitter_Persephone",
+				ChangeType = "Absolute",
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponLobSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponLobSpecial",
+			}
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 1.5,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 5/2,
+			},
+			Legendary =
+			{
+				Multiplier = 6/2,
+			},
+			Perfect =
+			{
+				Multiplier = 9/2,
+			},
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "SetupSkullImpulseUI",
+		},
+		OnWeaponFiredFunctions = 
+		{
+			ValidWeapons = {"WeaponLobSpecial", "WeaponSkullImpulse"},
+			FunctionName = "SkullImpulseTransform",
+			FunctionArgs = 
+			{
+				BaseDuration = 0.5,			-- Duration of ex attack w/ no charge
+				Interval = 200,
+			}
+		},
+		MaxBonusBoonRankWeighted =
+		{
+			BaseValue = 2,
+		},
+		MaxBonusBoonRankDistribution =
+		{
+			[2] =
+			{
+				-- Weighted list, so all values should add up to 1 for best distribution
+				-- Don't add entries for 1 because that's the same as 0 boon and causes 'level 1' to show up on boon menus
+				[0] = 0.70,
+				[2] = 0.30,
+			},
+			[3] =
+			{
+				[0] = 0.65,
+				[2] = 0.30,
+				[3] = 0.05,
+			},
+			[4] =
+			{
+				[0] = 0.60,
+				[2] = 0.25,
+				[3] = 0.10,
+				[4] = 0.05,
+			},
+			[5] =
+			{
+				[0] = 0.55,
+				[2] = 0.20,
+				[3] = 0.15,
+				[4] = 0.10,
+				[5] = 0.05,
+			},
+			[6] =
+			{
+				[0] = 0.50,
+				[2] = 0.16,
+				[3] = 0.14,
+				[4] = 0.12,
+				[5] = 0.06,
+				[6] = 0.02,
+			},
+			[9] =
+			{
+				[0] = 0.28,
+				[2] = 0.16,
+				[3] = 0.14,
+				[4] = 0.12,
+				[5] = 0.10,
+				[6] = 0.08,
+				[7] = 0.06,
+				[8] = 0.04,
+				[9] = 0.02,
+			}
+		},
+		OnEnemyDamagedAction = 
+		{
+			AllEffectsTrigger = true,
+			FunctionName = "ChargeSkullImpulse",
+			Args = 
+			{
+				-- One "charge" is equal to full one second of skull car
+				-- 0.001 means 100 damage = 0.1 seconds of skull car charge
+				ValidProjectiles = game.WeaponSets.OlympianProjectileNames,
+				ValidEffectNames = game.WeaponSets.OlympianEffectNames,
+				ChargePerDamage = 0.00100,
+				MaxCharge = 2,
+				MinChargeToFire = 0.5,
+				ReportValues =
+				{
+					ReportedMinChargeToFire = "MinChargeToFire",
+					ReportedMaxCharge = "MaxCharge",
+				}
+			}
+		},
+		StatLines =
+		{
+			"ExDamageStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "MaxBonusBoonRankWeighted",
+				ExtractAs = "BoonRank",
+				IncludeSigns = true,
+			},
+			{
+				Key = "ReportedMaxCharge",
+				ExtractAs = "Duration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedMinChargeToFire",
+				ExtractAs = "MinCharge",
+				SkipAutoExtract = true,
+			},
+		},
+		FlavorText = "LobImpulseAspect_FlavorText",
+	},
+
+	StaffSelfHitAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 3.5/4,
+			},
+			Epic =
+			{
+				Multiplier = 3.0/4,
+			},
+			Heroic =
+			{
+				Multiplier = 2.5/4,
+			},
+			Legendary =
+			{
+				Multiplier = 2.0/4,
+			},
+			Perfect =
+			{
+				Multiplier = 1.0/4,
+			},
+		},
+		Icon = "Hammer_Staff_41",
+		ReplacementGrannyModels =
+		{
+			WeaponStaff_Mesh = "WeaponStaff_Asclepius_Mesh"
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
+		},
+		OnWeaponFiredFunctions =
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			FunctionName = "DropOriginMarker",
+			FunctionArgs =
+			{
+				AnimationName = "MomusCastPointSpawn",
+				AttackAnimationName = "MomusCastPointAttack",
+				PreAttackDuration = 0.25,
+				ExpiringAnimationName = "MomusCastPointOut",
+				DestroyDelay = 0.5,
+				Repeats = 3,
+				Interval = { BaseValue = 4.0 },
+				ReportValues = { ReportedStrikeCount = "Repeats"},
+			},
+		},
+		OnProjectileDeathFunction =
+		{
+			Name = "ClearOriginMarker",
+			Args =
+			{
+				AttackAnimationName = "MomusCastPointAttack",
+				PreAttackDuration = 0.25,
+				ExpiringAnimationName = "MomusCastPointOut",
+				DestroyDelay = 0.5,
+				CastRepeats = 3,
+				Interval = { BaseValue = 4 },
+				ReportValues = { ReportedPulseInterval = "Interval"},
+			},
+		},
+		OnExpire =
+		{
+			FunctionName = "ClearAllOriginMarkers"
+		},
+		StatLines =
+		{
+			"PulseIntervalStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedPulseInterval",
+				ExtractAs = "PulseInterval",
+				DecimalPlaces = 1,
+			},
+			{
+				Key = "ReportedStrikeCount",
+				ExtractAs = "StrikeCount",
+				SkipAutoExtract = true
+			}
+		},
+		FlavorText = "StaffSelfHitAspect_FlavorText",
+	},
+
+	BaseStaffAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Staff_39",
+		ReplacementGrannyModels = 
+		{
+			WeaponStaff_Mesh = "WeaponStaff_Mesh"
+		},
+		AddOutgoingDamageModifiers = 
+		{
+			ValidWeapons = game.WeaponSets.HeroSecondaryWeapons,
+			ValidBaseDamageAddition = { BaseValue = 10 },
+			ReportValues = { ReportedBonus = "ValidBaseDamageAddition" }
+		},
+		PropertyChanges =
+		{
+			{
+				LuaProperty = "MaxMana",
+				BaseValue = 10,
+				ChangeType = "Add",
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponStaffBall",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponStaffBall",
+			}
+		},
+		StatLines =
+		{
+			"SpecialAndManaStatDisplay1",
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				MinMultiplier = 0,
+				MaxMultiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 3,
+			},
+			Legendary =
+			{
+				Multiplier = 4,
+			},
+			Perfect =
+			{
+				Multiplier = 5,
+			},
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedBonus",
+				ExtractAs = "DamageBonus",
+				IncludeSigns = true,
+			},
+		},
+		FlavorText = "BaseStaffAspect_FlavorText",
+	},
+
+	DaggerBackstabAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Daggers_38",
+		ReplacementGrannyModels = 
+		{
+			WeaponDaggerA_Mesh = "WeaponDaggerA_Mesh",
+			WeaponDaggerB_Mesh = "WeaponDaggerB_Mesh"
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 1.5,
+			},
+			Heroic =
+			{
+				Multiplier = 2.0,
+			},
+			Legendary =
+			{
+				Multiplier = 2.5,
+			},
+			Perfect =
+			{
+				Multiplier = 5,
+			},
+		},
+		AddOutgoingDamageModifiers =
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
+			HitVulnerabilityMultiplier =
+			{
+				BaseValue = 1.40,
+				SourceIsMultiplier = true,
+			},
+			ReportValues = { ReportedMultiplier = "HitVulnerabilityMultiplier"},
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponDaggerThrow",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponDaggerThrow",
+			}
+		},
+		StatLines =
+		{
+			"BackstabStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedMultiplier",
+				ExtractAs = "Damage",
+				Format = "PercentDelta",
+			},
+		},
+		FlavorText = "DaggerBackstabAspect_FlavorText",
+	},
+
+	TorchSpecialDurationAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 1.5,
+			},
+			Heroic =
+			{
+				Multiplier = 2,
+			},
+			Legendary =
+			{
+				Multiplier = 2.5,
+			},
+			Perfect =
+			{
+				Multiplier = 4,
+			},
+		},
+		Icon = "Hammer_Torch_39",
+		ReplacementGrannyModels =
+		{
+			WeaponTorchR_Mesh = "WeaponTorchR_Mesh",
+			WeaponTorchL_Mesh = "WeaponTorchL_Mesh"
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponTorchSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponTorchSpecial",
+			}
+		},
+		AddOutgoingCritModifiers =
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
+			Chance = { BaseValue = 0.04 },
+			ReportValues = {ReportedChance = "Chance"}
+		},
+		StatLines =
+		{
+			"SpecialDurationStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedChance",
+				ExtractAs = "Bonus",
+				Format = "LuckModifiedPercent",
+			},
+		},
+		FlavorText = "TorchSpecialDurationAspect_FlavorText",
+	},
+
+	AxeRecoveryAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 1.17,
+			},
+			Heroic =
+			{
+				Multiplier = 1.34,
+			},
+			Legendary =
+			{
+				Multiplier = 1.67,
+			},
+			Perfect =
+			{
+				Multiplier = 2.00,
+			},
+		},
+		Icon = "Hammer_Axe_40",
+		ReplacementGrannyModels = 
+		{
+			Melinoe_Axe_Mesh1 = "Melinoe_Axe_Mesh1"
+		},
+		AddOutgoingDamageModifiers = 
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimaryWeapons,
+			NonExBaseDamageAddition = { BaseValue = 30 },
+			ReportValues = 
+			{ 
+				ReportedDamage = "NonExBaseDamageAddition"
+			},
+		},
+		PropertyChanges =
+		{
+			{
+				LuaProperty = "MaxHealth",
+				BaseValue = 30,
+				ChangeType = "Add",
+			},
+		},
+		StatLines =
+		{
+			"AxeDamageHealthStatDisplay",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedDamage",
+				ExtractAs = "Damage",
+				IncludeSigns = true,
+			},
+		},
+		FlavorText = "AxeRecoveryAspect_FlavorText",
+	},
+
+	BaseSuitAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Suit_01",
+		ReplacementGrannyModels =
+		{
+			WeaponSuitR_Base_Mesh = "WeaponSuitR_Base_Mesh",
+			WeaponSuitL_Base_Mesh = "WeaponSuitL_Base_Mesh",
+			WeaponSuitB_Base_Mesh = "WeaponSuitB_Base_Mesh",
+		},
+
+		WeaponSpeedMultiplier =
+		{
+			WeaponNames = game.WeaponSets.HeroPrimaryWeapons,
+			Value =
+			{
+				BaseValue = 0.95,
+				SourceIsMultiplier = true,
+			},
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponNames = game.WeaponSets.HeroPrimaryWeapons,
+				BaseValue = 0.95,
+				SourceIsMultiplier = true,
+				SpeedPropertyChanges = true,
+				ExcludeLinked = true,
+			},
+			{
+				UnitProperty = "Speed",
+				BaseValue = 1.05,
+				SourceIsMultiplier = true,
+				ChangeType = "Multiply",
+				ReportValues = { ReportedChange = "ChangeValue" }
+			},
+			{
+				WeaponNames = { "WeaponSprint" },
+				WeaponProperty = "SelfVelocity",
+				BaseValue = 99,
+				ChangeType = "Add",
+				ExcludeLinked = true,
+			},
+			{
+				WeaponNames = { "WeaponSprint" },
+				WeaponProperty = "SelfVelocityCap",
+				BaseValue = 44.5,
+				ChangeType = "Add",
+				ExcludeLinked = true,
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponSuitRanged",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponSuitRanged",
+			}
+		},
+		StatLines =
+		{
+			"MoveSprintAttackSpeedStatDisplay",
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				MinMultiplier = 0,
+				MaxMultiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 3,
+			},
+			Legendary =
+			{
+				Multiplier = 4,
+			},
+			Perfect =
+			{
+				Multiplier = 7,
+			},
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedChange",
+				ExtractAs = "SpeedBonus",
+				Format = "PercentDelta"
+			},
+		},
+		FlavorText = "BaseSuitAspect_FlavorText",
+	},
+
+	LobAmmoBoostAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 0,
+			},
+			Rare =
+			{
+				Multiplier = 1,
+			},
+			Epic =
+			{
+				Multiplier = 2,
+			},
+			Heroic =
+			{
+				Multiplier = 3,
+			},
+			Legendary =
+			{
+				Multiplier = 4,
+			},
+			Perfect =
+			{
+				Multiplier = 7,
+			},
+		},
+		Icon = "Hammer_Lob_13",
+		ReplacementGrannyModels =
+		{
+			WeaponLob_Mesh = "WeaponLob_Mesh"
+		},
+		PropertyChanges =
+		{
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponLobSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponLobSpecial",
+			}
+		},
+		FlavorText = "LobAmmoBoostAspect_FlavorText",
+	},
+
+	LobGunAspect_Secondary =
+	{
+		InheritFrom = {"BaseTrait"},
+		Icon = "Hammer_Lob_16",
+		RarityLevels =
+		{
+			-- Chance the 130/140/150 number to be the percent increase at each rarity
+			Common =
+			{
+				Multiplier = (1-(100/105))/0.5,
+			},
+			Rare =
+			{
+				Multiplier = (1-(100/110))/0.5,
+			},
+			Epic =
+			{
+				Multiplier = (1-(100/115))/0.5,
+			},
+			Heroic =
+			{
+				Multiplier = (1-(100/120))/0.5,
+			},
+			Legendary =
+			{
+				Multiplier = (1-(100/125))/0.5,
+			},
+			Perfect =
+			{
+				Multiplier = (1-(100/135))/0.5,
+			},
+		},
+		ReplacementGrannyModels =
+		{
+			WeaponLob_Mesh = "WeaponLob_Hel_Mesh"
+		},
+		WeaponDataOverride =
+		{
+			WeaponLobSpecial = 
+			{
+				ScaledFireEndEffects = {},
+				CustomThrowEx = true,
+				CompleteObjectivesOnNonStagedFire = { "WeaponLobSpecial_Hel" },
+				HitSimSlowParameters = "nil",
+				HitSimSlowCooldown = "nil",
+				ChargeWeaponStages = 
+				{
+					{
+						ManaCost = 50,
+						Wait = 1.1,
+						WeaponProperties =
+						{
+							Projectile = "ProjectileLobGunRift",
+							BlinkDetonateOnInterval = 0,
+							BlinkDetonateAtOrigin = true,
+							WeaponRange = 1,
+							BlinkMaxRange = 1,
+							BlinkSpeed = 3500,
+							ShowFreeAimLine = true,
+							AimLineDistanceOverride = 1200,
+							UnblockedBlinkFx = "null",
+							ProjectileAngleStartOffset = 0,
+						},
+						ChannelSlowEventOnStart = true,
+						--DeferRevert = true,
+						SkipManaSpendOnFire = true,
+					},
+				},
+
+				Sounds =
+				{
+					ChargeSounds =
+					{
+						{
+							Name = "/SFX/Player Sounds/ZagreusWeaponChargeup" ,
+							StoppedBy = { "TriggerRelease" }
+						},
+						{
+							Name = "/VO/MelinoeEmotes/AnubisEmoteCharging2" ,
+							StoppedBy = { "TriggerRelease" }
+						},
+					},
+					FireSounds =
+					{
+						PerfectChargeSounds =
+						{
+							{ Name = "/Leftovers/SFX/AuraPerfectThrow" },
+						},
+						{ Name = "/SFX/Player Sounds/MelSkullsDash" },
+						{
+							Name = "/VO/MelinoeEmotes/HelEmoteAttacking2",
+							Cooldown = 0.5
+						},
+					},
+					FireStageSounds =
+					{
+						{ Name = "/SFX/Player Sounds/MelSkullsOmegaSpecialFire" },
+						{ Name = "/VO/MelinoeEmotes/HelEmoteSpecial2" },
+					},
+					ImpactSounds =
+					{
+						Invulnerable = "/SFX/SwordWallHitClank",
+						Armored = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Bone = "/SFX/MetalBoneSmash",
+						Brick = "/SFX/MetalStoneClang",
+						Stone = "/SFX/MetalStoneClang",
+						Organic = "/SFX/FistImpactBig",
+						StoneObstacle = "/SFX/SwordWallHitClank",
+						BrickObstacle = "/SFX/SwordWallHitClank",
+						MetalObstacle = "/SFX/SwordWallHitClank",
+						BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
+						Shell = "/SFX/ShellImpact",
+					},
+				},
+			}
+		},
+		OnProjectileCreationFunction =
+		{
+			ValidProjectiles = { "ProjectileLobOverheat" },
+			Name = "OnGunOverheatCreated",
+		},
+		OnWeaponFiredFunctions =
+		{
+			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			FunctionName = _PLUGIN.guid .. "." .. "HandleGunBehavior",
+			FunctionArgs =
+			{
+				EffectName = "HelOverheat",
+				EffectData =
+				{
+					Modifier = { BaseValue = 0.5, SourceIsMultiplier = true, DecimalPlaces = 4,},
+					Duration = 3,
+					ReportValues =
+					{
+						ReportedDuration = "Duration",
+						ReportedSpeed = "Modifier",
+					},
+				},
+				ExAttackApplyEffects = { "WeaponLobHelAttackEXDisable", "WeaponLobHelAttackEXDisableCancellable", },
+				ClipSize = 3,
+				ClipReload = 0.48,
+				ClipRegenInterval = 0.48,
+			}
+		},
+		SetupFunction =
+		{
+			Threaded = true,
+			Name = "HideGunUI"
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponName = "WeaponLobSpecial",
+				WeaponProperties =
+				{
+					Projectile = "ProjectileLobSpecialBounce",
+					BlinkDetonateOnInterval = 0,
+					BlinkDetonateAtOrigin = true,
+					BlinkDisableBehavior = true,
+					ShowFreeAimLine = true,
+					UnblockedBlinkFx = "null",
+					ProjectileAngleStartOffset = 0,
+					ChargeRangeMultiplier = 0,
+					RemoveControlOnFire = "WeaponLobSpecial",
+					AutoLock = true,
+					AutoLockRange = 650,
+					AutoLockArcDistance = math.rad(40),
+				},
+			},
+			{
+				WeaponName = "WeaponLobSpecial",
+				ProjectileName = "ProjectileThrowCharged",
+				ProjectileProperties =
+				{
+					Graphic = "LobSpecialFx_Hel",
+				},
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponLobSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponLobSpecial",
+			}
+		},
+		StatLines =
+		{
+			"OverheatDamageStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				CheckAutomaticPropertyChanges = true,
+				Key = "ReportedDuration",
+				ExtractAs = "OverheatDuration",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedSpeed",
+				ExtractAs = "AspectModifier",
+				Format = "PercentReciprocalDelta",
+			},
+		},
+		FlavorText = "LobGunAspect_FlavorText",
 	}
 }
 
@@ -2289,351 +3360,4 @@ for traitName, traitData in pairs(mod.AspectTraitData) do
     game.ProcessDataInheritance( traitData, game.TraitData )
 end
 
-function mod.CheckFrenzyCount(victim, functionArgs, triggerArgs)
-	if game.IsEmpty( game.CurrentRun.Hero.ActiveEffects ) or not game.CurrentRun.Hero.ActiveEffects.Frenzy then
-		local startingCount = game.MapState.FrenzyHits or 0
-		game.IncrementTableValue( game.MapState, "FrenzyHits" )
-		local requiredCount = 21
-		local traitData = game.GetHeroTrait("AxeRallyAspect_Secondary")
-		if traitData.OnEnemyDamagedAction and traitData.OnEnemyDamagedAction.Args then
-			requiredCount = traitData.OnEnemyDamagedAction.Args.RequiredCount or requiredCount
-		end
-		if game.ScreenAnchors.AxeUIChargeAmount then
-			game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = game.MapState.FrenzyHits / requiredCount, Instant = true })
-		end
-	end
-
-	if game.MapState.FrenzyHits >= functionArgs.RequiredCount then
-		game.MapState.FrenzyHits = 0
-		local dataProperties = game.MergeTables(game.EffectData[functionArgs.EffectName].DataProperties, functionArgs.DataProperties)
-		dataProperties.Duration = dataProperties.Duration + game.GetTotalHeroTraitValue("FrenzyDurationBonus")
-		game.ApplyEffect( game.MergeTables({ DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = functionArgs.EffectName, DataProperties = dataProperties }))
-	end
-end
-
-modutil.mod.Path.Wrap("SetupPerfectCritUI", function (base)
-	if game.SessionMapState.WeaponsDisabled then
-		return
-	end
-	if game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") then
-		game.wait(0.05)
-		local trait = game.GetHeroTrait("AxePerfectCriticalAspect_Secondary")
-    	local currentCrit = game.round(trait.PerfectCritChance * 100, 1)
-    	local maxCrit = trait.ReportedMaxCrit * 100
-    	if currentCrit == maxCrit then
-    		game.CreateAnimation({ Name = "ThanatosMaxMortalityFx", DestinationId = game.CurrentRun.Hero.ObjectId })
-    	end
-	end
-	return base()
-end)
-
-modutil.mod.Path.Wrap("ShowAxeUI", function (base)
-	base()
-
-	if (not game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") and not game.HeroHasTrait("AxeRallyAspect_Secondary")) or not game.ShowingCombatUI then
-		return
-	end
-
-	if game.ScreenAnchors.AxeUI ~= nil then
-		return
-	end
-
-	game.ScreenAnchors.AxeUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
-	game.ScreenAnchors.AxeUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
-
-	if game.HeroHasTrait("AxeRallyAspect_Secondary") then
-		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount })
-		local currentHits = game.MapState.FrenzyHits or 0
-		local requiredCount = 12
-		local traitData = game.GetHeroTrait("AxeRallyAspect_Secondary")
-		if traitData.OnWeaponFiredFunctions and traitData.OnWeaponFiredFunctions.FunctionArgs then
-			requiredCount = traitData.OnWeaponFiredFunctions.FunctionArgs.RequiredCount or requiredCount
-		end
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = currentHits / requiredCount, Instant = true })
-		if currentHits >= requiredCount then
-			game.SetAnimation({Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = game.ScreenAnchors.AxeUI })
-		end
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-	elseif game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") then
-		local trait = game.GetHeroTrait("AxePerfectCriticalAspect_Secondary")
-		local currentCrit = game.round(trait.PerfectCritChance * 100 * game.GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true } ))
-		local maxCrit = game.round(trait.ReportedMaxCrit * 100 * game.GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true } ))
-		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount })
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = currentCrit/ maxCrit, Instant = true })
-
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-		game.CreateTextBox({
-			Id = game.ScreenAnchors.AxeUI,
-			OffsetX = 26, OffsetY = -2,
-			Text = "UI_CritText",
-			TextSymbolScale = 0.88,
-			Font = "NumericP22UndergroundSCHeavy", FontSize = 24,
-			ShadowRed = 0.1, ShadowBlue = 0.1, ShadowGreen = 0.1,
-			OutlineColor = {0.113, 0.113, 0.113, 1}, OutlineThickness = 1,
-			ShadowAlpha = 1.0, ShadowBlur = 0, ShadowOffsetY = 2, ShadowOffsetX = 0,
-			Justification = "Left",LuaKey = "TempTextData", LuaValue = { Amount = currentCrit }
-		})
-	end
-end)
-
-modutil.mod.Path.Wrap("ShowSuitUI", function (base, args)
-	base(args)
-	args = args or {}
-	if (not game.HeroHasTrait("SuitMarkCritAspect_Secondary") and not game.HeroHasTrait("SuitComboAspect_Secondary")) or not game.ShowingCombatUI then
-		return
-	end
-	if game.ScreenAnchors.SuitUI ~= nil then
-		game.SetAlpha({ Ids = { game.ScreenAnchors.SuitUI, game.ScreenAnchors.SuitUIChargeAmount }, Duration = args.FadeDuration or game.HUDScreen.FadeInDuration, Fraction = args.Fraction or game.ConfigOptionCache.HUDOpacity })
-		return
-	end
-
-	game.ScreenAnchors.SuitUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
-	game.ScreenAnchors.SuitUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
-	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount })
-	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = 0, Instant = true })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUIChargeAmount, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-	game.CreateTextBox({
-		Id = game.ScreenAnchors.SuitUI,
-		OffsetX = 26, OffsetY = -2,
-		TextSymbolScale = 0.88,
-		Font = "NumericP22UndergroundSCHeavy", FontSize = 24,
-		ShadowRed = 0.1, ShadowBlue = 0.1, ShadowGreen = 0.1,
-		OutlineColor = {0.113, 0.113, 0.113, 1}, OutlineThickness = 1,
-		ShadowAlpha = 1.0, ShadowBlur = 0, ShadowOffsetY = 2, ShadowOffsetX = 0,
-		Justification = "Left",
-		})
-	game.UpdateSuitUI()
-end)
-
-modutil.mod.Path.Wrap("UpdateSuitUI", function (base)
-	base()
-	if game.HeroHasTrait("SuitComboAspect_Secondary") then
-		local trait = game.GetHeroTrait("SuitComboAspect_Secondary")
-		local effectName = trait.OnWeaponFiredFunctions.FunctionArgs.EffectName
-		local stacks = 0
-		local maxStacks = trait.OnWeaponFiredFunctions.FunctionArgs.SelfEffectMaxStacks
-
-		if not game.IsEmpty(game.CurrentRun.Hero.ActiveEffects) and game.CurrentRun.Hero.ActiveEffects[effectName] then
-			stacks = game.CurrentRun.Hero.ActiveEffects[effectName]
-		end
-
-		local text = "UI_StackText"
-		local font = "NumericP22UndergroundSCHeavy"
-		if stacks >= trait.OnWeaponFiredFunctions.FunctionArgs.SelfEffectMaxStacks then
-			text = "UI_StackText_Max"
-			font = "P22UndergroundSCHeavy"
-		end
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = stacks/maxStacks, Instant = true })
-		if stacks >= maxStacks then
-			game.SetAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI })
-		else
-			game.StopAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI })
-		end
-		game.ModifyTextBox({ Id = game.ScreenAnchors.SuitUI, Text =  text, Font = font, LuaKey = "TempTextData", LuaValue = { Amount = stacks}})
-	end
-end)
-
-modutil.mod.Path.Wrap("ShivaAttackBoostApply", function (base, triggerArgs)
-	base(triggerArgs)
-	if not game.HeroHasTrait("SuitComboAspect_Secondary") then
-		return
-	end
-	local victim = triggerArgs.Victim
-	game.IncrementTableValue( victim.ActiveEffects, triggerArgs.EffectName )
-
-	game.UpdateSuitUI()
-
-	local trait = game.GetHeroTrait("SuitComboAspect_Secondary")
-	local maxStacks = trait.OnWeaponFiredFunctions.FunctionArgs.SelfEffectMaxStacks
-	game.PlaySound({ Name = "/SFX/Player Sounds/ShivaPowerUp", Id = game.CurrentRun.Hero.ObjectId })
-	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = victim.ActiveEffects[triggerArgs.EffectName]/maxStacks, Instant = true })
-	if victim.ActiveEffects[triggerArgs.EffectName] >= maxStacks then
-		game.SessionMapState.ShivaMaxStackPresentation = true
-		game.SetAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI })
-	end
-end)
-
-modutil.mod.Path.Wrap("ShivaAttackBoostClear", function (base, triggerArgs)
-	base(triggerArgs)
-	if not game.HeroHasTrait("SuitComboAspect_Secondary") then
-		return
-	end
-
-	local victim = triggerArgs.Victim
-	local trait = game.GetHeroTrait("SuitComboAspect_Secondary")
-
-	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = 0, Instant = true })
-	if game.SessionMapState.ShivaMaxStackPresentation then
-		game.SetAnimation({ Name = "StaffReloadTimerOut", DestinationId = game.ScreenAnchors.SuitUI })
-		game.SessionMapState.ShivaMaxStackPresentation = nil
-	end
-	game.UpdateSuitUI()
-end)
-
-modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, functionArgs, triggerArgs)
-	if game.Contains({"WeaponStaffSwing5", "WeaponAxeSpin"}, weaponData.Name) then
-		if weaponData.Name == "WeaponStaffSwing5" then
-			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
-			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
-			if game.HeroHasTrait("StaffExAoETrait") then
-				game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
-				game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
-			end
-		elseif weaponData.Name == "WeaponAxeSpin" then
-			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
-		end
-
-		local projectileIds = game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] or {}
-		local stacks = game.CurrentRun.Hero.ActiveEffects[functionArgs.EffectName]
-		if not stacks then
-			return
-		end
-		if functionArgs.SelfEffectMaxStacks and stacks > functionArgs.SelfEffectMaxStacks then
-			stacks = functionArgs.SelfEffectMaxStacks
-		end
-		for _, id in ipairs(projectileIds) do
-			game.SessionMapState.SuitBonusProjectileId[id] = 1 + functionArgs.SelfEffectStackMultiplier * stacks
-		end
-		game.ClearEffect({Id = game.CurrentRun.Hero.ObjectId, Name = "ShivaAttackBoost"})
-		game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
-		return
-	end
-	game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
-	base(weaponData, functionArgs, triggerArgs)
-end)
-
-function mod.CheckSuitComboAttackBuff(triggerArgs, functionArgs)
-	game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] or {}
-	table.insert(game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"], triggerArgs.ProjectileId)
-	game.notifyExistingWaiters(_PLUGIN.guid .. "ProjectileCreation")
-end
-
-function mod.StopThanatosMaxMortalityFx()
-	game.StopAnimation({ Name = "ThanatosMaxMortalityFx", DestinationId = game.CurrentRun.Hero.ObjectId})
-end
-
-modutil.mod.Path.Wrap("ShowDaggerUI", function (base, args)
-	base(args)
-
-	if game.HeroHasTrait("DaggerBlockAspect") then
-		return
-	end
-
-	args = args or {}
-	if not game.ShowingCombatUI  and not args.Force then
-		return
-	end
-	if not game.HeroHasTrait("DaggerBlockAspect_Secondary") then
-		return
-	end
-
-	if game.ScreenAnchors.DaggerUI ~= nil then
-		game.SetAlpha({ Ids = { game.ScreenAnchors.DaggerUI, game.ScreenAnchors.DaggerUIChargeAmount }, Duration = args.FadeDuration or game.HUDScreen.FadeInDuration, Fraction = args.Fraction or game.ConfigOptionCache.HUDOpacity })
-		return
-	end
-	if game.ScreenAnchors.DaggerUIChargeAmount then
-		game.Destroy({ Id = game.ScreenAnchors.DaggerUIChargeAmount })
-	end
-
-	game.ScreenAnchors.DaggerUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150 , Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
-	game.ScreenAnchors.DaggerUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
-
-	local trait = game.GetHeroTrait("DaggerBlockAspect_Secondary")
-	local totalTime = trait.OnWeaponChargeFunctions.FunctionArgs.Cooldown
-
-	if not game.CheckCooldownNoTrigger("DaggerBlockShield", totalTime) and game.SessionState.GlobalCooldowns.DaggerBlockShield then
-		local remainingTime = totalTime - ( game._worldTime - game.SessionState.GlobalCooldowns.DaggerBlockShield)			
-		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, PlaySpeed = game.ScreenData.HUD.ReloadTimerFrames / totalTime })
-		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, StartFrameFraction = 1 - remainingTime / totalTime })
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, Fraction = 1 })
-	else
-		game.SetAnimation({ Name = "StaffReloadTimerReady",SuppressSounds = true, DestinationId = game.ScreenAnchors.DaggerUI })
-		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount})
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.DaggerUIChargeAmount, Fraction = 1, Instant = true })
-	end
-	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUI, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUIChargeAmount, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.DaggerUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-end)
-
-game.OnWeaponChargeCanceled{ "WeaponAxeSpin",
-	function( triggerArgs )
-		if game.MapState.DaggerBlockShieldActive then
-			game.MapState.DaggerBlockShieldActive = false
-			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
-			game.SetPlayerInterruptible("DaggerBlock")
-			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
-			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
-			if chargeFunctionArgs.Vfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-			if chargeFunctionArgs.BackVfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-		end
-	end
-}
-
-game.OnWeaponChargeCanceled{ "WeaponTorch",
-	function( triggerArgs )
-		if game.MapState.DaggerBlockShieldActive then
-			game.MapState.DaggerBlockShieldActive = false
-			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
-			game.SetPlayerInterruptible("DaggerBlock")
-			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
-			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
-			if chargeFunctionArgs.Vfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-			if chargeFunctionArgs.BackVfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-		end
-	end
-}
-
-game.OnWeaponChargeCanceled{ "WeaponStaffSwing5",
-	function( triggerArgs )
-		if game.MapState.DaggerBlockShieldActive then
-			game.MapState.DaggerBlockShieldActive = false
-			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
-			game.SetPlayerInterruptible("DaggerBlock")
-			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
-			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
-			if chargeFunctionArgs.Vfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-			if chargeFunctionArgs.BackVfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-		end
-	end
-}
-
-game.OnWeaponChargeCanceled{ "WeaponSuitCharged",
-	function( triggerArgs )
-		if game.MapState.DaggerBlockShieldActive then
-			game.MapState.DaggerBlockShieldActive = false
-			game.SetThingProperty({ Property = "AllowDodge", Value = true, DestinationId = game.CurrentRun.Hero.ObjectId, DataValue = false })
-			game.SetPlayerInterruptible("DaggerBlock")
-			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
-			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
-			if chargeFunctionArgs.Vfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.Vfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-			if chargeFunctionArgs.BackVfx then
-				game.StopAnimation({ Name = chargeFunctionArgs.BackVfx, DestinationId = game.CurrentRun.Hero.ObjectId })
-			end
-		end
-	end
-}
+game.TraitData["StaffRaiseDeadAspect"].ManaCostModifiers.WeaponNames = {"WeaponStaffBall"}

@@ -2,10 +2,11 @@ local config = {
   enabled = true;
   primary = "WeaponStaffSwing";
   secondary = "WeaponStaffSwing";
-  aspect = "None";
+  aspect = "BaseStaffAspect_Secondary";
   last_primary = "WeaponStaffSwing";
   last_secondary = "WeaponStaffSwing";
-  last_aspect = "None";
+  last_aspect = "BaseStaffAspect_Secondary";
+  random_fusion_each_run = false;
 }
 
 local configDesc = {

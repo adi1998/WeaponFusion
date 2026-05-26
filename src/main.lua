@@ -42,13 +42,17 @@ local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
     mod = modutil.mod.Mod.Register(_PLUGIN.guid)
-    function mod.dump(o, depth)
+    function mod.dump(o, depth, max_depth)
+        max_depth = max_depth or 4
         depth = depth or 0
+        if depth == max_depth then
+            return tostring(o)
+        end
         if type(o) == 'table' then
             local s = "\n" .. string.rep("\t", depth) .. '{\n'
             for k,v in pairs(o) do
                 if type(k) ~= 'number' then k = '"'..k..'"' end
-                s = s .. string.rep("\t",(depth+1)) .. '['..k..'] = ' .. mod.dump(v, depth + 1) .. ',\n'
+                s = s .. string.rep("\t",(depth+1)) .. '['..k..'] = ' .. mod.dump(v, depth + 1, max_depth) .. ',\n'
             end
             return s .. string.rep("\t", depth) .. '}'
         elseif type(o) == "string" then
@@ -59,8 +63,13 @@ local function on_ready()
     end
     import 'sjson.lua'
     import 'aspects.lua'
+    import 'aspects_logic.lua'
+    import 'charon.lua'
+    import 'hel.lua'
     import 'ready.lua'
-    import 'powers.lua'
+    import 'momus.lua'
+    import 'eos.lua'
+    import 'startrun.lua'
 end
 
 local function on_reload()
@@ -75,6 +84,8 @@ end
 local function on_ready_late()
     if config.enabled == false then return end
     import "ready_late.lua"
+    import "momus_late.lua"
+    import "charon_late.lua"
 end
 
 local function on_reload_late()

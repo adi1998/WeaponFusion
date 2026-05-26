@@ -14,6 +14,7 @@ mod.WeaponData = {
             "StaffAttackRecoveryTrait",
             "StaffExAoETrait",
             "StaffOneWayAttackTrait",
+
             "StaffRaiseDeadBigTrait",
             "StaffRaiseDeadDoubleTrait",
         },
@@ -118,32 +119,39 @@ mod.WeaponData = {
         },
     },
 
-    -- WeaponLob = {
-    --     Primary = {
-    --         "WeaponLobChargedPulse",
-    --     },
-    --     Secondary = {
-    --         "WeaponLobSpecial", "WeaponSkullImpulse"
-    --     },
-    --     PrimaryHammers = {
-    --         "LobAmmoTrait",
-    --         "LobAmmoMagnetismTrait",
-    --         "LobSpreadShotTrait",
-    --         "LobPulseAmmoCollectTrait",
-    --         "LobPulseAmmoTrait",
-    --         "LobGrowthTrait",
-    --         "LobStraightShotTrait",
+    WeaponLob = {
+        Primary = {
+            "WeaponLobChargedPulse",
+        },
+        Secondary = {
+            "WeaponLobSpecial", "WeaponSkullImpulse"
+        },
+        PrimaryHammers = {
+            "LobAmmoTrait",
+            "LobAmmoMagnetismTrait",
+            "LobSpreadShotTrait",
+            "LobPulseAmmoCollectTrait",
+            "LobPulseAmmoTrait", -- funky requirements
+            "LobGrowthTrait",
+            "LobStraightShotTrait",
 
-    --     },
-    --     SecondaryHammers = {
-    --         "LobRushArmorTrait",
-    --         "LobOneSideTrait",
-    --         "LobSturdySpecialTrait",
-    --         "LobSpecialSpeedTrait",
-    --         "LobInOutSpecialExTrait",
+            "LobGunBounceTrait",
+            "LobGunAttackRangeTrait",
+            "LobGunAttackDoublerTrait"
+        },
+        SecondaryHammers = {
+            "LobRushArmorTrait",
+            "LobOneSideTrait",
+            "LobSturdySpecialTrait",
+            "LobSpecialSpeedTrait",
+            "LobInOutSpecialExTrait",
 
-    --     }
-    -- },
+            "LobGunSpecialBounceTrait"
+        },
+        CommonHammers = {
+            "LobGunOverheatTrait",
+        }
+    },
 
     WeaponSuit = {
         Primary = {
@@ -160,6 +168,7 @@ mod.WeaponData = {
             "SuitFullChargeTrait",
             "SuitDashAttackTrait",
             "SuitSpecialBlockTrait",
+
             "SuitComboBlockBuffTrait",
             "SuitComboDashAttackTrait",
             "SuitPowershotTrait",
@@ -201,8 +210,35 @@ function MorosSpecialDetonatePatches()
             "ProjectileSuitRangedChargedUnguided",
             "ProjectileSuitRangedGuidedSplit",
             "ProjectileSuitRangedChargedSplit",
+
+            "ProjectileSuitGrenade",
+            "ProjectileSuitBomb",
+            "ProjectileSuitGrenadeStraight",
+            "ProjectileSuitBombStraight"
         },
+        ["WeaponLobSpecial"] = {
+            "ProjectileThrowBlink",
+            "ProjectileThrowCharged",
+            "ProjectileLobGunRift",
+            "ProjectileLobSpecialBounce"
+        }
     }
+    local detonateSkip = game.ToLookup({
+        "ProjectileStaffBallCharged",
+
+        "ProjectileSuitRangedGuided",
+        "ProjectileSuitRangedUnguided",
+        "ProjectileSuitRangedCharged",
+        "ProjectileSuitRangedChargedUnguided",
+        "ProjectileSuitRangedGuidedSplit",
+        "ProjectileSuitRangedChargedSplit",
+
+        "ProjectileSuitGrenade",
+        "ProjectileSuitBomb",
+        "ProjectileSuitGrenadeStraight",
+        "ProjectileSuitBombStraight"
+    })
+
     for weaponName, projectiles in pairs(specialWeaponProjectileMap) do
         for _, projectileName in ipairs(projectiles) do
             table.insert(game.TraitData.TorchDetonateAspect.PropertyChanges, {
@@ -219,6 +255,15 @@ function MorosSpecialDetonatePatches()
 				ChangeValue = true,
 				ChangeType = "Absolute",
 			})
+            if not detonateSkip[projectileName] then
+                table.insert(game.TraitData.TorchDetonateAspect.PropertyChanges, {
+                    WeaponName = weaponName,
+                    ProjectileName = projectileName,
+                    ProjectileProperty = "DetonateOnImpact",
+                    ChangeValue = false,
+                    ChangeType = "Absolute",
+                })
+            end
         end
     end
 end
@@ -445,7 +490,7 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     game.WeaponData[primarySource].SecondaryWeapon, game.WeaponData[secondarySource].SecondaryWeapon = mod.WeaponData[secondarySource].Secondary[1], mod.WeaponData[primarySource].Secondary[1]
 
-    print(primarySource, secondarySource, secondaryAspect)
+    print("Fusing", primarySource, secondarySource, secondaryAspect)
 
     if primarySource ~= secondarySource and mod.AspectTraitData[secondaryAspect] then
         for _, traitName in ipairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource]) do
@@ -474,7 +519,7 @@ if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary]
 end
 
 modutil.mod.Path.Wrap("SetupMap", function(base, ...)
-    game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit"}})
+    game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit", "WeaponLob"}})
     return base(...)
 end)
 
@@ -483,14 +528,19 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
     args = args or {}
 	local currentWeaponName = game.GetEquippedWeapon()
 	local currentWeaponData = game.WeaponData[currentWeaponName]
-	local traitName = game.GameState.LastWeaponUpgradeName[currentWeaponName]
+	local traitName = game.GameState.LastWeaponUpgradeName[currentWeaponName] or game.ScreenData.WeaponUpgradeScreen.DisplayOrder[currentWeaponName][1]
     if traitName then
         local traitData = game.TraitData[traitName]
         local aspectTraitName = traitData[_PLUGIN.guid .. "SecondaryAspect"]
         print("equipping minor aspect", aspectTraitName)
         if traitData and aspectTraitName and (not game.HeroHasTrait( aspectTraitName )) then
             print("adding secondary aspect trait")
-            game.AddTraitToHero({ TraitName = aspectTraitName, Rarity = "Common" })
+            local origAspectTraitName = string.gsub(aspectTraitName, "_Secondary", "")
+            local level = game.GetWeaponUpgradeLevel(origAspectTraitName)
+            print("applying trait with level", origAspectTraitName, level)
+            local rarity = game.GetRarityKey( level, game.TraitRarityData.WeaponRarityUpgradeOrder )
+            print("Rarity", rarity)
+            game.AddTraitToHero({ TraitName = aspectTraitName, Rarity = rarity })
             local aspectTraitData = game.TraitData[aspectTraitName]
             if aspectTraitData.ReplacementGrannyModels ~= nil then
 				for originalModel, attachmentModel in pairs(aspectTraitData.ReplacementGrannyModels) do
@@ -517,10 +567,40 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
     return val
 end)
 
+modutil.mod.Path.Wrap("UpgradeAspect", function (base, args, origTraitData)
+    base(args, origTraitData)
+
+    args = args or {}
+	local currentWeaponName = game.GetEquippedWeapon()
+
+	local traitName = game.GameState.LastWeaponUpgradeName[currentWeaponName]
+	if traitName == nil then
+		traitName = game.ScreenData.WeaponUpgradeScreen.FreeUnlocks[currentWeaponName]
+	end
+	if not traitName then
+		return
+	end
+    local traitData = game.TraitData[traitName] or {}
+    local minorTraitName = traitData[_PLUGIN.guid .. "SecondaryAspect"]
+    local minorTraitData = game.TraitData[minorTraitName]
+    if minorTraitData then
+        if minorTraitName and game.HeroHasTrait( minorTraitName ) then
+		    game.RemoveTrait( game.CurrentRun.Hero, minorTraitName )
+	    end
+        local numRanks = game.GetWeaponUpgradeLevel( string.gsub(minorTraitName, "_Secondary", "") ) + args.UpgradeLevels
+        local rarity = game.TraitRarityData.WeaponRarityUpgradeOrder[numRanks]
+        game.AddTraitToHero({ SkipNewTraitHighlight = args.SkipTraitHighlight, TraitName = minorTraitName, Rarity = rarity })
+    end
+end)
+
 modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     for traitName, _ in pairs(mod.AspectTraitData) do
         print("unequipping minor aspect", traitName)
         local traitData = game.TraitData[traitName]
+        if traitData.LinkedSpell and game.HeroHasTrait( traitName ) then
+            print("unequipping Spell", traitData.LinkedSpell)
+            game.UnequipLinkedSpell( traitData )
+        end
         while game.HeroHasTrait( traitName ) do
             game.RemoveTrait( game.CurrentRun.Hero, traitName )
         end
@@ -530,18 +610,8 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
             end
         end
     end
-    for _, traitData in ipairs( game.CurrentRun.Hero.Traits ) do
-        if traitData.LinkedSpell and string.match(traitData.Name, "_Secondary") then
-            print("equipping Spell", traitData.LinkedSpell)
-            game.UnequipLinkedSpell( traitData )
-        end
-    end
     local val = base(args)
     return val
-end)
-
-modutil.mod.Path.Override("BiomeMapPresentation", function (base, ...)
-    return
 end)
 
 modutil.mod.Path.Wrap("TorchSpecialAutofire", function (base, ...)
@@ -558,6 +628,21 @@ modutil.mod.Path.Wrap("TorchPrimaryAutofire", function (base, ...)
     return base(...)
 end)
 
+modutil.mod.Path.Wrap("SetupMap", function (base, ...)
+    game.LoadPackages({Names = {_PLUGIN.guid}})
+    return base(...)
+end)
+
 -- game.OnControlPressed({'Gift', function()
 -- 	return mod.OpenWeaponFusionScreen()
 -- end})
+
+modutil.mod.Path.Wrap("addDamageMultiplier", function (base, data, multiplier)
+    if multiplier ~= multiplier and data.SuccessiveProjectileMultiplier then
+        if game.SessionMapState[_PLUGIN.guid .. "MomusAxeCurrentProjectileIndex"] then
+            return base(data, 1 + ( game.SessionMapState[_PLUGIN.guid .. "MomusAxeCurrentProjectileIndex"] - 1 ) * data.SuccessiveProjectileMultiplier)
+        end
+        return
+    end
+    return base(data, multiplier)
+end)
