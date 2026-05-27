@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add Axe and Staff minor aspects for AspectYoungMel
+
 ## [0.6.2] - 2026-05-26
 
 - Premium Service (Hephaeustus Legendary) will now also upgrade the Minor Aspects
