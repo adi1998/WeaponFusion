@@ -32,7 +32,7 @@ If it still seems bugged would really appreciate a bug report :).
 
 ### [Experimental] Same weapon fusion
 
-There is also experimental support for fusing two aspects of same weapon. It can only be enabled through the ImGui menu.
+There is also experimental support for fusing two aspects of same weapon. It can only be enabled through the ImGui menu (default keybind: INSERT).
 
 ![ImGui menu](images/imgui.png)
 
