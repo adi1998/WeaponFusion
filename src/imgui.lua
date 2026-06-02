@@ -129,7 +129,7 @@ function DrawMenu()
         config.random_fusion_each_run = value
     end
 
-    value, checked = rom.ImGui.Checkbox("Allow same weapon fusion\nExperimental, ImGui only", config.allow_same_weapon_fusion)
+    value, checked = rom.ImGui.Checkbox("Allow same weapon fusion\nExperimental setting with minimal testing", config.allow_same_weapon_fusion)
     if checked then
         config.allow_same_weapon_fusion = value
     end
