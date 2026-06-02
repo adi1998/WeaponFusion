@@ -20,6 +20,10 @@ Salute the silver pool to fuse weapons. It's recommended to only use this if you
 
 Fusion can only be performed in the Crossroads training grounds.
 
+If it feels like the fusion didn't apply properly try starting a run/reloading the room.
+
+If it still seems bugged would really appreciate a bug report :).
+
 ![Pool Interact](images/pool.png)
 
 <br>
@@ -28,13 +32,9 @@ Fusion can only be performed in the Crossroads training grounds.
 
 ### [Experimental] Same weapon fusion
 
-There is also experimental support for fusing two aspects of same weapon. Can only be enabled through ImGui. It will work with the in-game menu too once enabled. If the ImGui window seem unresponsive try disabling V-sync and any external frame limiters if enabled.
+There is also experimental support for fusing two aspects of same weapon. It can only be enabled through the ImGui menu.
 
 ![ImGui menu](images/imgui.png)
-
-If it feels like the fusion didn't apply properly try starting a run/reloading the room.
-
-If it still seems bugged would really appreciate a bug report :).
 
 ## Some Limitations/Issues
 
