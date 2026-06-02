@@ -497,8 +497,6 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
             game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = secondaryAspect
         end
     end
-
-    game.SetupRunData()
 end
 
 function UnfuseWeapons()
@@ -517,6 +515,8 @@ UnfuseWeapons()
 if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary] then
     FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
 end
+
+game.SetupRunData()
 
 modutil.mod.Path.Wrap("SetupMap", function(base, ...)
     game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit", "WeaponLob"}})
