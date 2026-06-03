@@ -183,10 +183,10 @@ mod.FusionScreenData = {
 			{
 				"CloseButton",
 				"CycleAspectButtonDown",
-				"CycleAspectButtonUp",
 				"FuseAndExitButton",
 				"UnfuseAndExitButton",
-				"RandomToggle"
+				"RandomToggle",
+				"CycleAspectButtonUp",
 			},
 
 			Children =
@@ -201,7 +201,7 @@ mod.FusionScreenData = {
 						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CloseWeaponFusionScreen",
 						ControlHotkeys = { "Cancel", },
 					},
-					Text = "Menu_Exit",
+					Text = "{CN} EXIT",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				},
 
@@ -215,19 +215,8 @@ mod.FusionScreenData = {
 						MouseControlHotkeys = { "MenuDown" }
 					},
 					Text = "{ML} {MR} CYCLE ASPECT",
+					AltText = "{MU} {MD} CYCLE ASPECT",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
-				},
-
-				CycleAspectButtonUp =
-				{
-					Graphic = "ContextualActionButton",
-					Data =
-					{
-						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CycleAspectsUp",
-						ControlHotkeys = { "MenuLeft" },
-						MouseControlHotkeys = { "MenuUp" }
-					},
-					Text = "",
 				},
 
 				FuseAndExitButton =
@@ -267,7 +256,19 @@ mod.FusionScreenData = {
 					},
 					Text = "{G} RANDOM EACH RUN",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
-				}
+				},
+
+				CycleAspectButtonUp =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CycleAspectsUp",
+						ControlHotkeys = { "MenuLeft" },
+						MouseControlHotkeys = { "MenuUp" }
+					},
+					Text = "",
+				},
 			},
 		},
 
@@ -612,11 +613,9 @@ function mod.MouseOverMinorAspect(button)
 	mod.CreateAspectInfoItem(button)
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.15})
 	if game.GetConfigOptionValue({ Name = "UseMouse" }) then
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 0, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 0, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.AltText})
 	else
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 1, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 1, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.Text})
 	end
 end
 
@@ -640,11 +639,9 @@ function mod.MouseOffMinorAspect(button)
 	end
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.3, Duration = 0.15})
 	if game.GetConfigOptionValue({ Name = "UseMouse" }) then
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 0, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 0, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.AltText})
 	else
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 1, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 1, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.Text})
 	end
 end
 
