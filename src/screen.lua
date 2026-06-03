@@ -115,7 +115,8 @@ mod.FusionScreenData = {
 			"UnfuseHoldButtonGraphic",
 			"ActionBarBackground",
 			"WeaponImage",
-			"StatsBox",
+			"ActionBar",
+			"UnfuseButtonControlIcon"
 		},
 
         BackgroundDim =
@@ -214,8 +215,8 @@ mod.FusionScreenData = {
 						ControlHotkeys = { "MenuRight" },
 						MouseControlHotkeys = { "MenuDown" }
 					},
-					Text = "{ML} {MR} CYCLE ASPECT",
-					AltText = "{MU} {MD} CYCLE ASPECT",
+					Text = "  {MR} CYCLE ASPECT",
+					AltText = "  {MD} CYCLE ASPECT",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				},
 
@@ -242,7 +243,7 @@ mod.FusionScreenData = {
 						OnMouseOffFunctionName = "MouseOffContextualAction",
 						-- OnPressedFunctionName = _PLUGIN.guid .. "." .. "FuseAndExit",
 					},
-					Text = "HOLD {IP} UNFUSE",
+					Text = " HOLD {IP} UNFUSE",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				},
 
@@ -272,11 +273,28 @@ mod.FusionScreenData = {
 			},
 		},
 
+		UnfuseButtonControlIcon = {
+			X = 972,
+			Y = game.UIData.ContextualButtonY,
+			Text = "{IP}",
+			TextArgs = {
+				FontSize = 20,
+				Width = 415,
+				LineSpacingBottom = 0,
+				Color = { 0.58, 0.34, 0.78, 1.0 },
+				Font = "LatoBold",
+				ShadowBlur = 0, ShadowColor = {0,0,0,0}, ShadowOffset={0, 3},
+				Justification = "CENTER",
+				VerticalJustification = "CENTER",
+				TextSymbolScale = 0.8,
+			}
+		},
+
 		UnfuseHoldButtonGraphic = {
 			AnimationName = _PLUGIN.guid .. "HoldButtonAnimationEmpty",
-			X = 635,
-			Y = game.UIData.ContextualButtonY + 2,
-			Scale = 0.2,
+			X = 972,
+			Y = game.UIData.ContextualButtonY,
+			Scale = 0.23,
 			Alpha = 1,
 		}
     }
@@ -365,6 +383,13 @@ function mod.OpenWeaponFusionScreen()
 	if config.random_fusion_each_run then
 		local modify = game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
 	end
+
+	components.CycleAspectButtonDown.Text = "{ML} {MR} CYCLE ASPECT"
+	components.CycleAspectButtonDown.AltText = "{MU} {MD} CYCLE ASPECT"
+	components.UnfuseAndExitButton.Text = "HOLD         UNFUSE"  -- 9 spaces for icons to fit in
+
+	game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text = components.CycleAspectButtonDown.Text})
+	game.ModifyTextBox({Id = components.UnfuseAndExitButton.Id, Text = components.UnfuseAndExitButton.Text})
 
     screen.KeepOpen = true
 	screen.CanClose = true
@@ -712,11 +737,6 @@ function mod.CycleAspectsUp(screen)
 end
 
 function mod.FuseAndExit(screen)
-	if game.GetConfigOptionValue({ Name = "UseMouse" }) then
-		game.Teleport({Id = screen.Components.UnfuseHoldButtonGraphic.Id, DestinationId = screen.Components.RandomToggle.Id, OffsetX = 180, OffsetY = 2})
-	else
-		game.Teleport({Id = screen.Components.UnfuseHoldButtonGraphic.Id, DestinationId = screen.Components.RandomToggle.Id, OffsetX = 180, OffsetY = 0})
-	end
 	game.wait(0.2)
 
 	if game.IsControlDown({ Name = "ItemPin" }) then
@@ -728,10 +748,16 @@ function mod.FuseAndExit(screen)
 			Timeout = threshold,
 		})
 		game.SetAnimation({DestinationId = screen.Components.UnfuseHoldButtonGraphic.Id, Name = _PLUGIN.guid .. "HoldButtonAnimation"})
+		game.Shake({ Id = screen.Components.UnfuseHoldButtonGraphic.Id, Distance = 1, Speed = 200, Duration = 1 })
+		local chargeSoundId = game.PlaySound({Name = "/SFX/Player Sounds/MelinoeAxePhysicalChargeUp"})
 		game.waitUntil( notifyName )
+		game.StopSound({Id = chargeSoundId})
 		local timedOut = game._eventTimeoutRecord and game._eventTimeoutRecord[ notifyName ]
 		if game._eventTimeoutRecord then game._eventTimeoutRecord[ notifyName ] = nil end
 		if timedOut then
+			local completeSoundId =  game.PlaySound({Name = "/SFX/Player Sounds/NyxTurboBoost"})
+			game.SetVolume({Id = completeSoundId, Value = 0.8})
+			game.Flash({ Id = screen.Components.UnfuseHoldButtonGraphic.Id, Speed = 0.8, MinFraction = 0.1, MaxFraction = 0.3, Color = game.Color.White })
 			mod.UnequipWeapons()
 			config.last_primary = "WeaponStaffSwing"
 			config.last_secondary = "WeaponStaffSwing"
@@ -784,10 +810,6 @@ function mod.ToggleRandomEachRun(screen, button)
 		game.MouseOffContextualAction(button)
 		game.PlaySound({ Name = screen.ToggleOnSound, Id = button.Id })
 	end
-end
-
-function mod.ShakeButton(args)
-	Shake({ Id = args.Id, Distance = 3, Speed = 1000, Duration = 0.2 })
 end
 
 game.HubRoomData.Hub_PreRun.ObstacleData[558210].UseTextTalkAndSpecial = "{I} Inspect \n {SI} Weapon Fusion"
