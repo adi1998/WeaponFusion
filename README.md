@@ -20,9 +20,7 @@ Salute the silver pool to fuse weapons. It's recommended to only use this if you
 
 Fusion can only be performed in the Crossroads training grounds.
 
-If it feels like the fusion didn't apply properly try starting a run/reloading the room.
-
-If it still seems bugged would really appreciate a bug report :).
+If it feels like the fusion didn't apply properly try starting a run/reloading the room. If it still seems bugged would really appreciate a bug report :).
 
 ![Pool Interact](images/pool.png)
 
