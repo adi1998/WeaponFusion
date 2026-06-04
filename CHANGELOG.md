@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Remove hitstop from Morrigan's Blood Triad and Dagger Omega Attack
+- Fix Nergal and Thanatos not working properly after the Anubis fix
+
 ## [0.6.2] - 2026-05-26
 
 - Premium Service (Hephaeustus Legendary) will now also upgrade the Minor Aspects

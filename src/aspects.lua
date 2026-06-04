@@ -3268,3 +3268,13 @@ for traitName, traitData in pairs(mod.AspectTraitData) do
 end
 
 game.TraitData["StaffRaiseDeadAspect"].ManaCostModifiers.WeaponNames = {"WeaponStaffBall"}
+
+game.ProjectileData.WomboStrike.HitScreenshake = nil
+game.ProjectileData.WomboStrike.HitSimSlowCustomName = nil
+game.ProjectileData.WomboStrike.HitSimSlowCooldown = nil
+game.ProjectileData.WomboStrike.HitSimSlowParameters = nil
+game.ProjectileData.WomboStrike.FireRumbleParameters = nil
+
+game.WeaponData.WeaponDagger5.HitSimSlowParameters = nil
+game.WeaponData.WeaponDagger5.HitRumbleParameters = nil
+game.WeaponData.WeaponDagger5.HitScreenshake = nil
