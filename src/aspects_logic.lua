@@ -1,17 +1,17 @@
 
 function mod.CheckFrenzyCount(victim, functionArgs, triggerArgs)
 
-	local passesHitCheck = functionArgs.FirstHitOnly == nil or (functionArgs.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckFrenzyCount" ))
+	local passesHitCheck = functionArgs.FirstHitOnly == nil or (functionArgs.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, "CheckFrenzyCount_Secondary" ))
 
 	if triggerArgs.SourceProjectile ~= nil and functionArgs.MultihitProjectileWhitelistLookup and functionArgs.MultihitProjectileWhitelistLookup[triggerArgs.SourceProjectile] and functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile] then
 		local conditions = functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile]
 		passesHitCheck = true
-		if conditions.Cooldown and not game.CheckCooldown( _PLUGIN.guid .. "." .. "CheckFrenzyCount", conditions.Cooldown ) then
+		if conditions.Cooldown and not game.CheckCooldown( "CheckFrenzyCount_Secondary", conditions.Cooldown ) then
 			passesHitCheck = false
 		end
 	end
 	if passesHitCheck then
-		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckFrenzyCount")
+		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, "CheckFrenzyCount_Secondary")
 		if game.IsEmpty( game.CurrentRun.Hero.ActiveEffects ) or not game.CurrentRun.Hero.ActiveEffects.Frenzy then
 			local startingCount = game.MapState.FrenzyHits or 0
 			game.IncrementTableValue( game.MapState, "FrenzyHits" )
@@ -42,18 +42,18 @@ function mod.CheckPerfectAxeCrit( victim, args, triggerArgs )
 		return
 	end
 
-	local passesHitCheck = args.FirstHitOnly == nil or (args.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit" ))
+	local passesHitCheck = args.FirstHitOnly == nil or (args.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, "CheckPerfectAxeCrit_Secondary" ))
 
 	if triggerArgs.SourceProjectile ~= nil and args.MultihitProjectileWhitelistLookup and args.MultihitProjectileWhitelistLookup[triggerArgs.SourceProjectile] and args.MultihitProjectileConditions[triggerArgs.SourceProjectile] then
 		local conditions = args.MultihitProjectileConditions[triggerArgs.SourceProjectile]
 		passesHitCheck = true
-		if conditions.Cooldown and not game.CheckCooldown( _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit", conditions.Cooldown ) then
+		if conditions.Cooldown and not game.CheckCooldown( "CheckPerfectAxeCrit_Secondary", conditions.Cooldown ) then
 			passesHitCheck = false
 		end
 	end
 
 	if passesHitCheck then
-		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "." .. "CheckPerfectAxeCrit")
+		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, "CheckPerfectAxeCrit_Secondary")
 		local trait = game.GetHeroTrait( "AxePerfectCriticalAspect_Secondary")
 
 		local prevCritChance = game.round(trait.PerfectCritChance * 100, 1)
