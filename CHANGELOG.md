@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-06-04
+
 - Remove hitstop from Morrigan's Blood Triad and Dagger Omega Attack
 - Fix Nergal and Thanatos not working properly after the Anubis fix
 
@@ -91,7 +93,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.6.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.6.3...HEAD
+[0.6.3]: https://github.com/adi1998/WeaponFusion/compare/0.6.2...0.6.3
 [0.6.2]: https://github.com/adi1998/WeaponFusion/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/adi1998/WeaponFusion/compare/0.5.1...0.6.1
 [0.5.1]: https://github.com/adi1998/WeaponFusion/compare/0.5.0...0.5.1
