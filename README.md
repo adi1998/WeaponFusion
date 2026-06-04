@@ -43,4 +43,4 @@ There is also experimental support for fusing two aspects of same weapon. It can
 
 ## Issues and feedback
 
-Report any issues or feedback [here](https://github.com/adi1998/WeaponFusion/issues) or on [Discord](https://discord.gg/bKvJTAJj).
+Report any issues or feedback [here](https://github.com/adi1998/WeaponFusion/issues) or on [Discord](https://discord.gg/KuMbyrN).

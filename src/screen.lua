@@ -796,6 +796,7 @@ function mod.FuseAndExit(screen)
     config.last_secondary = secondaryWeapon
     config.last_aspect = secondaryAspect
     FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
+	game.SetupRunData()
     mod.EquipWeapons({PrimaryUpgrade = primaryAspect})
 	game.RequestPreRunLoadoutChangeSave()
 	mod.CloseWeaponFusionScreen(screen)
