@@ -133,7 +133,21 @@ local traitTextList = {
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Hel",
         Description = "You have {$Keywords.GunAspect}, which grants the way of the {$Keywords.Overheat} after your {$Keywords.SpecialEX}.",
-    }
+    },
+
+    -- YM aspects
+    {
+        Id = "StaffAspectofYoungMelinoe_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Young Melinoë",
+        Description = "While you have no more than {#UpgradeFormat}{$TooltipData.ExtractData.HealthThreshold}%{!Icons.Health}{#Prev}, absorb your {$Keywords.SpecialEX} blast to restore {#BoldFormatGraft}{$TooltipData.ExtractData.HealAmount}{!Icons.Health}{#Prev}."
+    },
+    {
+        Id = "AxeAspectofYoungMelinoe_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Axpect of Young Melinoë",
+        Description = "Your {$Keywords.Special} Block grants {$Keywords.AxeRetaliate}."
+    },
 }
 
 mod.AspectDisplayNameMap = {}

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add Axe and Staff minor aspects for AspectYoungMel
+
 ## [0.6.3] - 2026-06-04
 
 - Remove hitstop from Morrigan's Blood Triad and Dagger Omega Attack

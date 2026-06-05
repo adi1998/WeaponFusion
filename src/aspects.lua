@@ -3261,6 +3261,316 @@ mod.AspectTraitData = {
 	}
 }
 
+AspectYoungMel = "JarlUlsfark-AspectYoungMel"
+
+if rom.mods[AspectYoungMel] then
+	game.OverwriteTableKeys(mod.AspectTraitData, {
+		StaffAspectofYoungMelinoe_Secondary = {
+			InheritFrom = {"BaseTrait"},
+			Icon = "JarlUlsfark-AspectYoungMel\\StaffAspectYoungMelIcon",
+			ReplacementGrannyModels =
+			{
+				WeaponStaff_Mesh = "WeaponStaff_Mesh"
+			},
+			RarityLevels =
+			{
+				Common =
+				{
+					Multiplier = 1,
+				},
+				Rare =
+				{
+					Multiplier = 1.333,
+				},
+				Epic =
+				{
+					Multiplier = 1.666,
+				},
+				Heroic =
+				{
+					Multiplier = 2,
+				},
+				Legendary =
+				{
+					Multiplier = 2.333,
+				},
+				Perfect =
+				{
+					Multiplier = 2.666,
+				},
+			},
+			OnProjectileDeathFunction =
+			{
+				Name = AspectYoungMel .. "." .. "CheckStaffSelfHit",
+				ValidProjectiles = {"ProjectileStaffBallCharged"},
+				Args = 
+				{
+					ProjectileName = "ProjectileStaffBallCharged",
+					Threshold = { BaseValue = 0.3 },
+					HealAmount = 5,
+					ReportValues = 
+					{ 
+						ReportedThreshold = "Threshold" ,
+						ReportedHeal = "HealAmount"
+					},
+				}
+			},
+			ExtractValues =
+			{
+				{
+					Key = "ReportedThreshold",
+					ExtractAs = "HealthThreshold",
+					Format = "Percent",
+					SkipAutoExtract = true
+				},
+				{
+					Key = "ReportedHeal",
+					ExtractAs = "HealAmount",
+					SkipAutoExtract = true
+				},
+			},
+			StatLines =
+			{
+				"HealthThresholdStatDisplay"
+			},
+			PropertyChanges =
+			{
+				{
+					WeaponName = "WeaponStaffBall",
+					WeaponProperty = "Projectile",
+					ChangeValue = "ProjectileStaffBoltEA",
+				},
+				{
+					WeaponName = "WeaponStaffBall",
+					WeaponProperty = "InitialCooldown",
+					ChangeValue = 0,
+					ChangeType = "Absolute",
+				},
+				{
+					WeaponName = "WeaponStaffBall",
+					WeaponProperty = "Cooldown",
+					ChangeValue = 0.4,
+					ChangeType = "Absolute",
+				},
+			},
+			FlavorText = "StaffAspectofYoungMelinoe_FlavorText",
+		},
+
+		AxeAspectofYoungMelinoe_Secondary = {
+			InheritFrom = {"BaseTrait"},
+			RarityLevels =
+			{
+				Common =
+				{
+					Multiplier = 1.4,
+				},
+				Rare =
+				{
+					Multiplier = 1.8,
+				},
+				Epic =
+				{
+					Multiplier = 2.2,
+				},
+				Heroic =
+				{
+					Multiplier = 2.6,
+				},
+				Legendary =
+				{
+					Multiplier = 3,
+				},
+				Perfect =
+				{
+					Multiplier = 3.4,
+				},
+			},
+			Icon = "JarlUlsfark-AspectYoungMel\\AxeAspectYoungMelIcon",
+			ReplacementGrannyModels =
+			{
+				Melinoe_Axe_Mesh1 = "Melinoe_Axe_Mesh1",
+			},
+			OnBlockDamageFunction =
+			{
+				Name = AspectYoungMel .. "." .. "BlockAxeBuff",
+				Args = 
+				{
+					MaxRetaliateBuff = { BaseValue = 1 },
+					EffectName = "CastGripEffect",
+					Duration = 3,
+					ReportValues =
+					{
+						MaxBuff = "MaxRetaliateBuff",
+
+					}
+				}
+			},
+			AddOutgoingDamageModifiers = {
+				ValidWeapons = game.WeaponSets.HeroPrimaryWeapons,
+				UseTraitValue = "RetaliateBuff",
+				IsMultiplier = true,
+			},
+			RetaliateBuff = 1,
+			WeaponDataOverride =
+			{
+				WeaponAxeSpecial =
+				{
+					Sounds =
+					{
+						FireSounds =
+						{
+							{ Name = "/SFX/Player Sounds/ZagreusFistWhoosh" },
+						},
+						ImpactSounds =
+						{
+							Invulnerable = "/SFX/Player Sounds/ZagreusShieldRicochet",
+							Armored = "/SFX/Player Sounds/ZagreusShieldRicochet",
+							Bone = "/SFX/Player Sounds/ShieldObstacleHit",
+							Brick = "/SFX/Player Sounds/ShieldObstacleHit",
+							Stone = "/SFX/Player Sounds/ShieldObstacleHit",
+							Organic = "/SFX/Player Sounds/ShieldObstacleHit",
+							StoneObstacle = "/SFX/SwordWallHitClankSmall",
+							BrickObstacle = "/SFX/SwordWallHitClankSmall",
+							MetalObstacle = "/SFX/SwordWallHitClankSmall",
+							BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
+							Shell = "/SFX/ShellImpact",
+						},
+					},
+				},
+			},
+			-- Changing special to Block
+			PropertyChanges =
+			{
+				{
+					WeaponName = "WeaponAxeSpecial",
+					WeaponProperties = {
+						Projectile = "ProjectileAxeBlockSpin",
+						ExpireProjectilesOnFire = "ProjectileAxeSpin",
+						DoProjectileBlockPresentation = true,
+						DefaultKnockbackForce = 480,
+						DefaultKnockbackScale = 0.6,
+						ActiveProjectileCap = 1,
+						FizzleOldSpawns = true,
+						BlockedByAllOtherFireRequest = false,
+						RootOwnerWhileFiring = true,
+						FireFx = "null",
+						FullyAutomatic = true,
+						Cooldown = 0.4,
+						AddOnFire = "WeaponAxeSpecialSwing",
+					},
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecialSwing",
+					WeaponProperty = "Projectile",
+					ChangeValue = "ProjectileAxeBlock2",
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "AxeSpecialBlockSelfTriggerLock",
+					EffectProperty = "Active",
+					ChangeValue = false,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "AxeSpecialDisable",
+					EffectProperty = "Active",
+					ChangeValue = false,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "AxeSpecialDisable",
+					EffectProperty = "Active",
+					ChangeValue = false,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "AxeSpecialDisableCancelable",
+					EffectProperty = "Active",
+					ChangeValue = false,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "AxeSpecialDisableMovementCancelable",
+					EffectProperty = "Active",
+					ChangeValue = false,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "ShieldSelfSpeed",
+					EffectProperty = "Active",
+					ChangeValue = true,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "ShieldSelfInvulnerableRush",
+					EffectProperty = "Active",
+					ChangeValue = true,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "ShieldSelfInvulnerableRush2",
+					EffectProperty = "Active",
+					ChangeValue = true,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "ShieldFireDisableAttack",
+					EffectProperty = "Active",
+					ChangeValue = true,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "ShieldChargeDisableMove",
+					EffectProperty = "Active",
+					ChangeValue = true,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+				{
+					WeaponName = "WeaponAxeSpecial",
+					EffectName = "ShieldFireDisableMove2",
+					EffectProperty = "Active",
+					ChangeValue = true,
+					ChangeType = "Absolute",
+					ExcludeLinked = true,
+				},
+			},
+			StatLines =
+			{
+				"AxeAspectYoungMelStat",
+			},
+			ExtractValues =
+			{
+				{
+					Key = "MaxBuff",
+					ExtractAs = "RetaliateDamage",
+					Format = "PercentDelta",
+				},
+			},
+			FlavorText = "AxeAspectofYoungMelinoe_FlavorText",
+		}
+	})
+end
+
 game.OverwriteTableKeys( game.TraitData, mod.AspectTraitData )
 
 for traitName, traitData in pairs(mod.AspectTraitData) do

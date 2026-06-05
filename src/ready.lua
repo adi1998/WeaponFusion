@@ -26,6 +26,10 @@ mod.WeaponData = {
             "StaffTripleShotTrait",
 
             "StaffLoneShadeRallyTrait",
+
+            -- aspect young mel
+            "StaffDoubleHealTraitYM",
+            "StaffSpecialHomingTraitYM"
         },
         CommonHammers = {
             "StaffLoneShadeRespawnTrait",
@@ -87,6 +91,10 @@ mod.WeaponData = {
             "AxeBlockEmpowerTrait",
             "AxeArmorTrait",
             "AxeChargedSpecialTrait",
+
+            -- aspect young mel
+            "AxeShieldDeflectTraitYM",
+            "AxeExtendedRetaliateTraitYM",
         },
         CommonHammers = {
             "AxeRallyFrenzyTrait"
@@ -282,13 +290,13 @@ function PatchHammerAspectRequirement(requirement)
             table.insert(newRequirement.HasAny, traitName.."_Secondary")
         end
     end
-    if requirement.IsNone then
+    if requirement.IsNone or requirement.HasNone then
         newRequirement =
         {
             Path = {"CurrentRun", "Hero", "TraitDictionary"},
             HasNone = { },
         }
-        for _, traitName in ipairs(requirement.IsNone) do
+        for _, traitName in ipairs(requirement.IsNone or requirement.HasNone) do
             table.insert(newRequirement.HasNone, traitName)
             table.insert(newRequirement.HasNone, traitName.."_Secondary")
         end
@@ -298,27 +306,31 @@ end
 
 function PatchSecondaryHammerRequirements(hammerName, weaponName)
     local hammerData = game.TraitData[hammerName]
-    hammerData.GameStateRequirements[1] =
-    {
-        Path = { "CurrentRun", "Hero", "Weapons", },
-        HasAll = { weaponName, },
-    }
-    local secondRequirement = hammerData.GameStateRequirements[2]
-    if secondRequirement then
-        hammerData.GameStateRequirements[2] = PatchHammerAspectRequirement(secondRequirement)
+    if hammerData then
+        hammerData.GameStateRequirements[1] =
+        {
+            Path = { "CurrentRun", "Hero", "Weapons", },
+            HasAll = { weaponName, },
+        }
+        local secondRequirement = hammerData.GameStateRequirements[2]
+        if secondRequirement then
+            hammerData.GameStateRequirements[2] = PatchHammerAspectRequirement(secondRequirement)
+        end
     end
 end
 
 function PatchCommonHammerRequirements(hammerName, weaponName, secondWeaponName)
     local hammerData = game.TraitData[hammerName]
-    hammerData.GameStateRequirements[1] =
-    {
-        Path = { "CurrentRun", "Hero", "Weapons", },
-        HasAny = { weaponName, secondWeaponName},
-    }
-    local secondRequirement = hammerData.GameStateRequirements[2]
-    if secondRequirement then
-        hammerData.GameStateRequirements[2] = PatchHammerAspectRequirement(secondRequirement)
+    if hammerData then
+        hammerData.GameStateRequirements[1] =
+        {
+            Path = { "CurrentRun", "Hero", "Weapons", },
+            HasAny = { weaponName, secondWeaponName},
+        }
+        local secondRequirement = hammerData.GameStateRequirements[2]
+        if secondRequirement then
+            hammerData.GameStateRequirements[2] = PatchHammerAspectRequirement(secondRequirement)
+        end
     end
 end
 
@@ -342,57 +354,59 @@ end
 
 function PatchSecondaryHammerPropertyChanges(hammerName, weaponName)
     local traitData = game.TraitData[hammerName]
-    local newPropertyChanges = {}
-    local replacePropertyChanges = {}
-    for propertyIndex, property in ipairs(traitData.PropertyChanges or {}) do
-        local weaponName = property.WeaponName
-        local minorAspectMap = secondaryWeaponMinorAspectMap[weaponName]
-        if minorAspectMap then
-            local duplicate = 0
-            if property.TraitName and minorAspectMap[property.TraitName .. "_Secondary"] then
-                local newProperty = game.DeepCopyTable(property)
-                newProperty.TraitName = property.TraitName .. "_Secondary"
-                table.insert(newPropertyChanges, newProperty)
-                duplicate = duplicate + 1
-            end
-            if property.FalseTraitName and minorAspectMap[property.FalseTraitName .. "_Secondary"] then
-                local newProperty = game.DeepCopyTable(property)
-                newProperty.FalseTraitName = nil
-                newProperty.FalseTraitNames = { property.FalseTraitName, property.FalseTraitName .. "_Secondary" }
-                replacePropertyChanges[propertyIndex] = newProperty
-                duplicate = duplicate + 1
-            end
-            if property.TraitNames then
-                local newProperty
-                for index, traitName in ipairs(property.TraitNames) do
-                    if minorAspectMap[traitName .. "_Secondary"] then
-                        newProperty = game.DeepCopyTable(property)
-                        newProperty.TraitNames[index] = traitName .. "_Secondary"
-                        table.insert(newPropertyChanges, newProperty)
-                        duplicate = duplicate + 1
+    if traitData then
+        local newPropertyChanges = {}
+        local replacePropertyChanges = {}
+        for propertyIndex, property in ipairs(traitData.PropertyChanges or {}) do
+            local weaponName = property.WeaponName
+            local minorAspectMap = secondaryWeaponMinorAspectMap[weaponName]
+            if minorAspectMap then
+                local duplicate = 0
+                if property.TraitName and minorAspectMap[property.TraitName .. "_Secondary"] then
+                    local newProperty = game.DeepCopyTable(property)
+                    newProperty.TraitName = property.TraitName .. "_Secondary"
+                    table.insert(newPropertyChanges, newProperty)
+                    duplicate = duplicate + 1
+                end
+                if property.FalseTraitName and minorAspectMap[property.FalseTraitName .. "_Secondary"] then
+                    local newProperty = game.DeepCopyTable(property)
+                    newProperty.FalseTraitName = nil
+                    newProperty.FalseTraitNames = { property.FalseTraitName, property.FalseTraitName .. "_Secondary" }
+                    replacePropertyChanges[propertyIndex] = newProperty
+                    duplicate = duplicate + 1
+                end
+                if property.TraitNames then
+                    local newProperty
+                    for index, traitName in ipairs(property.TraitNames) do
+                        if minorAspectMap[traitName .. "_Secondary"] then
+                            newProperty = game.DeepCopyTable(property)
+                            newProperty.TraitNames[index] = traitName .. "_Secondary"
+                            table.insert(newPropertyChanges, newProperty)
+                            duplicate = duplicate + 1
+                        end
                     end
                 end
-            end
-            if property.FalseTraitNames then
-                local newProperty = game.DeepCopyTable(property)
-                for _, traitName in ipairs(property.FalseTraitNames) do
-                    if minorAspectMap[traitName .. "_Secondary"] then
-                        table.insert(newProperty.FalseTraitNames, traitName.."_Secondary")
-                        replacePropertyChanges[propertyIndex] = newProperty
-                        duplicate = duplicate + 1
+                if property.FalseTraitNames then
+                    local newProperty = game.DeepCopyTable(property)
+                    for _, traitName in ipairs(property.FalseTraitNames) do
+                        if minorAspectMap[traitName .. "_Secondary"] then
+                            table.insert(newProperty.FalseTraitNames, traitName.."_Secondary")
+                            replacePropertyChanges[propertyIndex] = newProperty
+                            duplicate = duplicate + 1
+                        end
                     end
                 end
-            end
-            if duplicate > 1 then
-                print("multiple property changes detected for", hammerName, propertyIndex, mod.dump(property))
+                if duplicate > 1 then
+                    print("multiple property changes detected for", hammerName, propertyIndex, mod.dump(property))
+                end
             end
         end
-    end
-    for index, property in pairs(replacePropertyChanges) do
-        traitData.PropertyChanges[index] = property
-    end
-    for _, property in ipairs(newPropertyChanges) do
-        table.insert(traitData.PropertyChanges, property)
+        for index, property in pairs(replacePropertyChanges) do
+            traitData.PropertyChanges[index] = property
+        end
+        for _, property in ipairs(newPropertyChanges) do
+            table.insert(traitData.PropertyChanges, property)
+        end
     end
 end
 
