@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-06-05
+
 - Add experimental support for same weapon fusion
 - Add Axe and Staff minor aspects for AspectYoungMel
 
@@ -96,7 +98,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.6.3...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/adi1998/WeaponFusion/compare/0.6.3...0.7.0
 [0.6.3]: https://github.com/adi1998/WeaponFusion/compare/0.6.2...0.6.3
 [0.6.2]: https://github.com/adi1998/WeaponFusion/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/adi1998/WeaponFusion/compare/0.5.1...0.6.1
