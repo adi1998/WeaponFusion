@@ -1,12 +1,11 @@
 ## Weapon Fusion
 
-Hades II mod allowing you to fuse any* 2 weapons and their aspects. Takes Attacks and Specials from different weapons and combines them into a single weapon.
+Hades II mod allowing you to fuse any* 2 weapons and their aspects. Takes Attacks and Specials from different weapons and combines them into a single weapon. Also supprts some AspectYoungMel aspects.
 
 Gameplay examples of what it looks like in action: 
 
 - [Xinth plus Persephone](https://www.youtube.com/watch?v=OkgxMJ7DG9Y)
 - [Moros plus Xinth](https://www.youtube.com/watch?v=6Wv3l-xk-m4)
-- [UI Test](https://www.youtube.com/watch?v=ZmoIs2aW9iM)
 
 ## Installation
 
@@ -30,13 +29,12 @@ If it feels like the fusion didn't apply properly try starting a run/reloading t
 
 ### [Experimental] Same weapon fusion
 
-There is also experimental support for fusing two aspects of same weapon. It can only be enabled through the ImGui menu (default keybind: INSERT).
+There is also experimental support for fusing two aspects of same weapon. It can only be enabled through the ImGui menu (default keybind: INSERT) or the r2modman config editor.
 
 ![ImGui menu](images/imgui.png)
 
 ## Some Limitations/Issues
 
-- ~~A weapon cannot be fused with another aspect of itself.~~
 - Aspect of Pan as primary does nothing
 - Minor Aspect of Hel doesn't disable some omega attacks during Valkyrie Form
 - Some aspects which didn't make sense to have just its specials didn't make it in (Eos, Moros, Medea)
