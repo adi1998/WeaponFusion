@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Add experimental support for same weapon fusion
 - Add Axe and Staff minor aspects for AspectYoungMel
 
 ## [0.6.3] - 2026-06-04

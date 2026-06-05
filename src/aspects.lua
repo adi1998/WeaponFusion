@@ -467,7 +467,7 @@ mod.AspectTraitData = {
 		},
 		AddOutgoingDamageModifiers =
 		{
-			ValidWeapons = { "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5", "WeaponTorch", "WeaponLob"},
+			ValidWeapons = { "WeaponAxeSpin", "WeaponStaffSwing5", "WeaponDagger5", "WeaponTorch", "WeaponLob", "WeaponSuitCharged"},
 			ValidSuitProjectile = true,
 		},
 		OnProjectileDeathFunction =
