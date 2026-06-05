@@ -173,6 +173,9 @@ sjson.hook(weaponAnimationFile, function (data)
             newEntry.Name = newEntry.Name .. "_FusionScreen"
             newEntry.ZWobbleSpeed = 0
             newEntry.ZWobbleDistance = 0
+            if value.Name == "WeaponDaggerFloatingIdleVertical" then
+                newEntry.Scale = 1.6
+            end
             table.insert(newData, newEntry)
         end
     end
@@ -270,6 +273,23 @@ local buttonGraphic = {
         },
 	},
 
+    -- hold button
+
+    {
+        Name = _PLUGIN.guid .. "HoldButtonAnimation",
+        FilePath = _PLUGIN.guid .. "\\hold_button\\circle_hold",
+        StartFrame = 1,
+        NumFrames = 60,
+        GroupName = "Combat_Menu_Overlay_Additive",
+    },
+
+    {
+        Name = _PLUGIN.guid .. "HoldButtonAnimationEmpty",
+        FilePath = _PLUGIN.guid .. "\\hold_button\\circle_hold0000",
+        NumFrames = 1,
+        HoldLastFrame = true,
+        GroupName = "Combat_Menu_Overlay_Additive",
+    }
 }
 
 sjson.hook(guiAnimationFile, function (data)

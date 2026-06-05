@@ -1,8 +1,8 @@
 mod.PrimaryWeaponOutline =
 {
 	R = 255,
-	G = 30,
-	B = 50,
+	G = 80,
+	B = 100,
 	Opacity = 1,
 	Thickness = 5,
 	Threshold = 0.6,
@@ -10,15 +10,15 @@ mod.PrimaryWeaponOutline =
 
 mod.SecondaryWeaponOutline =
 {
-	R = 30,
-	G = 50,
+	R = 100,
+	G = 150,
 	B = 255,
 	Opacity = 1,
 	Thickness = 5,
 	Threshold = 0.6,
 }
 
-mod.HoverWeaponOutlin =
+mod.HoverWeaponOutline =
 {
 	R = game.Color.AlliedOutline[1],
 	G = game.Color.AlliedOutline[2],
@@ -85,7 +85,7 @@ mod.FusionScreenData = {
         },
         WeaponDagger = {
             OffsetX = 0,
-            OffsetY = -40,
+            OffsetY = -20,
         },
         WeaponTorch = {
             OffsetX = 0,
@@ -112,9 +112,11 @@ mod.FusionScreenData = {
 		{
 			"BackgroundDim",
 			"Background",
+			"UnfuseHoldButtonGraphic",
 			"ActionBarBackground",
 			"WeaponImage",
-			"StatsBox",
+			"ActionBar",
+			"UnfuseButtonControlIcon"
 		},
 
         BackgroundDim =
@@ -182,9 +184,10 @@ mod.FusionScreenData = {
 			{
 				"CloseButton",
 				"CycleAspectButtonDown",
-				"CycleAspectButtonUp",
 				"FuseAndExitButton",
-				"RandomToggle"
+				"UnfuseAndExitButton",
+				"RandomToggle",
+				"CycleAspectButtonUp",
 			},
 
 			Children =
@@ -199,7 +202,7 @@ mod.FusionScreenData = {
 						OnPressedFunctionName = _PLUGIN.guid .. "." .. "CloseWeaponFusionScreen",
 						ControlHotkeys = { "Cancel", },
 					},
-					Text = "Menu_Exit",
+					Text = "{CN} EXIT",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				},
 
@@ -212,7 +215,47 @@ mod.FusionScreenData = {
 						ControlHotkeys = { "MenuRight" },
 						MouseControlHotkeys = { "MenuDown" }
 					},
-					Text = "{ML} {MR} CYCLE ASPECT",
+					Text = "  {MR} CYCLE ASPECT",
+					AltText = "  {MD} CYCLE ASPECT",
+					TextArgs = game.UIData.ContextualButtonFormatRight,
+				},
+
+				FuseAndExitButton =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnMouseOverFunctionName = "MouseOverContextualAction",
+						OnMouseOffFunctionName = "MouseOffContextualAction",
+						OnPressedFunctionName = _PLUGIN.guid .. "." .. "FuseAndExit",
+						ControlHotkeys = { "ItemPin" },
+					},
+					Text = "{IP} FUSE",
+					TextArgs = game.UIData.ContextualButtonFormatRight,
+				},
+
+				UnfuseAndExitButton =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnMouseOverFunctionName = "MouseOverContextualAction",
+						OnMouseOffFunctionName = "MouseOffContextualAction",
+						-- OnPressedFunctionName = _PLUGIN.guid .. "." .. "FuseAndExit",
+					},
+					Text = " HOLD {IP} UNFUSE",
+					TextArgs = game.UIData.ContextualButtonFormatRight,
+				},
+
+				RandomToggle =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnPressedFunctionName = _PLUGIN.guid .. "." .. "ToggleRandomEachRun",
+						ControlHotkeys = { "Reroll" }
+					},
+					Text = "{G} RANDOM EACH RUN",
 					TextArgs = game.UIData.ContextualButtonFormatRight,
 				},
 
@@ -227,34 +270,33 @@ mod.FusionScreenData = {
 					},
 					Text = "",
 				},
-
-				FuseAndExitButton =
-				{
-					Graphic = "ContextualActionButton",
-					Data =
-					{
-						OnMouseOverFunctionName = "MouseOverContextualAction",
-						OnMouseOffFunctionName = "MouseOffContextualAction",
-						OnPressedFunctionName = _PLUGIN.guid .. "." .. "FuseAndExit",
-						ControlHotkeys = { "ItemPin" },
-					},
-					Text = "{IP} FUSE AND EXIT",
-					TextArgs = game.UIData.ContextualButtonFormatRight,
-				},
-
-				RandomToggle =
-				{
-					Graphic = "ContextualActionButton",
-					Data =
-					{
-						OnPressedFunctionName = _PLUGIN.guid .. "." .. "ToggleRandomEachRun",
-						ControlHotkeys = { "Reroll" }
-					},
-					Text = "{G} RANDOM EACH RUN",
-					TextArgs = game.UIData.ContextualButtonFormatRight,
-				}
 			},
 		},
+
+		UnfuseButtonControlIcon = {
+			X = 972,
+			Y = game.UIData.ContextualButtonY,
+			Text = "{IP}",
+			TextArgs = {
+				FontSize = 20,
+				Width = 415,
+				LineSpacingBottom = 0,
+				Color = { 0.58, 0.34, 0.78, 1.0 },
+				Font = "LatoBold",
+				ShadowBlur = 0, ShadowColor = {0,0,0,0}, ShadowOffset={0, 3},
+				Justification = "CENTER",
+				VerticalJustification = "CENTER",
+				TextSymbolScale = 0.8,
+			}
+		},
+
+		UnfuseHoldButtonGraphic = {
+			AnimationName = _PLUGIN.guid .. "HoldButtonAnimationEmpty",
+			X = 972,
+			Y = game.UIData.ContextualButtonY,
+			Scale = 0.23,
+			Alpha = 1,
+		}
     }
 }
 
@@ -271,8 +313,6 @@ function mod.OpenWeaponFusionScreen()
         weaponComponent.Y = weaponComponent.Y + screen.ItemSpacingY
         screen.ComponentData["WeaponImageData2"..weaponName] = weaponComponent
     end
-
-	
 
     game.HideCombatUI( screen.Name )
 	game.wait( 0.1 )
@@ -305,6 +345,7 @@ function mod.OpenWeaponFusionScreen()
 			local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData1"..weaponName].Id
 			game.AddOutline( outlineData )
+			game.SetColor({Id = components["WeaponImageData1"..weaponName].Id, Color = { 220, 100, 100, 255 }})
 			screen.SelectedPrimary = index
 		end
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData2"..weaponName].Id })
@@ -312,6 +353,7 @@ function mod.OpenWeaponFusionScreen()
 			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData2"..weaponName].Id
 			game.AddOutline( outlineData )
+			game.SetColor({Id = components["WeaponImageData2"..weaponName].Id, Color = { 150, 100, 100, 255 }})
 			screen.SelectedSecondary = index
 		end
 		table.insert(screen.ScrollState, state)
@@ -339,8 +381,15 @@ function mod.OpenWeaponFusionScreen()
 	game.TeleportCursor({ OffsetX = screen.ItemStartX + screen.ButtonOffsetX, OffsetY = screen.ItemStartY, ForceUseCheck = true })
 
 	if config.random_fusion_each_run then
-		game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
+		local modify = game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
 	end
+
+	components.CycleAspectButtonDown.Text = "{ML} {MR} CYCLE ASPECT"
+	components.CycleAspectButtonDown.AltText = "{MU} {MD} CYCLE ASPECT"
+	components.UnfuseAndExitButton.Text = "HOLD         UNFUSE"  -- 9 spaces for icons to fit in
+
+	game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text = components.CycleAspectButtonDown.Text})
+	game.ModifyTextBox({Id = components.UnfuseAndExitButton.Id, Text = components.UnfuseAndExitButton.Text})
 
     screen.KeepOpen = true
 	screen.CanClose = true
@@ -543,18 +592,22 @@ function mod.SetAspectConfig(screen)
 		local playAnim
 		if button.WeaponType == "Primary" and screen.SelectedPrimary ~= button.Index then
 			game.RemoveOutline( {Id = components["WeaponImageData1"..screen.WeaponList[screen.SelectedPrimary].WeaponName].Id} )
+			game.SetColor({Id = components["WeaponImageData1"..screen.WeaponList[screen.SelectedPrimary].WeaponName].Id, Color = game.Color.White})
 			screen.SelectedPrimary = button.Index
 			local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 			outlineData.Id = components[button.WeaponKey].Id
 			game.AddOutline( outlineData )
+			game.SetColor({Id = outlineData.Id, Color = { 220, 100, 100, 255 }})
 			playAnim = true
 		end
 		if button.WeaponType == "Secondary" and screen.SelectedSecondary ~= button.Index then
 			game.RemoveOutline( {Id = components["WeaponImageData2"..screen.WeaponList[screen.SelectedSecondary].WeaponName].Id} )
+			game.SetColor({Id = components["WeaponImageData2"..screen.WeaponList[screen.SelectedSecondary].WeaponName].Id, Color = game.Color.White})
 			screen.SelectedSecondary = button.Index
 			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
 			outlineData.Id = components[button.WeaponKey].Id
 			game.AddOutline( outlineData )
+			game.SetColor({Id = outlineData.Id, Color = { 100, 100, 255, 255 }})
 			playAnim = true
 		end
 
@@ -569,11 +622,6 @@ function mod.SetAspectConfig(screen)
 		game.wait(0.06)
 		game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.06, EaseIn = 0.9, EaseOut = 1.0})
 	end
-	if screen.SelectedPrimary == screen.SelectedSecondary then
-		game.ModifyTextBox({ Id = components.FuseAndExitButton.Id, Text = "{IP} UNFUSE AND EXIT" })
-	else
-		game.ModifyTextBox({ Id = components.FuseAndExitButton.Id, Text = "{IP} FUSE AND EXIT" })
-	end
 end
 
 function mod.MouseOverMinorAspect(button)
@@ -583,18 +631,16 @@ function mod.MouseOverMinorAspect(button)
 	local components = button.Screen.Components
 	if not ( button.Index == screen.SelectedPrimary and button.WeaponType == "Primary" or
 			 button.Index == screen.SelectedSecondary and button.WeaponType == "Secondary" ) then
-		local outlineData = game.ShallowCopyTable( mod.HoverWeaponOutlin )
+		local outlineData = game.ShallowCopyTable( mod.HoverWeaponOutline )
 		outlineData.Id = components[button.WeaponKey].Id
 		game.AddOutline( outlineData )
 	end
 	mod.CreateAspectInfoItem(button)
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.5, Duration = 0.15})
 	if game.GetConfigOptionValue({ Name = "UseMouse" }) then
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 0, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 0, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.AltText})
 	else
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 1, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 1, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.Text})
 	end
 end
 
@@ -605,6 +651,7 @@ function mod.MouseOffMinorAspect(button)
 	screen.SelectedItem = nil
 	local components = button.Screen.Components
 	game.RemoveOutline( {Id = components[button.WeaponKey].Id} )
+	-- game.SetColor({Id = components[button.WeaponKey].Id, Color = game.Color.White})
 	if button.Index == screen.SelectedPrimary and button.WeaponType == "Primary" then
 		local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 		outlineData.Id = components[button.WeaponKey].Id
@@ -617,11 +664,9 @@ function mod.MouseOffMinorAspect(button)
 	end
 	game.SetScale({Id = components[button.WeaponKey].Id, Fraction = 1.3, Duration = 0.15})
 	if game.GetConfigOptionValue({ Name = "UseMouse" }) then
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 0, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 0, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.AltText})
 	else
-		game.SetAlpha({Id = components.CycleAspectButtonDown.Id, Fraction = 1, Duration = 0.14})
-		game.SetAlpha({Id = components.CycleAspectButtonUp.Id, Fraction = 1, Duration = 0.14})
+		game.ModifyTextBox({Id = components.CycleAspectButtonDown.Id, Text =  components.CycleAspectButtonDown.Text})
 	end
 end
 
@@ -692,22 +737,56 @@ function mod.CycleAspectsUp(screen)
 end
 
 function mod.FuseAndExit(screen)
-	if screen.SelectedPrimary == screen.SelectedSecondary then
-		mod.UnequipWeapons()
-		config.last_primary = "WeaponStaffSwing"
-		config.last_secondary = "WeaponStaffSwing"
-		config.last_aspect = "BaseStaffAspect_Secondary"
-		UnfuseWeapons()
-		mod.EquipWeapons()
-		game.RequestPreRunLoadoutChangeSave()
-		mod.CloseWeaponFusionScreen(screen)
+	game.wait(0.2)
+
+	if game.IsControlDown({ Name = "ItemPin" }) then
+		local notifyName = _PLUGIN.guid .. "HoldFuseNotify"
+		local threshold  = 1
+		game.NotifyOnControlReleased({
+			Names   = { "ItemPin" },
+			Notify  = notifyName,
+			Timeout = threshold,
+		})
+		game.SetAnimation({DestinationId = screen.Components.UnfuseHoldButtonGraphic.Id, Name = _PLUGIN.guid .. "HoldButtonAnimation"})
+		game.Shake({ Id = screen.Components.UnfuseHoldButtonGraphic.Id, Distance = 1, Speed = 200, Duration = 1 })
+		local chargeSoundId = game.PlaySound({Name = "/SFX/Player Sounds/MelinoeAxePhysicalChargeUp"})
+		game.waitUntil( notifyName )
+		game.StopSound({Id = chargeSoundId})
+		local timedOut = game._eventTimeoutRecord and game._eventTimeoutRecord[ notifyName ]
+		if game._eventTimeoutRecord then game._eventTimeoutRecord[ notifyName ] = nil end
+		if timedOut then
+			local completeSoundId =  game.PlaySound({Name = "/SFX/Player Sounds/NyxTurboBoost"})
+			game.SetVolume({Id = completeSoundId, Value = 0.8})
+			game.Flash({ Id = screen.Components.UnfuseHoldButtonGraphic.Id, Speed = 0.8, MinFraction = 0.1, MaxFraction = 0.3, Color = game.Color.White })
+			mod.UnequipWeapons()
+			config.last_primary = "WeaponStaffSwing"
+			config.last_secondary = "WeaponStaffSwing"
+			config.last_aspect = ""
+			UnfuseWeapons()
+			mod.EquipWeapons()
+			game.RequestPreRunLoadoutChangeSave()
+			mod.CloseWeaponFusionScreen(screen)
+			return
+		end
+		game.SetAnimation({DestinationId = screen.Components.UnfuseHoldButtonGraphic.Id, Name = _PLUGIN.guid .. "HoldButtonAnimationEmpty"})
 		return
 	end
+
 	local state = screen.ScrollState
 	local primaryWeapon = screen.WeaponList[screen.SelectedPrimary].WeaponName
 	local secondaryWeapon = screen.WeaponList[screen.SelectedSecondary].WeaponName
 	local primaryAspect = game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primaryWeapon][state[screen.SelectedPrimary].PrimaryIndex]
 	local secondaryAspect = WeaponMinorAspectData[secondaryWeapon][state[screen.SelectedSecondary].SecondaryIndex]
+
+	local sameAspect = primaryAspect == string.gsub(secondaryAspect, "_Secondary", "")
+	local sameWeapon = (primaryWeapon == secondaryWeapon and not config.allow_same_weapon_fusion)
+
+	if sameAspect or sameWeapon then
+		game.Shake({ Id = screen.Components["WeaponImageData1"..primaryWeapon].Id, Distance = 7, Speed = 700, Duration = 0.3 })
+		game.Shake({ Id = screen.Components["WeaponImageData2"..primaryWeapon].Id, Distance = 7, Speed = 700, Duration = 0.3 })
+		game.PlaySound({ Name = "/SFX/WrathOver", Id = game.CurrentRun.Hero.ObjectId })
+		return
+	end
 
 	print("Fusing", primaryAspect, primaryWeapon, secondaryAspect, secondaryWeapon)
 

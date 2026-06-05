@@ -335,6 +335,10 @@ mod.AspectTraitData = {
 				ExcludeLinked = true,
 			},
 		},
+		OnExpire =
+		{
+			FunctionName = "EndNergalBuff"
+		},
 		SetupFunction =
 		{
 			Threaded = true,

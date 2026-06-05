@@ -283,6 +283,7 @@ end
 modutil.mod.Path.Wrap("HandleAttachRecord", function (base, weaponData, functionArgs, triggerArgs)
 	if weaponData.Name == "WeaponTorchSpecial" and game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) then
 		triggerArgs.NumProjectiles = triggerArgs.NumProjectiles or 2
+		triggerArgs.ProjectileName = triggerArgs.ProjectileName or "ProjectileTorchOrbitEx"
 	end
     base(weaponData, functionArgs, triggerArgs)
     mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
