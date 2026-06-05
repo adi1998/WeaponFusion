@@ -56,7 +56,7 @@ function DrawMenu()
                 if rom.ImGui.Selectable(displayName, weaponName == config.primary) then
                     if weaponName ~= config.primary then
                         config.primary = weaponName
-                        if config.secondary == config.primary then
+                        if config.secondary == config.primary and not config.allow_same_weapon_fusion then
                             config.secondary = WeaponDisplayOrder[ index%(#WeaponDisplayOrder) + 1 ]
                         end
                     end
@@ -72,7 +72,7 @@ function DrawMenu()
         if rom.ImGui.BeginCombo("###secondary", WeaponNameDisplayNameMap[config.secondary]) then
             for _, weaponName in ipairs(WeaponDisplayOrder) do
                 local displayName = WeaponNameDisplayNameMap[weaponName]
-                if weaponName ~= config.primary and rom.ImGui.Selectable(displayName, weaponName == config.secondary) then
+                if (weaponName ~= config.primary or config.allow_same_weapon_fusion) and rom.ImGui.Selectable(displayName, weaponName == config.secondary) then
                     if weaponName ~= config.secondary then
                         config.secondary = weaponName
                         config.aspect = WeaponMinorAspectData[weaponName][1]
@@ -127,5 +127,10 @@ function DrawMenu()
     local value, checked = rom.ImGui.Checkbox("Random fusion each run", config.random_fusion_each_run)
     if checked then
         config.random_fusion_each_run = value
+    end
+
+    value, checked = rom.ImGui.Checkbox("Allow same weapon fusion\nExperimental setting with minimal testing", config.allow_same_weapon_fusion)
+    if checked then
+        config.allow_same_weapon_fusion = value
     end
 end

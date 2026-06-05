@@ -506,13 +506,11 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
 
     print("Fusing", primarySource, secondarySource, secondaryAspect)
 
-    if primarySource ~= secondarySource and mod.AspectTraitData[secondaryAspect] then
+    if (primarySource ~= secondarySource or config.allow_same_weapon_fusion) and mod.AspectTraitData[secondaryAspect] then
         for _, traitName in ipairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource]) do
             game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = secondaryAspect
         end
     end
-
-    game.SetupRunData()
 end
 
 function UnfuseWeapons()
@@ -531,6 +529,8 @@ UnfuseWeapons()
 if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary] then
     FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
 end
+
+game.SetupRunData()
 
 modutil.mod.Path.Wrap("SetupMap", function(base, ...)
     game.LoadPackages({Names = {"WeaponStaffSwing", "WeaponAxe", "WeaponDagger", "WeaponTorch", "WeaponSuit", "WeaponLob"}})
