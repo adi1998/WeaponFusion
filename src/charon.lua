@@ -7,7 +7,9 @@ game.TraitData.AxeArmCastAspect.OnProjectileDeathFunction = {
     }
 }
 
-table.insert(game.TraitData.AxeArmCastAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileThrowCharged")
+if game.TraitData.AxeArmCastAspect.OnProjectileCreationFunction then
+	table.insert(game.TraitData.AxeArmCastAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileThrowCharged")
+end
 
 function mod.CheckAxeCastArm(triggerArgs, functionArgs)
     local intersectionProjectiles = game.GetInProjectilesBlast({ ProjectileId = triggerArgs.ProjectileId, DestinationName = "ProjectileCast", UseDamageRadius = true, })

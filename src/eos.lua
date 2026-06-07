@@ -1,4 +1,6 @@
-game.TraitData.TorchSprintRecallAspect.ChargeStageModifiers.ValidWeapons = {"WeaponTorchSpecial"}
+if game.TraitData.TorchSprintRecallAspect.ChargeStageModifiers then
+	game.TraitData.TorchSprintRecallAspect.ChargeStageModifiers.ValidWeapons = {"WeaponTorchSpecial"}
+end
 
 function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
     local isEx = game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs )

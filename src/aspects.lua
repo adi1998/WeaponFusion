@@ -3577,7 +3577,9 @@ for traitName, traitData in pairs(mod.AspectTraitData) do
     game.ProcessDataInheritance( traitData, game.TraitData )
 end
 
-game.TraitData["StaffRaiseDeadAspect"].ManaCostModifiers.WeaponNames = {"WeaponStaffBall"}
+if game.TraitData["StaffRaiseDeadAspect"].ManaCostModifiers then
+	game.TraitData["StaffRaiseDeadAspect"].ManaCostModifiers.WeaponNames = {"WeaponStaffBall"}
+end
 
 game.ProjectileData.WomboStrike.HitScreenshake = nil
 game.ProjectileData.WomboStrike.HitSimSlowCustomName = nil
