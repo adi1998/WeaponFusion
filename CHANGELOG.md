@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- Minor compatibility patch for dx2_weapons, proper compatibility still not guaranteed but the mods should atleast load without issue.
+- Minor compatibility patch for dx2_weapons, proper compatibility still not guaranteed but the mods should atleast load without issue now.
+- Fix primary weapon selection allowing locked weapon selection
 
 ## [0.7.0] - 2026-06-05
 
