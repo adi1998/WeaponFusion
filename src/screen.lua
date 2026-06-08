@@ -478,6 +478,23 @@ function mod.OpenWeaponFusionScreen()
 	-- print("compnents")
 	-- print(mod.dump(screen.Components, 0, 2))
 
+	screen.WeaponList = {}
+
+	local weaponUpgrades = game.DeepCopyTable(game.ScreenData.WeaponUpgradeScreen.DisplayOrder)
+
+	for weaponKit, upgradeList in pairs(weaponUpgrades) do
+		for index, upgrade in ipairs(upgradeList) do
+			if not game.GameState.WeaponsUnlocked[upgrade] then
+				upgradeList[index] = nil
+			end
+		end
+		weaponUpgrades[weaponKit] = game.CollapseTable(upgradeList)
+	end
+
+	for _, weaponName in ipairs(WeaponDisplayOrder) do
+		table.insert(screen.WeaponList,{ WeaponName = weaponName, PrimaryAspects = weaponUpgrades[weaponName], SecondaryAspects = WeaponMinorAspectData[weaponName] })
+	end
+
 	screen.ScrollState = {}
 
 	screen.SelectedPrimary = 1
@@ -488,7 +505,7 @@ function mod.OpenWeaponFusionScreen()
         local weaponData = game.WeaponData[weaponName]
         local traitData1 = game.TraitData[game.GameState.LastWeaponUpgradeName[weaponName]] or game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
         local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
-		state.PrimaryIndex = game.GetIndex(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName], traitData1.Name)
+		state.PrimaryIndex = game.GetIndex(screen.WeaponList[index].PrimaryAspects, traitData1.Name)
 		state.SecondaryIndex = 1
 		if game.TraitData[config.last_aspect] and game.Contains(WeaponMinorAspectData[weaponName], config.last_aspect) then
 			traitData2 = game.TraitData[config.last_aspect:gsub("_Secondary$", "")]
@@ -513,22 +530,6 @@ function mod.OpenWeaponFusionScreen()
 		table.insert(screen.ScrollState, state)
     end
 
-	screen.WeaponList = {}
-
-	local weaponUpgrades = game.DeepCopyTable(game.ScreenData.WeaponUpgradeScreen.DisplayOrder)
-
-	for weaponKit, upgradeList in pairs(weaponUpgrades) do
-		for index, upgrade in ipairs(upgradeList) do
-			if not game.GameState.WeaponsUnlocked[upgrade] then
-				upgradeList[index] = nil
-			end
-		end
-		weaponUpgrades[weaponKit] = game.CollapseTable(upgradeList)
-	end
-
-	for _, weaponName in ipairs(WeaponDisplayOrder) do
-		table.insert(screen.WeaponList,{ WeaponName = weaponName, PrimaryAspects = weaponUpgrades[weaponName], SecondaryAspects = WeaponMinorAspectData[weaponName] })
-	end
 
 	mod.CreateMinorAspectButtons(screen)
 
@@ -856,9 +857,9 @@ function mod.CycleAspectsDown(screen)
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData"..row..weaponName].Id })
 	else
 		local aspectIndex = screen.ScrollState[index].PrimaryIndex
-		local numAspects = #(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName])
-		local newAspectIndex =  aspectIndex % numAspects + 1
-		local traitData1 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][newAspectIndex]]
+		local numAspects = #(screen.WeaponList[index].PrimaryAspects)
+		local newAspectIndex =  (aspectIndex - 1 + 1) % numAspects + 1
+		local traitData1 = game.TraitData[screen.WeaponList[index].PrimaryAspects[newAspectIndex]]
 		screen.ScrollState[index].PrimaryIndex = newAspectIndex
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 	end
@@ -889,9 +890,9 @@ function mod.CycleAspectsUp(screen)
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData"..row..weaponName].Id })
 	else
 		local aspectIndex = screen.ScrollState[index].PrimaryIndex
-		local numAspects = #(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName])
-		local newAspectIndex =  (aspectIndex - 2) % numAspects + 1
-		local traitData1 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][newAspectIndex]]
+		local numAspects = #(screen.WeaponList[index].PrimaryAspects)
+		local newAspectIndex =  (aspectIndex - 1 - 1) % numAspects + 1
+		local traitData1 = game.TraitData[screen.WeaponList[index].PrimaryAspects[newAspectIndex]]
 		screen.ScrollState[index].PrimaryIndex = newAspectIndex
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 	end
