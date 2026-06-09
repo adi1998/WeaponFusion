@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Block fusion menu unless all weapons are unlocked
+
 ## [0.7.1] - 2026-06-08
 
 - Minor compatibility patch for dx2_weapons, proper compatibility still not guaranteed but the mods should atleast load without issue now.

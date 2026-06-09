@@ -484,7 +484,7 @@ function mod.OpenWeaponFusionScreen()
 
 	for weaponKit, upgradeList in pairs(weaponUpgrades) do
 		for index, upgrade in ipairs(upgradeList) do
-			if not game.GameState.WeaponsUnlocked[upgrade] then
+			if not game.GameState.WeaponsUnlocked[upgrade] and index ~= 1 then
 				upgradeList[index] = nil
 			end
 		end
@@ -529,7 +529,6 @@ function mod.OpenWeaponFusionScreen()
 		end
 		table.insert(screen.ScrollState, state)
     end
-
 
 	mod.CreateMinorAspectButtons(screen)
 
@@ -978,3 +977,18 @@ end
 
 game.HubRoomData.Hub_PreRun.ObstacleData[558210].UseTextTalkAndSpecial = "{I} Inspect \n {SI} Weapon Fusion"
 game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractFunctionName = _PLUGIN.guid .. "." .. "OpenWeaponFusionScreen"
+game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractGameStateRequirements =
+{
+	{
+		Path = { "GameState", "WeaponsUnlocked", },
+		HasAll =
+		{
+			"WeaponStaffSwing",
+			"WeaponDagger",
+			"WeaponTorch",
+			"WeaponAxe",
+			"WeaponLob",
+			"WeaponSuit",
+		}
+	}
+}
