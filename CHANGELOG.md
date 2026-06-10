@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.7.2] - 2026-06-10
+
 - Block fusion menu unless all weapons are unlocked
 
 ## [0.7.1] - 2026-06-08
@@ -105,7 +107,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.7.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.7.2...HEAD
+[0.7.2]: https://github.com/adi1998/WeaponFusion/compare/0.7.1...0.7.2
 [0.7.1]: https://github.com/adi1998/WeaponFusion/compare/0.7.0...0.7.1
 [0.7.0]: https://github.com/adi1998/WeaponFusion/compare/0.6.3...0.7.0
 [0.6.3]: https://github.com/adi1998/WeaponFusion/compare/0.6.2...0.6.3
