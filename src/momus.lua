@@ -899,3 +899,12 @@ modutil.mod.Path.Wrap("StartCastRepeatThread", function (base, triggerArgs, func
 	end
 	return base(triggerArgs, functionArgs)
 end)
+
+modutil.mod.Path.Wrap("ClearOriginMarker", function (base, triggerArgs, functionArgs)
+	if triggerArgs.name == "ProjectileCast" and triggerArgs.Armed then
+		if game.HeroHasTrait("StaffClearCastAspect_Secondary") or game.HeroHasTrait("StaffClearCastAspect") then
+			game.SessionMapState.InvalidRepeatCastIds[game.SessionMapState.FamiliarCastProjectileId or -1] = true
+		end
+	end
+	return base(triggerArgs, functionArgs)
+end)

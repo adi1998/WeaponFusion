@@ -2539,6 +2539,19 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
+				WeaponNames = { "WeaponStaffSwing5"},
+				ExcludeLinked = true,
+				WeaponProperties = 
+				{
+					NumProjectileWaves = 3,
+				},
+			},
+			{
+				WeaponName = "WeaponStaffSwing5",
+				WeaponProperty = "ProjectileWaveInterval",
+				ChangeValue = 10,	--Handled via StartPrimaryRepeatThread
+			},
+			{
 				FalseTraitName = "AxeFreeSpinTrait",
 				WeaponName = "WeaponAxeSpin",
 				WeaponProperty = "RemoveControlOnCharge2",
