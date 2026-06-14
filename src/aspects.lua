@@ -1,3 +1,6 @@
+local artemisValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack", "WeaponTransformSpecial"} )
+game.RemoveValueAndCollapse(artemisValidWeapons, "WeaponAxeSpin")
+
 mod.AspectTraitData = {
     AxeArmCastAspect_Secondary =
 	{
@@ -2245,8 +2248,13 @@ mod.AspectTraitData = {
 		},
 		OnWeaponFiredFunctions =
 		{
-			ValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack", "WeaponTransformSpecial"} ),
+			ValidWeapons = artemisValidWeapons,
 			FunctionName = "CheckDaggerCritCharges",
+		},
+		OnProjectileCreationFunction =
+		{
+			ValidProjectiles = {"ProjectileAxeSpin"},
+			Name = _PLUGIN.guid .. "." .. "CheckDaggerCritChargesProjectile"
 		},
 		WeaponSpeedMultiplier =
 		{

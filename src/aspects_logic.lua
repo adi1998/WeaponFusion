@@ -610,3 +610,29 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 		base(weaponData, traitArgs, triggerArgs)
 	end
 end)
+
+function mod.CheckDaggerCritChargesProjectile(triggerArgs, functionArgs)
+	local weaponData = game.WeaponData.WeaponAxeSpin
+	if game.MapState.DaggerCharges and game.MapState.DaggerCharges >= 1 then
+		game.MapState.CritVolleys = game.MapState.CritVolleys or {}
+		game.MapState.CritVolleys[weaponData.Name] = game.MapState.CritVolleys[weaponData.Name] or {}
+
+		game.IncrementTableValue(game.MapState.CritVolleys[weaponData.Name], triggerArgs.ProjectileVolley, 1)
+		local numProjectiles = 1
+
+		game.MapState.DaggerCharges = game.MapState.DaggerCharges - numProjectiles
+
+		for k,v in ipairs( game.SessionMapState.DaggerCritTicks ) do
+			if k > game.MapState.DaggerCharges then
+				game.RemoveArtemisDaggerTick( k )
+			end
+		end
+
+		if game.MapState.DaggerCharges <= 0 then
+			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+			game.thread( game.DaggerBlockClearedPresentation, chargeFunctionArgs )
+			game.MapState.DaggerCharges = 0
+		end
+	end
+end
