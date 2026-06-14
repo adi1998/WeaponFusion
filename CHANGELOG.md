@@ -4,6 +4,8 @@
 
 - Minor Momus and Circe fixes for same weapon fusion
 - Fix Exceptional Talent for Minor Aspect of Hel
+- Fix Artemis not boosting Supay Attacks
+- Fix Axe not consuming Artemis crit charges
 
 ## [0.7.2] - 2026-06-10
 
