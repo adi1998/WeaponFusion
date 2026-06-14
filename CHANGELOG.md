@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Minor Momus and Circe fixes for same weapon fusion
+- Fix Exceptional Talent for Minor Aspect of Hel
+
 ## [0.7.2] - 2026-06-10
 
 - Block fusion menu unless all weapons are unlocked

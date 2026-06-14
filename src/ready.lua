@@ -491,6 +491,67 @@ end
 
 mod.PatchBoonVfx()
 
+function mod.PatchChargeStageModifiers()
+    local boonList = {
+        "DoubleExManaBoon"
+    }
+    for _, boon in ipairs(boonList) do
+        local traitData = game.TraitData[boon]
+        local newChargeStageModifier = {}
+        local replaceChargeStageModifier = {}
+        for modifierIndex, modifier in ipairs(traitData.ChargeStageModifiersArray) do
+            if game.Contains(modifier.ValidWeapons or {}, "WeaponStaffBall") then
+                local duplicate = 0
+                if modifier.TraitName and mod.AspectTraitData[modifier.TraitName.."_Secondary"] then
+                    local newModifier = game.DeepCopyTable(modifier)
+                    newModifier.TraitName = modifier.TraitName .. "_Secondary"
+                    table.insert(newChargeStageModifier, newModifier)
+                    duplicate = duplicate + 1
+                end
+                if modifier.FalseTraitName and mod.AspectTraitData[modifier.TraitName.."_Secondary"] then
+                    local newModifier = game.DeepCopyTable(modifier)
+                    newModifier.FalseTraitName = nil
+                    newModifier.FalseTraitNames = { modifier.FalseTraitName, modifier.FalseTraitName .. "_Secondary" }
+                    replaceChargeStageModifier[modifierIndex] = newModifier
+                    duplicate = duplicate + 1
+                end
+                if modifier.TraitNames then
+                    local newModifier
+                    for index, traitName in ipairs(modifier.TraitNames) do
+                        if mod.AspectTraitData[traitName.."_Secondary"] then
+                            newModifier = game.DeepCopyTable(modifier)
+                            newModifier.TraitNames[index] = traitName .. "_Secondary"
+                            table.insert(newChargeStageModifier, newModifier)
+                            duplicate = duplicate + 1
+                        end
+                    end
+                end
+                if modifier.FalseTraitNames then
+                    local newModifier = game.DeepCopyTable(modifier)
+                    for index, traitName in ipairs(modifier.FalseTraitNames) do
+                        if mod.AspectTraitData[traitName.."_Secondary"] then
+                            table.insert(newModifier.FalseTraitNames, traitName .. "_Secondary")
+                            replaceChargeStageModifier[modifierIndex] = newModifier
+                            duplicate = duplicate + 1
+                        end
+                    end
+                end
+                if duplicate > 1 then
+                    print("mulitple ChargeStageModifier patches detectd for", boon, modifierIndex, mod.dump(modifier))
+                end
+            end
+        end
+        for _, modifier in ipairs(newChargeStageModifier) do
+            table.insert(traitData.ChargeStageModifiersArray, modifier)
+        end
+        for index, modifier in pairs(replaceChargeStageModifier) do
+            traitData.ChargeStageModifiersArray[index] = modifier
+        end
+    end
+end
+
+mod.PatchChargeStageModifiers()
+
 function mod.PatchHeroWeaponSets(primarySource, secondarySource)
     local primaryData = mod.WeaponData[primarySource]
     local secondaryData = mod.WeaponData[secondarySource]
