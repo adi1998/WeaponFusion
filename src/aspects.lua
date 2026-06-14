@@ -2253,7 +2253,7 @@ mod.AspectTraitData = {
 		},
 		OnProjectileCreationFunction =
 		{
-			ValidProjectiles = {"ProjectileAxeSpin"},
+			ValidProjectiles = {"ProjectileAxeSpin", "ProjectileTorchBall", "ProjectileTorchSupayBallEx"},
 			Name = _PLUGIN.guid .. "." .. "CheckDaggerCritChargesProjectile"
 		},
 		WeaponSpeedMultiplier =

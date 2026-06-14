@@ -611,28 +611,58 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 	end
 end)
 
-function mod.CheckDaggerCritChargesProjectile(triggerArgs, functionArgs)
-	local weaponData = game.WeaponData.WeaponAxeSpin
-	if game.MapState.DaggerCharges and game.MapState.DaggerCharges >= 1 then
-		game.MapState.CritVolleys = game.MapState.CritVolleys or {}
-		game.MapState.CritVolleys[weaponData.Name] = game.MapState.CritVolleys[weaponData.Name] or {}
+modutil.mod.Path.Wrap("CheckDaggerCritCharges", function (base, weaponData, functionArgs, triggerArgs)
+	if game.HeroHasTrait("TorchAutofireAspect") or weaponData.Name == "WeaponAxeSpin" then
+		return
+	end
+	return base(weaponData, functionArgs, triggerArgs)
+end)
 
-		game.IncrementTableValue(game.MapState.CritVolleys[weaponData.Name], triggerArgs.ProjectileVolley, 1)
-		local numProjectiles = 1
-
-		game.MapState.DaggerCharges = game.MapState.DaggerCharges - numProjectiles
-
-		for k,v in ipairs( game.SessionMapState.DaggerCritTicks ) do
-			if k > game.MapState.DaggerCharges then
-				game.RemoveArtemisDaggerTick( k )
+modutil.mod.Path.Wrap("CalculateCritChance", function (base, attacker, victim, weaponData, triggerArgs)
+	local critChance = { CritChance = base(attacker, victim, weaponData, triggerArgs) }
+	if attacker ~= nil and attacker.OutgoingCritModifiers ~= nil and ( not weaponData or not weaponData.IgnoreOutgoingCritModifiers ) then
+		for i, modifierData in ipairs( attacker.OutgoingCritModifiers ) do
+			local validProjectile = modifierData.ValidProjectilesLookup == nil or ( triggerArgs.SourceProjectile and modifierData.ValidProjectilesLookup[ triggerArgs.SourceProjectile ] ~= nil and triggerArgs.EffectName == nil )
+			local validWeapon = modifierData.ValidWeaponsLookup == nil or ( modifierData.ValidWeaponsLookup[ triggerArgs.SourceWeapon ] ~= nil and triggerArgs.EffectName == nil )
+			if validWeapon and validProjectile then
+				if attacker == game.CurrentRun.Hero then
+					if modifierData.ValidVolleyChance and game.MapState[_PLUGIN.guid .. "CritVolleys"] and game.MapState[_PLUGIN.guid .. "CritVolleys"][triggerArgs.SourceWeapon] and triggerArgs.ProjectileId and game.MapState[_PLUGIN.guid .. "CritVolleys"][triggerArgs.SourceWeapon][triggerArgs.ProjectileId] then
+						game.addCritMultiplier( modifierData, modifierData.ValidVolleyChance, critChance )
+					end
+				end
 			end
 		end
+	end
+	return critChance.CritChance
+end)
 
-		if game.MapState.DaggerCharges <= 0 then
-			local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
-			local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
-			game.thread( game.DaggerBlockClearedPresentation, chargeFunctionArgs )
-			game.MapState.DaggerCharges = 0
+function mod.CheckDaggerCritChargesProjectile(triggerArgs, functionArgs)
+	local weaponData = game.WeaponData.WeaponTorch
+	if triggerArgs.name == "ProjectileAxeSpin" then
+		weaponData = game.WeaponData.WeaponAxeSpin
+	end
+	if weaponData.Name == "WeaponAxeSpin" or game.HeroHasTrait("TorchAutofireAspect") then
+		if game.MapState.DaggerCharges and game.MapState.DaggerCharges >= 1 then
+			game.MapState[_PLUGIN.guid .. "CritVolleys"] = game.MapState[_PLUGIN.guid .. "CritVolleys"] or {}
+			game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponData.Name] = game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponData.Name] or {}
+
+			game.IncrementTableValue(game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponData.Name], triggerArgs.ProjectileId, 1)
+			local numProjectiles = 1
+
+			game.MapState.DaggerCharges = game.MapState.DaggerCharges - numProjectiles
+
+			for k,v in ipairs( game.SessionMapState.DaggerCritTicks ) do
+				if k > game.MapState.DaggerCharges then
+					game.RemoveArtemisDaggerTick( k )
+				end
+			end
+
+			if game.MapState.DaggerCharges <= 0 then
+				local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+				local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+				game.thread( game.DaggerBlockClearedPresentation, chargeFunctionArgs )
+				game.MapState.DaggerCharges = 0
+			end
 		end
 	end
 end
