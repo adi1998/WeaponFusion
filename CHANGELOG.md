@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.7.3] - 2026-06-16
+
 - Minor Momus and Circe fixes for same weapon fusion
 - Fix Exceptional Talent for Minor Aspect of Hel
 - Fix Artemis not boosting Supay Attacks
@@ -113,7 +115,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.7.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.7.3...HEAD
+[0.7.3]: https://github.com/adi1998/WeaponFusion/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/adi1998/WeaponFusion/compare/0.7.1...0.7.2
 [0.7.1]: https://github.com/adi1998/WeaponFusion/compare/0.7.0...0.7.1
 [0.7.0]: https://github.com/adi1998/WeaponFusion/compare/0.6.3...0.7.0
