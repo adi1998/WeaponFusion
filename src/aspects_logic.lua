@@ -666,3 +666,26 @@ function mod.CheckDaggerCritChargesProjectile(triggerArgs, functionArgs)
 		end
 	end
 end
+
+function mod.CheckAxeFreeSpinCrit(victim, functionArgs, triggerArgs)
+	if game.HeroHasTrait("AxeFreeSpinTrait") and game.CheckCooldown(_PLUGIN.guid .. "FreeSpinCrit", 0.15) then
+		if game.MapState.DaggerCharges and game.MapState.DaggerCharges >= 1 then
+			game.MapState.DaggerCharges = game.MapState.DaggerCharges - 1
+			for k,v in ipairs( game.SessionMapState.DaggerCritTicks ) do
+				if k > game.MapState.DaggerCharges then
+					game.RemoveArtemisDaggerTick( k )
+				end
+			end
+			if game.MapState.DaggerCharges <= 0 then
+				local traitData = game.GetHeroTrait("DaggerBlockAspect_Secondary")
+				local chargeFunctionArgs = traitData.OnWeaponChargeFunctions.FunctionArgs
+				game.thread( game.DaggerBlockClearedPresentation, chargeFunctionArgs )
+				game.MapState.DaggerCharges = 0
+			end
+			if game.MapState.DaggerCharges <= 0 then
+				game.wait(0.1)
+				game.MapState[_PLUGIN.guid .. "CritVolleys"]["WeaponAxeSpin"] = {}
+			end
+		end
+	end
+end

@@ -6,6 +6,7 @@
 - Fix Exceptional Talent for Minor Aspect of Hel
 - Fix Artemis not boosting Supay Attacks
 - Fix Axe not consuming Artemis crit charges
+- Fix Psychic Whirlwind breaking daggers omega special
 
 ## [0.7.2] - 2026-06-10
 

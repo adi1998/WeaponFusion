@@ -537,7 +537,7 @@ function mod.PatchChargeStageModifiers()
                     end
                 end
                 if duplicate > 1 then
-                    print("mulitple ChargeStageModifier patches detectd for", boon, modifierIndex, mod.dump(modifier))
+                    print("mulitple ChargeStageModifier patches detected for", boon, modifierIndex, mod.dump(modifier))
                 end
             end
         end

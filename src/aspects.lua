@@ -2256,6 +2256,11 @@ mod.AspectTraitData = {
 			ValidProjectiles = {"ProjectileAxeSpin", "ProjectileTorchBall", "ProjectileTorchSupayBallEx"},
 			Name = _PLUGIN.guid .. "." .. "CheckDaggerCritChargesProjectile"
 		},
+		OnEnemyDamagedAction =
+		{
+			ValidProjectiles = {"ProjectileAxeSpin"},
+			FunctionName = _PLUGIN.guid .. "." .. "CheckAxeFreeSpinCrit",
+		},
 		WeaponSpeedMultiplier =
 		{
 			WeaponNames = {"WeaponStaffSwing5", "WeaponAxeSpin", "WeaponTorch", "WeaponSuitCharged", "WeaponLob"},
@@ -3611,3 +3616,7 @@ game.ProjectileData.WomboStrike.FireRumbleParameters = nil
 game.WeaponData.WeaponDagger5.HitSimSlowParameters = nil
 game.WeaponData.WeaponDagger5.HitRumbleParameters = nil
 game.WeaponData.WeaponDagger5.HitScreenshake = nil
+
+if game.TraitData.AxeFreeSpinTrait.ChargeStageModifiers then
+	game.TraitData.AxeFreeSpinTrait.ChargeStageModifiers.ValidWeapons = {"WeaponAxeSpin"}
+end
