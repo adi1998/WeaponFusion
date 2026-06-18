@@ -1969,7 +1969,10 @@ mod.AspectTraitData = {
 				"ProjectileTorchBall",
 				"ProjectileTorchGhost",
 				"ProjectileLobBullet",
-				"ProjectileLob"
+				"ProjectileLob",
+				"ProjectileSuit",
+				"ProjectileSuit2",
+				"ProjectileSuitDouble",
 			},
 			Args =
 			{
@@ -1982,8 +1985,9 @@ mod.AspectTraitData = {
 				RetargetChance = 0,	-- Chance split missiles can hit the same target
 				ProjectileOffsets =
 				{
-					-- ProjectileSuit = 200,
-					-- ProjectileSuit2 = 250,
+					ProjectileSuit = 200,
+					ProjectileSuit2 = 250,
+					ProjectileSuitDouble = 200,
 					--ProjectileSuitCharged = 300,
 					ProjectileStaffSwing1 = 120,
 					ProjectileStaffSwing2 = 120,
@@ -2012,8 +2016,9 @@ mod.AspectTraitData = {
 				{
 					ProjectileSuitRangedGuided = "ProjectileSuitRangedGuidedSplit",
 					--ProjectileSuitRangedCharged = "ProjectileSuitRangedChargedSplit",
-					-- ProjectileSuit = "ProjectileSuitSplit",
-					-- ProjectileSuit2 = "ProjectileSuitSplit2",
+					ProjectileSuit = "ProjectileSuitSplit",
+					ProjectileSuit2 = "ProjectileSuitSplit2",
+					ProjectileSuitDouble = "ProjectileSuitDouble",
 					--ProjectileSuitCharged = "ProjectileSuitChargedSplit",
 					ProjectileStaffSwing1 = "ProjectileStaffSwing1",
 					ProjectileStaffSwing2 = "ProjectileStaffSwing2",
@@ -2053,6 +2058,9 @@ mod.AspectTraitData = {
 		{
 			ValidProjectiles = {
 				"ProjectileSuitRangedUnguided",
+				"ProjectileSuit",
+				"ProjectileSuit2",
+				"ProjectileSuitDouble",
 				"ProjectileStaffSwing1",
 				"ProjectileStaffSwing2",
 				"ProjectileStaffSwing3",

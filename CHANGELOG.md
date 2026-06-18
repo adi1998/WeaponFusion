@@ -4,6 +4,7 @@
 
 - Implement Nyx Nightspawns for staff attack and special, torch attack, skull attack and dagger special
 - Allow Nyx omega Boost to activate Valkyire form
+- Fix attack Nightspawns for coat attacks during same weapon fusion
 
 ## [0.7.3] - 2026-06-16
 
