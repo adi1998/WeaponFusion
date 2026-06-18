@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-06-18
+
 - Implement Nyx Nightspawns for staff attack and special, torch attack, skull attack and dagger special
 - Allow Nyx omega Boost to activate Valkyire form
 - Fix attack Nightspawns for coat attacks during same weapon fusion
@@ -119,7 +121,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.7.3...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/adi1998/WeaponFusion/compare/0.7.3...0.8.0
 [0.7.3]: https://github.com/adi1998/WeaponFusion/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/adi1998/WeaponFusion/compare/0.7.1...0.7.2
 [0.7.1]: https://github.com/adi1998/WeaponFusion/compare/0.7.0...0.7.1
