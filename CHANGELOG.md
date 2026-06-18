@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Implement Nyx Nightspawns for staff attack and special, torch attack, skull attack
+
 ## [0.7.3] - 2026-06-16
 
 - Minor Momus and Circe fixes for same weapon fusion

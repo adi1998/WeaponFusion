@@ -1,3 +1,13 @@
+if game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction then
+    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.ValidProjectiles, "ProjectileStaffBall")
+    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileNameMap["ProjectileStaffBall"] = "ProjectileStaffBall"
+    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileVfx["ProjectileStaffBall"] = "NyxMissileSpawner"
+end
+
+if game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction then
+    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileStaffBall")
+end
+
 local nyxPropertyChanges = {
     {
         WeaponName = "WeaponTorch",
@@ -6,7 +16,22 @@ local nyxPropertyChanges = {
         ExcludeLinked = true,
         ProjectileProperty = "UnlimitedUnitPenetration",
         ChangeType = "Absolute",
-    }
+    },
+    {
+        WeaponName = "WeaponStaffBall",
+        ProjectileName = "ProjectileStaffBall",
+        ChangeValue = false,
+        ExcludeLinked = true,
+        ProjectileProperty = "UnlimitedUnitPenetration",
+        ChangeType = "Absolute",
+    },
+    {
+        WeaponName = "WeaponLob",
+        ChangeValue = false,
+        ExcludeLinked = true,
+        ProjectileProperty = "UnlimitedUnitPenetration",
+        ChangeType = "Absolute",
+    },
 }
 
 modutil.mod.Path.Wrap("NyxHitBuffApply", function (base, triggerArgs)

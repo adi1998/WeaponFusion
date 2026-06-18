@@ -1968,6 +1968,8 @@ mod.AspectTraitData = {
 				-- "ProjectileDaggerSliceDouble",
 				"ProjectileTorchBall",
 				"ProjectileTorchGhost",
+				"ProjectileLobBullet",
+				"ProjectileLob"
 			},
 			Args =
 			{
@@ -1991,12 +1993,21 @@ mod.AspectTraitData = {
 					-- ProjectileDaggerSliceLeft = 150,
 					-- ProjectileDaggerSliceDouble = 150,
 				},
-				ProjectileVfx = 
+				ProjectileVfx =
 				{
 					ProjectileSuitRangedGuided = "NyxMissileSpawner",
+					ProjectileLobBullet = "NyxMissileSpawner",
+					ProjectileLob = "NyxMissileSpawner",
+					ProjectileStaffSwing1 = "NyxMissileSpawner",
+					ProjectileStaffSwing2 = "NyxMissileSpawner",
+					ProjectileStaffSwing3 = "NyxMissileSpawner",
 					--ProjectileSuitRangedCharged = "NyxMissileSpawner",
 				},
-				ProjectileNameMap = 
+				ProjectileNameMapIgnores = 
+				{
+					ProjectileLob = "LobCloseAttackAspect",
+				},
+				ProjectileNameMap =
 				{
 					ProjectileSuitRangedGuided = "ProjectileSuitRangedGuidedSplit",
 					--ProjectileSuitRangedCharged = "ProjectileSuitRangedChargedSplit",
@@ -2012,6 +2023,8 @@ mod.AspectTraitData = {
 					-- ProjectileDaggerSliceDouble = "ProjectileDaggerSliceDouble",
 					ProjectileTorchBall = "ProjectileTorchBallSplit",
 					ProjectileTorchGhost = "ProjectileTorchGhostSplit",
+					ProjectileLobBullet = "ProjectileLobBullet",
+					ProjectileLob = "ProjectileLob",
 				},
 				DamageMultiplier = { BaseValue = 0.15 },
 				ReportValues =
@@ -2049,6 +2062,8 @@ mod.AspectTraitData = {
 				"ProjectileDaggerSliceDouble",
 				"ProjectileTorchBall",
 				"ProjectileTorchGhost",
+				"ProjectileLobBullet",
+				"ProjectileLob",
 			},
 			Name = "CheckSplitValidity",
 			Args =
