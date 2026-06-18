@@ -1,6 +1,3 @@
-game.EffectData.NyxHitBuff.OnApplyFunctionName = _PLUGIN.guid .. "." .. "OnApplyNyxHitBuff"
-game.EffectData.NyxHitBuff.OnClearFunctionName = _PLUGIN.guid .. "." .. "OnClearNyxHitBuff"
-
 local nyxPropertyChanges = {
     {
         WeaponName = "WeaponTorch",
@@ -12,19 +9,21 @@ local nyxPropertyChanges = {
     }
 }
 
-function mod.OnApplyNyxHitBuff(triggerArgs)
+modutil.mod.Path.Wrap("NyxHitBuffApply", function (base, triggerArgs)
     local victim = triggerArgs.Victim
 	if not triggerArgs.Reapplied and victim == game.CurrentRun.Hero then
         game.ApplyUnitPropertyChanges(game.CurrentRun.Hero, nyxPropertyChanges)
     end
-end
+    return base(triggerArgs)
+end)
 
-function mod.OnClearNyxHitBuff(triggerArgs)
+modutil.mod.Path.Wrap("NyxHitBuffClear", function (base, triggerArgs)
     local victim = triggerArgs.Victim
 	if victim == game.CurrentRun.Hero then
 		game.ApplyUnitPropertyChanges( game.CurrentRun.Hero, nyxPropertyChanges, true, true)
 	end
-end
+    return base(triggerArgs)
+end)
 
 modutil.mod.Path.Wrap("CheckProjectileSpawn", function (base, triggerArgs, functionArgs)
     if triggerArgs.WeaponName == "WeaponTorch" and not functionArgs.IgnoreAdvancedSplitValidity and game.HeroHasTrait("TorchSplitAttackTrait") then
