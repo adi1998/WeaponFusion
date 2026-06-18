@@ -500,7 +500,7 @@ modutil.mod.Path.Wrap("HandleGunBehavior", function (base, weaponData, functionA
 	if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs )  then
 		local chargeStages = game.GetWeaponChargeStages( weaponData )
 		local weaponCharge = (game.MapState.WeaponCharge or {})[weaponData.Name] or 1
-		if #chargeStages <= weaponCharge and game.Contains( {"WeaponStaffBall", "WeaponDaggerThrow", "WeaponTorchSpecial", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponSuitRanged"}, weaponData.Name ) then
+		if #chargeStages <= weaponCharge and game.Contains( {"WeaponStaffBall", "WeaponDaggerThrow", "WeaponTorchSpecial", "WeaponAxeSpecial", "WeaponAxeSpecialSwing", "WeaponSuitRanged", "WeaponSprintEx"}, weaponData.Name ) then
 			local dataProperties = game.MergeTables(game.EffectData[functionArgs.EffectName].DataProperties, functionArgs.EffectData)
 			dataProperties.Duration = dataProperties.Duration + game.GetTotalHeroTraitValue("OverheatDurationIncrease")
 			game.ApplyEffect({ DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = functionArgs.EffectName, DataProperties = dataProperties })

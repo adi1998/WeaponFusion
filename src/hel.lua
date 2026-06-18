@@ -1,3 +1,6 @@
+game.TraitData.LobGunAspect.OnWeaponFiredFunctions.ValidWeapons = game.DeepCopyTable(game.WeaponSets.HeroAllWeapons)
+table.insert(game.TraitData.LobGunAspect.OnWeaponFiredFunctions.ValidWeapons, "WeaponSprintEx")
+
 function mod.HandleGunBehavior(weaponData, functionArgs, triggerArgs)
     if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs )  then
 		if triggerArgs.ProjectileId and ( weaponData.Name == "WeaponLobSpecial" ) then
