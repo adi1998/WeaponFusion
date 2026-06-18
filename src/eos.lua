@@ -91,7 +91,7 @@ function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
 					Angle = angle,
 					Id = game.CurrentRun.Hero.ObjectId,
 					ProjectileDestinationId = game.SessionMapState.CurrentExProjectile,
-					FireFromTarget = true, 
+					FireFromTarget = true,
 					DataProperties = derivedValues.PropertyChanges,
 					ThingProperties = derivedValues.ThingPropertyChanges,
 				})

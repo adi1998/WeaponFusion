@@ -2,10 +2,15 @@ if game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction then
     table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.ValidProjectiles, "ProjectileStaffBall")
     game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileNameMap["ProjectileStaffBall"] = "ProjectileStaffBall"
     game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileVfx["ProjectileStaffBall"] = "NyxMissileSpawner"
+
+    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.ValidProjectiles, "ProjectileDaggerThrow")
+    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileNameMap["ProjectileDaggerThrow"] = "ProjectileDaggerThrow"
+    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileVfx["ProjectileDaggerThrow"] = "NyxMissileSpawner"
 end
 
 if game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction then
     table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileStaffBall")
+    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileDaggerThrow")
 end
 
 local nyxPropertyChanges = {
@@ -53,6 +58,9 @@ end)
 modutil.mod.Path.Wrap("CheckProjectileSpawn", function (base, triggerArgs, functionArgs)
     if triggerArgs.WeaponName == "WeaponTorch" and not functionArgs.IgnoreAdvancedSplitValidity and game.HeroHasTrait("TorchSplitAttackTrait") then
         functionArgs.SpawnArc = 40
+    end
+    if triggerArgs.WeaponName == "WeaponDaggerThrow" then
+        triggerArgs.Angle = game.GetAngle({Id = game.CurrentRun.Hero.ObjectId})
     end
     return base(triggerArgs, functionArgs)
 end)

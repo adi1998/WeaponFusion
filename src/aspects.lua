@@ -1992,6 +1992,7 @@ mod.AspectTraitData = {
 					-- ProjectileDaggerSliceRight = 150,
 					-- ProjectileDaggerSliceLeft = 150,
 					-- ProjectileDaggerSliceDouble = 150,
+					ProjectileDaggerThrow = 30,
 				},
 				ProjectileVfx =
 				{
