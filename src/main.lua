@@ -51,8 +51,8 @@ local function on_ready()
         if type(o) == 'table' then
             local s = "\n" .. string.rep("\t", depth) .. '{\n'
             for k,v in pairs(o) do
-                if type(k) ~= 'number' then k = '"'..k..'"' end
-                s = s .. string.rep("\t",(depth+1)) .. '['..k..'] = ' .. mod.dump(v, depth + 1, max_depth) .. ',\n'
+                if type(k) == 'number' then k = '['..k..']' end
+                s = s .. string.rep("\t",(depth+1)) .. k .. ' = ' .. mod.dump(v, depth + 1, max_depth) .. ',\n'
             end
             return s .. string.rep("\t", depth) .. '}'
         elseif type(o) == "string" then
@@ -66,9 +66,10 @@ local function on_ready()
     import 'aspects_logic.lua'
     import 'charon.lua'
     import 'hel.lua'
-    import 'ready.lua'
+    import 'nyx.lua'
     import 'momus.lua'
     import 'eos.lua'
+    import 'ready.lua'
     import 'startrun.lua'
 end
 

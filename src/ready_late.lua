@@ -253,3 +253,15 @@ modutil.mod.Path.Context.Wrap.Static("TorchPrimaryAutofire", function ()
 		return base(args)
 	end)
 end)
+
+modutil.mod.Path.Context.Wrap.Static("CheckProjectileSpawn", function ()
+	modutil.mod.Path.Wrap("CreateProjectileFromUnit", function (base, args)
+		-- if string.match(args.WeaponName, "WeaponDagger") then
+		-- 	args.AttachToTarget = true
+		-- end
+		local projectileId = base(args)
+		if args.WeaponName ~= "WeaponSuitRanged" then
+			game.SessionMapState.InvalidSplitIds[projectileId] = true
+		end
+	end)
+end)

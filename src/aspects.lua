@@ -1956,7 +1956,19 @@ mod.AspectTraitData = {
 		OnProjectileDeathFunction =
 		{
 			Name = "CheckProjectileSpawn",
-			ValidProjectiles = { "ProjectileSuitRangedGuided" },
+			ValidProjectiles = {
+				"ProjectileSuitRangedGuided",
+				"ProjectileStaffSwing1",
+				"ProjectileStaffSwing2",
+				"ProjectileStaffSwing3",
+				"ProjectileStaffDash",
+				-- "ProjectileDagger",
+				-- "ProjectileDaggerSliceRight",
+				-- "ProjectileDaggerSliceLeft",
+				-- "ProjectileDaggerSliceDouble",
+				"ProjectileTorchBall",
+				"ProjectileTorchGhost",
+			},
 			Args =
 			{
 				UseOriginalProjectileForPropertyChanges = true,
@@ -1964,13 +1976,20 @@ mod.AspectTraitData = {
 				MatchProjectileName = true,
 				SpawnCount = 2,
 				SpawnArc = 60,
-				Alpha = 0.3,
+				Alpha = 0.6,
 				RetargetChance = 0,	-- Chance split missiles can hit the same target
 				ProjectileOffsets =
 				{
 					-- ProjectileSuit = 200,
 					-- ProjectileSuit2 = 250,
 					--ProjectileSuitCharged = 300,
+					ProjectileStaffSwing1 = 120,
+					ProjectileStaffSwing2 = 120,
+					ProjectileStaffSwing3 = 120,
+					-- ProjectileDagger = 150,
+					-- ProjectileDaggerSliceRight = 150,
+					-- ProjectileDaggerSliceLeft = 150,
+					-- ProjectileDaggerSliceDouble = 150,
 				},
 				ProjectileVfx = 
 				{
@@ -1984,6 +2003,15 @@ mod.AspectTraitData = {
 					-- ProjectileSuit = "ProjectileSuitSplit",
 					-- ProjectileSuit2 = "ProjectileSuitSplit2",
 					--ProjectileSuitCharged = "ProjectileSuitChargedSplit",
+					ProjectileStaffSwing1 = "ProjectileStaffSwing1",
+					ProjectileStaffSwing2 = "ProjectileStaffSwing2",
+					ProjectileStaffSwing3 = "ProjectileStaffSwing3",
+					-- ProjectileDagger = "ProjectileDagger",
+					-- ProjectileDaggerSliceRight = "ProjectileDaggerSliceRight",
+					-- ProjectileDaggerSliceLeft = "ProjectileDaggerSliceLeft",
+					-- ProjectileDaggerSliceDouble = "ProjectileDaggerSliceDouble",
+					ProjectileTorchBall = "ProjectileTorchBallSplit",
+					ProjectileTorchGhost = "ProjectileTorchGhostSplit",
 				},
 				DamageMultiplier = { BaseValue = 0.15 },
 				ReportValues =
@@ -2009,7 +2037,19 @@ mod.AspectTraitData = {
 		},
 		OnProjectileCreationFunction =
 		{
-			ValidProjectiles = {"ProjectileSuitRangedUnguided", --[["ProjectileSuit", "ProjectileSuit2",]] --[["ProjectileSuitCharged", "ProjectileSuitRangedChargedUnguided"]] },
+			ValidProjectiles = {
+				"ProjectileSuitRangedUnguided",
+				"ProjectileStaffSwing1",
+				"ProjectileStaffSwing2",
+				"ProjectileStaffSwing3",
+				"ProjectileStaffDash",
+				"ProjectileDagger",
+				"ProjectileDaggerSliceRight",
+				"ProjectileDaggerSliceLeft",
+				"ProjectileDaggerSliceDouble",
+				"ProjectileTorchBall",
+				"ProjectileTorchGhost",
+			},
 			Name = "CheckSplitValidity",
 			Args =
 			{
