@@ -228,7 +228,8 @@ local guiAnimationFile = rom.path.combine(rom.paths.Context, "Game\\Animations\\
 local buttonGraphic = {
     {
         Name = _PLUGIN.guid .. "Button_Default",
-        FilePath = _PLUGIN.guid .. "\\Square100",
+        -- FilePath = _PLUGIN.guid .. "\\Square100",
+        FilePath = "Portraits\\Codex\\CodexPortrait_Crawler",
         EndFrame = 1,
         HoldLastFrame = true,
         NumFrames = 1,

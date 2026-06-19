@@ -70,7 +70,7 @@ mod.FusionScreenData = {
         Graphic = "BlankObstacle3D",
         X = 250,
         Y = 300,
-        Scale = 1.3,
+        Scale = 2.5,
         Alpha = 0.0,
         AlphaTarget = 1.0,
         AlphaTargetDuration = 0.4,
@@ -80,28 +80,28 @@ mod.FusionScreenData = {
     WeaponImageOffsets =
     {
         WeaponStaffSwing = {
-            OffsetX = 0,
+            OffsetX = -1000,
             OffsetY = 0,
         },
         WeaponDagger = {
-            OffsetX = 0,
+            OffsetX = -1000,
             OffsetY = -20,
         },
         WeaponTorch = {
-            OffsetX = 0,
+            OffsetX = -1000,
             OffsetY = -60,
         },
         WeaponAxe = {
-            OffsetX = 0,
+            OffsetX = -1000,
             OffsetY = 50,
         },
         WeaponSuit = {
-            OffsetX = 0,
+            OffsetX = -1000,
             OffsetY = -100,
         },
 		WeaponLob = {
 			OffsetX = 0,
-			OffsetY = 40,
+			OffsetY = 150,
 		}
     },
 
@@ -512,6 +512,7 @@ function mod.OpenWeaponFusionScreen()
 			state.SecondaryIndex = game.GetIndex(WeaponMinorAspectData[weaponName], traitData2.Name.."_Secondary")
 		end
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
+		game.SetAlpha({Id = components["WeaponImageData1"..weaponName].Id, Fraction = 0})
 		if config.last_primary == weaponName then
 			local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData1"..weaponName].Id
@@ -519,7 +520,8 @@ function mod.OpenWeaponFusionScreen()
 			game.SetColor({Id = components["WeaponImageData1"..weaponName].Id, Color = { 220, 100, 100, 255 }})
 			screen.SelectedPrimary = index
 		end
-        game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData2"..weaponName].Id })
+        game.SetAnimation({ Name = "Enemy_SirenDrummer_IdleA", GrannyModel = "SirenDrummer_Mesh", DestinationId = components["WeaponImageData2"..weaponName].Id })
+		game.SetAngle({Id = components["WeaponImageData2"..weaponName].Id, Angle = 330})
 		if config.last_secondary == weaponName then
 			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData2"..weaponName].Id
@@ -728,8 +730,8 @@ function mod.CreateMinorAspectButtons( screen, args )
 			local locationY = screen.ItemStartY + (row - 1) * screen.ItemSpacingY
 			slotData.X = locationX
 			slotData.Y = locationY
-			slotData.ScaleX = 1.5
-			slotData.ScaleY = 3
+			slotData.ScaleX = 1
+			slotData.ScaleY = 1
 			slotData.Alpha = 1
 
 			local button = game.CreateComponentFromData( screen, slotData )
@@ -992,3 +994,5 @@ game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractGameStateRequire
 		}
 	}
 }
+
+game.LoadPackages({Name = "BiomeG"})
