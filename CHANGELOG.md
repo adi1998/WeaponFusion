@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix Morrigan special Nightspawn
+
 ## [0.8.0] - 2026-06-18
 
 - Implement Nyx Nightspawns for staff attack and special, torch attack, skull attack and dagger special
