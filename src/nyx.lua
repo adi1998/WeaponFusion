@@ -61,6 +61,7 @@ modutil.mod.Path.Wrap("CheckProjectileSpawn", function (base, triggerArgs, funct
     end
     if triggerArgs.WeaponName == "WeaponDaggerThrow" then
         triggerArgs.Angle = game.GetAngle({Id = game.CurrentRun.Hero.ObjectId})
+        functionArgs.MatchProjectileName = false
     end
     return base(triggerArgs, functionArgs)
 end)
