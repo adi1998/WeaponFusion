@@ -70,7 +70,7 @@ mod.FusionScreenData = {
         Graphic = "BlankObstacle3D",
         X = 250,
         Y = 300,
-        Scale = 2.5,
+        Scale = 1.7,
         Alpha = 0.0,
         AlphaTarget = 1.0,
         AlphaTargetDuration = 0.4,
@@ -101,7 +101,7 @@ mod.FusionScreenData = {
         },
 		WeaponLob = {
 			OffsetX = 0,
-			OffsetY = 150,
+			OffsetY = -50,
 		}
     },
 
@@ -520,7 +520,9 @@ function mod.OpenWeaponFusionScreen()
 			game.SetColor({Id = components["WeaponImageData1"..weaponName].Id, Color = { 220, 100, 100, 255 }})
 			screen.SelectedPrimary = index
 		end
-        game.SetAnimation({ Name = "Enemy_SirenDrummer_IdleA", GrannyModel = "SirenDrummer_Mesh", DestinationId = components["WeaponImageData2"..weaponName].Id })
+        game.SetAnimation({ Name = "Enemy_Sheep_Idle", GrannyModel = "PolyphemusSheepSmall_Mesh", DestinationId = components["WeaponImageData2"..weaponName].Id })
+		-- SetThingProperty({ Property = "GrannyTexture", Value ="Models/Melinoe/YoungMelTransform_Color", DestinationId = components["WeaponImageData2"..weaponName].Id  })
+		-- game.wait(math.random(10,20)/10)
 		game.SetAngle({Id = components["WeaponImageData2"..weaponName].Id, Angle = 330})
 		if config.last_secondary == weaponName then
 			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
@@ -994,5 +996,3 @@ game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractGameStateRequire
 		}
 	}
 }
-
-game.LoadPackages({Name = "BiomeG"})

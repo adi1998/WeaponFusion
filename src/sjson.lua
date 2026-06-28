@@ -228,8 +228,8 @@ local guiAnimationFile = rom.path.combine(rom.paths.Context, "Game\\Animations\\
 local buttonGraphic = {
     {
         Name = _PLUGIN.guid .. "Button_Default",
-        -- FilePath = _PLUGIN.guid .. "\\Square100",
-        FilePath = "Portraits\\Codex\\CodexPortrait_Crawler",
+        FilePath = _PLUGIN.guid .. "\\Square100",
+        -- FilePath = "Portraits\\Codex\\CodexPortrait_Crawler",
         EndFrame = 1,
         HoldLastFrame = true,
         NumFrames = 1,
@@ -239,7 +239,7 @@ local buttonGraphic = {
 
     {
 		Name = _PLUGIN.guid .. "Button_HighlightOn",
-		FilePath = _PLUGIN.guid .. "\\Square100",
+		FilePath = _PLUGIN.guid .. "\\Square1002",
 		EndFrame = 1,
 		HoldLastFrame = true,
 		NumFrames = 1,
@@ -248,7 +248,7 @@ local buttonGraphic = {
 
 	{
 		Name = _PLUGIN.guid .. "Button_HighlightOff",
-		FilePath = _PLUGIN.guid .. "\\Square100",
+		FilePath = _PLUGIN.guid .. "\\Square1002",
 		EndFrame = 1,
 		NumFrames = 1,
 		StartFrame = 1,
