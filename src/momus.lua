@@ -427,7 +427,7 @@ function mod.StartTorchPrimaryRepeatThread(startX, startY, angle, args)
 		local dropLocation = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = startX, LocationY = startY })
 		local nearestEnemyId = game.GetClosest({ Id = dropLocation, DestinationName = "EnemyTeam", IgnoreInvulnerable = true, IgnoreHomingIneligible = true, StopsProjectiles = true, Distance = 1000 })
 		if nearestEnemyId and nearestEnemyId ~= 0 then
-			angle = game.GetAngleBetween({Id = nearestEnemyId, DestinationId = dropLocation})
+			angle = game.GetAngleBetween({Id = dropLocation, DestinationId = nearestEnemyId})
 		end
 		game.CreateProjectileFromUnit({ WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DestinationId = dropLocation, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, FireFromTarget = true, Angle = angle })
 		game.Destroy({Id = dropLocation })

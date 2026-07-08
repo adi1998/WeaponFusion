@@ -708,10 +708,6 @@ modutil.mod.Path.Wrap("SetupMap", function (base, ...)
     return base(...)
 end)
 
--- game.OnControlPressed({'Gift', function()
--- 	return mod.OpenWeaponFusionScreen()
--- end})
-
 modutil.mod.Path.Wrap("addDamageMultiplier", function (base, data, multiplier)
     if multiplier ~= multiplier and data.SuccessiveProjectileMultiplier then
         if game.SessionMapState[_PLUGIN.guid .. "MomusAxeCurrentProjectileIndex"] then
@@ -720,4 +716,11 @@ modutil.mod.Path.Wrap("addDamageMultiplier", function (base, data, multiplier)
         return
     end
     return base(data, multiplier)
+end)
+
+modutil.mod.Path.Wrap("InvalidateCheckpoint", function(base, ...)
+    if game.CurrentRun and game.HeroHasTrait("DaggerTripleAspect") and game.HeroHasTrait("StaffSelfHitAspect_Secondary") then
+        return
+    end
+    return base(...)
 end)

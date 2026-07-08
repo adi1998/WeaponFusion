@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 - Fix Morrigan special Nightspawn
+- Fix Torch omega attack firing in the opposite direction
+- SKip checkpoint invalidation in some cases to avoid losing runs
 
 ## [0.8.0] - 2026-06-18
 
