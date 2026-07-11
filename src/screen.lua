@@ -575,7 +575,7 @@ function mod.CreateAspectInfoItem(button)
 
 	if button.WeaponType == "Primary" then
 		local aspectIndex = screen.ScrollState[index].PrimaryIndex
-		local rawTraitData = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][aspectIndex]]
+		local rawTraitData = game.TraitData[screen.WeaponList[index].PrimaryAspects[aspectIndex]]
 		traitData = game.GetProcessedTraitData({ Unit = game.CurrentRun.Hero, TraitName = rawTraitData.Name, Rarity = game.GetRarityKey( game.GetWeaponUpgradeLevel( rawTraitData.Name ), game.TraitRarityData.WeaponRarityUpgradeOrder ) })
 		game.SetTraitTextData( traitData )
 	else
@@ -936,10 +936,14 @@ function mod.FuseAndExit(screen)
 	end
 
 	local state = screen.ScrollState
-	local primaryWeapon = screen.WeaponList[screen.SelectedPrimary].WeaponName
-	local secondaryWeapon = screen.WeaponList[screen.SelectedSecondary].WeaponName
-	local primaryAspect = game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primaryWeapon][state[screen.SelectedPrimary].PrimaryIndex]
-	local secondaryAspect = WeaponMinorAspectData[secondaryWeapon][state[screen.SelectedSecondary].SecondaryIndex]
+	local selectedPrimary = screen.SelectedPrimary
+	local selectedSecondary = screen.SelectedSecondary
+	local primaryIndex = state[selectedPrimary].PrimaryIndex
+	local secondaryIndex = state[selectedSecondary].SecondaryIndex
+	local primaryWeapon = screen.WeaponList[selectedPrimary].WeaponName
+	local secondaryWeapon = screen.WeaponList[selectedSecondary].WeaponName
+	local primaryAspect = screen.WeaponList[selectedPrimary].PrimaryAspects[primaryIndex]
+	local secondaryAspect = WeaponMinorAspectData[secondaryWeapon][secondaryIndex]
 
 	local sameAspect = primaryAspect == string.gsub(secondaryAspect, "_Secondary", "")
 	local sameWeapon = (primaryWeapon == secondaryWeapon and not config.allow_same_weapon_fusion)
