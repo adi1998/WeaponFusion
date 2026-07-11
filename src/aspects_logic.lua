@@ -711,3 +711,11 @@ function mod.CheckSelfBuffBlast(victim, functionArgs, triggerArgs)
 		game.Destroy({Id = ropeTargetId})
 	end
 end
+
+function mod.CheckSelfBuffBlastSkull(triggerArgs, functionArgs)
+	if game.CheckCooldown("OnEnemyDamagedSelfBuff", functionArgs.Cooldown) then
+		local effectName = functionArgs.EffectName
+		local dataProperties = game.MergeTables(game.EffectData[effectName].DataProperties, functionArgs.DataProperties)
+		game.ApplyEffect( { DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = effectName, DataProperties = dataProperties } )
+	end
+end

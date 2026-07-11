@@ -3689,16 +3689,28 @@ local shivaValidProjectiles = modutil.mod.Path.Get("TraitData.SuitComboAspect.On
 if shivaValidProjectiles then
 	table.insert(shivaValidProjectiles, "ProjectileAxeBlock2")
 	table.insert(shivaValidProjectiles, "ProjectileStaffBallCharged")
-	table.insert(shivaValidProjectiles, "ProjectileThrowCharged")
 end
 
-game.TraitData.SuitComboAspect.OnEnemyDamagedAction =
+game.OverwriteTableKeys(game.TraitData.SuitComboAspect,
 {
-	ValidProjectiles = {"ProjectileTorchOrbitEx", "ProjectileTorchSupayBallEx", "ProjectileDaggerThrowCharged"},
-	FunctionName = _PLUGIN.guid .. "." .. "CheckSelfBuffBlast",
-	Args =
+	OnEnemyDamagedAction =
 	{
-		EffectName = "ShivaAttackBoost",
-		Cooldown = 0.3,
+		ValidProjectiles = {"ProjectileTorchOrbitEx", "ProjectileTorchSupayBallEx", "ProjectileDaggerThrowCharged"},
+		FunctionName = _PLUGIN.guid .. "." .. "CheckSelfBuffBlast",
+		Args =
+		{
+			EffectName = "ShivaAttackBoost",
+			Cooldown = 0.3,
+		}
+	},
+	OnProjectileCreationFunction =
+	{
+		ValidProjectiles = {"ProjectileThrowCharged"},
+		Name = _PLUGIN.guid .. "." .. "CheckSelfBuffBlastSkull",
+		Args =
+		{
+			Cooldown = 0.25,
+			EffectName = "ShivaAttackBoost"
+		}
 	}
-}
+})

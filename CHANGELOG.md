@@ -2,8 +2,8 @@
 
 ## [Unreleased]
 
-- Fix fusion menu fusing unexpected aspects if not all aspects are unlocked
 - Shiva as primary aspect will get Destructive stacks from the secondary omega specials
+- Fix fusion menu fusing unexpected aspects if not all aspects are unlocked
 
 ## [0.8.1] - 2026-07-08
 
