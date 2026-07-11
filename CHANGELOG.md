@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-07-11
+
 - Shiva as primary aspect now gets Destructive stacks from the secondary omega specials
 - Fix fusion menu fusing unexpected aspects if not all aspects for a weapon are unlocked
 
@@ -130,7 +132,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.8.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/adi1998/WeaponFusion/compare/0.8.1...0.9.0
 [0.8.1]: https://github.com/adi1998/WeaponFusion/compare/0.8.0...0.8.1
 [0.8.0]: https://github.com/adi1998/WeaponFusion/compare/0.7.3...0.8.0
 [0.7.3]: https://github.com/adi1998/WeaponFusion/compare/0.7.2...0.7.3
