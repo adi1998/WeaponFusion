@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-07-08
+
 - Fix Morrigan special Nightspawn
 - Fix Torch omega attack firing in the opposite direction
 - SKip checkpoint invalidation in some cases to avoid losing runs
@@ -125,7 +127,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.8.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.8.1...HEAD
+[0.8.1]: https://github.com/adi1998/WeaponFusion/compare/0.8.0...0.8.1
 [0.8.0]: https://github.com/adi1998/WeaponFusion/compare/0.7.3...0.8.0
 [0.7.3]: https://github.com/adi1998/WeaponFusion/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/adi1998/WeaponFusion/compare/0.7.1...0.7.2
