@@ -3684,3 +3684,21 @@ game.WeaponData.WeaponDagger5.HitScreenshake = nil
 if game.TraitData.AxeFreeSpinTrait.ChargeStageModifiers then
 	game.TraitData.AxeFreeSpinTrait.ChargeStageModifiers.ValidWeapons = {"WeaponAxeSpin"}
 end
+
+local shivaValidProjectiles = modutil.mod.Path.Get("TraitData.SuitComboAspect.OnProjectileDeathFunction.ValidProjectiles")
+if shivaValidProjectiles then
+	table.insert(shivaValidProjectiles, "ProjectileAxeBlock2")
+	table.insert(shivaValidProjectiles, "ProjectileStaffBallCharged")
+	table.insert(shivaValidProjectiles, "ProjectileThrowCharged")
+end
+
+game.TraitData.SuitComboAspect.OnEnemyDamagedAction =
+{
+	ValidProjectiles = {"ProjectileTorchOrbitEx", "ProjectileTorchSupayBallEx", "ProjectileDaggerThrowCharged"},
+	FunctionName = _PLUGIN.guid .. "." .. "CheckSelfBuffBlast",
+	Args =
+	{
+		EffectName = "ShivaAttackBoost",
+		Cooldown = 0.3,
+	}
+}

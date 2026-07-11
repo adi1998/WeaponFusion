@@ -689,3 +689,25 @@ function mod.CheckAxeFreeSpinCrit(victim, functionArgs, triggerArgs)
 		end
 	end
 end
+
+function mod.CheckSelfBuffBlast(victim, functionArgs, triggerArgs)
+	local location = game.GetLocation({Id = game.CurrentRun.Hero.ObjectId})
+	game.wait(0.15)
+	if game.CheckCooldown("OnEnemyDamagedSelfBuff", functionArgs.Cooldown) then
+		local effectName = functionArgs.EffectName
+		local dataProperties = game.MergeTables(game.EffectData[effectName].DataProperties, functionArgs.DataProperties)
+		game.ApplyEffect( { DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = effectName, DataProperties = dataProperties } )
+		local currLocation = game.GetLocation({Id = game.CurrentRun.Hero.ObjectId})
+		local newLocation =
+		{
+			X = 2*currLocation.X - location.X,
+			Y = 2*currLocation.Y - location.Y
+		}
+		local ropeTargetId = game.SpawnObstacle({ Name = "InvisibleTarget", LocationX = newLocation.X, LocationY = newLocation.Y})
+		game.CreateAnimationsBetween({
+			Animation = _PLUGIN.guid .. "SelfBuffRope", Id = victim.ObjectId, DestinationId = ropeTargetId,
+			Stretch = true, UseZLocation = false})
+		game.wait(0.15)
+		game.Destroy({Id = ropeTargetId})
+	end
+end

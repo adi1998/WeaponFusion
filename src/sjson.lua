@@ -376,3 +376,19 @@ sjson.hook(screenTextPath, function(data)
         table.insert(data.Texts, perfectString)
     end
 end)
+
+local melinoeHeraVfxPath = rom.path.combine(rom.paths.Content, "Game\\Animations\\Melinoe_Hera_VFX.sjson")
+
+sjson.hook(melinoeHeraVfxPath, function (data)
+    table.insert(data.Animations, sjson.to_object(
+    {
+        Name = _PLUGIN.guid .. "SelfBuffRope",
+        InheritFrom = "HeraRope",
+        Hue = 0.2722,
+        RandomPlaySpeedMin = 200,
+		RandomPlaySpeedMax = 200,
+        StartScaleY = 1.25,
+		EndScaleY = 0.42,
+    }, {"Name", "InheritFrom"}))
+    return data
+end)
