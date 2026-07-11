@@ -3689,6 +3689,7 @@ local shivaValidProjectiles = modutil.mod.Path.Get("TraitData.SuitComboAspect.On
 if shivaValidProjectiles then
 	table.insert(shivaValidProjectiles, "ProjectileAxeBlock2")
 	table.insert(shivaValidProjectiles, "ProjectileStaffBallCharged")
+	table.insert(shivaValidProjectiles, "ProjectileThrowCharged")
 end
 
 game.OverwriteTableKeys(game.TraitData.SuitComboAspect,

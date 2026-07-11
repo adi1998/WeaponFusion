@@ -713,9 +713,48 @@ function mod.CheckSelfBuffBlast(victim, functionArgs, triggerArgs)
 end
 
 function mod.CheckSelfBuffBlastSkull(triggerArgs, functionArgs)
-	if game.CheckCooldown("OnEnemyDamagedSelfBuff", functionArgs.Cooldown) then
+	if game.CheckCooldown("OnEnemyDamagedSelfBuff", functionArgs.Cooldown) and not game.HeroHasTrait("LobGunAspect_Secondary") then
 		local effectName = functionArgs.EffectName
 		local dataProperties = game.MergeTables(game.EffectData[effectName].DataProperties, functionArgs.DataProperties)
 		game.ApplyEffect( { DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = effectName, DataProperties = dataProperties } )
 	end
+	if game.HeroHasTrait("LobGunAspect_Secondary") then
+		game.SessionMapState[_PLUGIN.guid .. "SkullOriginationMap"] = game.SessionMapState[_PLUGIN.guid .. "SkullOriginationMap"] or {}
+		game.SessionMapState[_PLUGIN.guid .. "SkullOriginationMap"][triggerArgs.ProjectileId] = game.GetLocation({Id = triggerArgs.ProjectileId, IsProjectile = true})
+	end
 end
+
+local function pointInRect(createLocation, deathLocation, width, heroLocation)
+    local x1, y1 = createLocation.X, createLocation.Y
+    local x2, y2 = deathLocation.X, deathLocation.Y
+    local x, y = heroLocation.X, heroLocation.Y
+
+    local dx, dy = x2 - x1, y2 - y1
+    local length = math.sqrt(dx*dx + dy*dy)
+
+    local unit_x, unit_y = dx / length, dy / length
+
+    x, y = x - x1, y - y1
+    local length_projection = x * unit_x + y * unit_y
+    local width_projection  = -x * unit_y + y * unit_x
+
+    return length_projection >= 0 and length_projection <= length and width_projection >= -width/2 and width_projection <= width/2
+end
+
+modutil.mod.Path.Wrap("CheckSelfBuffBlast", function (base, triggerArgs, functionArgs)
+	if triggerArgs.name == "ProjectileThrowCharged" and game.SessionMapState[_PLUGIN.guid .. "SkullOriginationMap"] and game.SessionMapState[_PLUGIN.guid .. "SkullOriginationMap"][triggerArgs.ProjectileId] then
+		local deathLocation = game.GetLocation({Id = triggerArgs.ProjectileId, IsProjectile = true})
+		local createLocation = game.SessionMapState[_PLUGIN.guid .. "SkullOriginationMap"][triggerArgs.ProjectileId]
+		local heroLocation = game.GetLocation({Id = game.CurrentRun.Hero.ObjectId})
+		local width = 400
+		if pointInRect(createLocation, deathLocation, width, heroLocation) then
+			if game.CheckCooldown("OnEnemyDamagedSelfBuff", functionArgs.Cooldown) then
+				local effectName = functionArgs.EffectName
+				local dataProperties = game.MergeTables(game.EffectData[effectName].DataProperties, functionArgs.DataProperties)
+				game.ApplyEffect( { DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = effectName, DataProperties = dataProperties } )
+			end
+		end
+	else
+		return base( triggerArgs, functionArgs)
+	end
+end)
