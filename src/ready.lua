@@ -719,7 +719,7 @@ modutil.mod.Path.Wrap("addDamageMultiplier", function (base, data, multiplier)
 end)
 
 modutil.mod.Path.Wrap("InvalidateCheckpoint", function(base, ...)
-    if game.CurrentRun and game.HeroHasTrait("DaggerTripleAspect") and game.HeroHasTrait("StaffSelfHitAspect_Secondary") then
+    if game.CurrentRun and game.CurrentRun.Hero.Weapons["WeaponDagger"] and game.HeroHasTrait("StaffSelfHitAspect_Secondary") then
         return
     end
     return base(...)
