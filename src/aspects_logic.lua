@@ -241,8 +241,7 @@ modutil.mod.Path.Wrap("ShivaAttackBoostClear", function (base, triggerArgs)
 end)
 
 modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, functionArgs, triggerArgs)
-	if game.Contains({"WeaponAxeSpin", "WeaponStaffSwing5", "WeaponLob", "WeaponTorch"}, weaponData.Name) and
-			game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) then
+	if game.Contains({"WeaponStaffSwing5", "WeaponLob", "WeaponTorch"}, weaponData.Name) and game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) then
 		if weaponData.Name == "WeaponStaffSwing5" then
 			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
 			if not game.HeroHasTrait("StaffRaiseDeadAspect") then
@@ -252,8 +251,6 @@ modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, fu
 				game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
 				game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
 			end
-		elseif weaponData.Name == "WeaponAxeSpin" then
-			game.waitUntil(_PLUGIN.guid .. "ProjectileCreation")
 		elseif weaponData.Name == "WeaponTorch" then
 			game.wait(0.01)
 		elseif weaponData.Name == "WeaponLob" then
@@ -275,12 +272,27 @@ modutil.mod.Path.Wrap("CheckSuitComboAttackBuff", function (base, weaponData, fu
 		game.ClearEffect({Id = game.CurrentRun.Hero.ObjectId, Name = "ShivaAttackBoost"})
 		game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
 		return
-	elseif game.Contains({"WeaponAxeSpin", "WeaponStaffSwing5", "WeaponLob", "WeaponTorch"}, weaponData.Name) then
+	elseif game.Contains({"WeaponStaffSwing5", "WeaponLob", "WeaponTorch"}, weaponData.Name) then
 		game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
+		return
+	elseif weaponData.Name == "WeaponAxeSpin" then
+		local stacks = game.CurrentRun.Hero.ActiveEffects[functionArgs.EffectName]
+		if not stacks then
+			return
+		end
+		if functionArgs.SelfEffectMaxStacks and stacks > functionArgs.SelfEffectMaxStacks then
+			stacks = functionArgs.SelfEffectMaxStacks
+		end
+		game.SessionMapState.SuitBonusProjectileVolley = game.SessionMapState.SuitBonusProjectileVolley or {}
+		game.SessionMapState.SuitBonusProjectileVolley["ProjectileAxeSpin"] = game.SessionMapState.SuitBonusProjectileVolley["ProjectileAxeSpin"] or {}
+		if triggerArgs.ProjectileVolley then
+			game.SessionMapState.SuitBonusProjectileVolley["ProjectileAxeSpin"][triggerArgs.ProjectileVolley] = 1 + functionArgs.SelfEffectStackMultiplier * stacks
+		end
+		game.ClearEffect({Id = game.CurrentRun.Hero.ObjectId, Name = "ShivaAttackBoost"})
 		return
 	end
 	game.SessionMapState[_PLUGIN.guid .. "ProjectileIds"] = nil
-	base(weaponData, functionArgs, triggerArgs)
+	return base(weaponData, functionArgs, triggerArgs)
 end)
 
 function mod.CheckSuitComboAttackBuff(triggerArgs, functionArgs)
@@ -612,7 +624,7 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 end)
 
 modutil.mod.Path.Wrap("CheckDaggerCritCharges", function (base, weaponData, functionArgs, triggerArgs)
-	if game.HeroHasTrait("TorchAutofireAspect") or weaponData.Name == "WeaponAxeSpin" then
+	if game.HeroHasTrait("TorchAutofireAspect") or weaponData.Name == "WeaponAxeSpin" or game.HeroHasTrait("StaffRaiseDeadAspect") then
 		return
 	end
 	return base(weaponData, functionArgs, triggerArgs)
@@ -637,16 +649,16 @@ modutil.mod.Path.Wrap("CalculateCritChance", function (base, attacker, victim, w
 end)
 
 function mod.CheckDaggerCritChargesProjectile(triggerArgs, functionArgs)
-	local weaponData = game.WeaponData.WeaponTorch
-	if triggerArgs.name == "ProjectileAxeSpin" then
-		weaponData = game.WeaponData.WeaponAxeSpin
-	end
-	if weaponData.Name == "WeaponAxeSpin" or game.HeroHasTrait("TorchAutofireAspect") then
-		if game.MapState.DaggerCharges and game.MapState.DaggerCharges >= 1 then
+	local weaponName = triggerArgs.WeaponName
+	local projectileName = triggerArgs.name
+	if not (weaponName == "WeaponTorch") or game.HeroHasTrait("TorchAutofireAspect") then
+		print("passed weapon/aspect check")
+		if game.MapState.DaggerCharges and (game.MapState.DaggerCharges >= 1) then
+			print("passed daggerchanrges count check")
 			game.MapState[_PLUGIN.guid .. "CritVolleys"] = game.MapState[_PLUGIN.guid .. "CritVolleys"] or {}
-			game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponData.Name] = game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponData.Name] or {}
+			game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponName] = game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponName] or {}
 
-			game.IncrementTableValue(game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponData.Name], triggerArgs.ProjectileId, 1)
+			game.IncrementTableValue(game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponName], triggerArgs.ProjectileId, 1)
 			local numProjectiles = 1
 
 			game.MapState.DaggerCharges = game.MapState.DaggerCharges - numProjectiles
@@ -667,9 +679,12 @@ function mod.CheckDaggerCritChargesProjectile(triggerArgs, functionArgs)
 	end
 end
 
-function mod.CheckAxeFreeSpinCrit(victim, functionArgs, triggerArgs)
-	if game.HeroHasTrait("AxeFreeSpinTrait") and game.CheckCooldown(_PLUGIN.guid .. "FreeSpinCrit", 0.15) then
-		if game.MapState.DaggerCharges and game.MapState.DaggerCharges >= 1 then
+function mod.CheckMultihitProjectileDaggerCrit(victim, functionArgs, triggerArgs)
+	local weaponName = triggerArgs.SourceWeapon
+	local projectileName = triggerArgs.SourceProjectile
+	game.MapState[_PLUGIN.guid .. "CritVolleys"] = game.MapState[_PLUGIN.guid .. "CritVolleys"] or {}
+	if (not (weaponName == "WeaponAxeSpin") or game.HeroHasTrait("AxeFreeSpinTrait")) and game.CheckCooldown(_PLUGIN.guid .. "FreeSpinCrit" .. projectileName, 0.15) then
+		if game.MapState.DaggerCharges and game.MapState.DaggerCharges >= 1 and game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponName] and game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponName][triggerArgs.ProjectileId] then
 			game.MapState.DaggerCharges = game.MapState.DaggerCharges - 1
 			for k,v in ipairs( game.SessionMapState.DaggerCritTicks ) do
 				if k > game.MapState.DaggerCharges then
@@ -684,7 +699,13 @@ function mod.CheckAxeFreeSpinCrit(victim, functionArgs, triggerArgs)
 			end
 			if game.MapState.DaggerCharges <= 0 then
 				game.wait(0.1)
-				game.MapState[_PLUGIN.guid .. "CritVolleys"]["WeaponAxeSpin"] = {}
+				game.MapState[_PLUGIN.guid .. "CritVolleys"][weaponName] = {}
+				local staffWeapons = {"WeaponStaffSwing5", "WeaponStaffSwing", "WeaponStaffSwingDash"}
+				if game.Contains(staffWeapons, weaponName) then
+					for index, value in ipairs(staffWeapons) do
+						game.MapState[_PLUGIN.guid .. "CritVolleys"][value] = {}
+					end
+				end
 			end
 		end
 	end

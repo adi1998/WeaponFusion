@@ -608,21 +608,10 @@ mod.AspectTraitData = {
 		OnProjectileCreationFunction =
 		{
 			ValidProjectiles = {
-				"ProjectileSwing5", "ProjectileStaffWall", "ProjectileAxeSpin", "ProjectileTorchWave", "ProjectileTorchGhostLarge", "ProjectileTorchSupayBallEx", "ProjectileTorchBallEos",
+				"ProjectileSwing5", "ProjectileStaffWall", --[["ProjectileAxeSpin",]] "ProjectileTorchWave", "ProjectileTorchGhostLarge", "ProjectileTorchSupayBallEx", "ProjectileTorchBallEos",
 				"ProjectileLobCharged", "ProjectileLobOverheat"
 			},
 			Name = _PLUGIN.guid .. "." .. "CheckSuitComboAttackBuff",
-			Args =
-			{
-				EffectName = "ShivaAttackBoost",
-				SelfEffectStackMultiplier = 0.50,
-				SelfEffectMaxStacks = 2,
-				ReportValues =
-				{
-					ReportedMaxStacks = "SelfEffectMaxStacks",
-					ReportedStackMultiplier = "SelfEffectStackMultiplier",
-				}
-			}
 		},
 		OnExpire =
 		{
@@ -2317,13 +2306,13 @@ mod.AspectTraitData = {
 		},
 		OnProjectileCreationFunction =
 		{
-			ValidProjectiles = {"ProjectileAxeSpin", "ProjectileTorchBall", "ProjectileTorchSupayBallEx"},
+			ValidProjectiles = {"ProjectileAxeSpin", "ProjectileTorchBall", "ProjectileTorchSupayBallEx", "ProjectileStaffWall", "ProjectileStaffSingle"},
 			Name = _PLUGIN.guid .. "." .. "CheckDaggerCritChargesProjectile"
 		},
 		OnEnemyDamagedAction =
 		{
-			ValidProjectiles = {"ProjectileAxeSpin"},
-			FunctionName = _PLUGIN.guid .. "." .. "CheckAxeFreeSpinCrit",
+			ValidProjectiles = {"ProjectileAxeSpin", "ProjectileStaffWall", "ProjectileStaffSingle"},
+			FunctionName = _PLUGIN.guid .. "." .. "CheckMultihitProjectileDaggerCrit",
 		},
 		WeaponSpeedMultiplier =
 		{

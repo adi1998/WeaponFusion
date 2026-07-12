@@ -1,0 +1,21 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "CombatLogic.lua"
+pattern = '''
+				if modifierData.ValidSuitProjectile and SessionMapState.SuitBonusProjectileId [triggerArgs.ProjectileId] then
+					addDamageMultiplier( modifierData, SessionMapState.SuitBonusProjectileId [triggerArgs.ProjectileId])	
+				end
+'''
+position = "after"
+payload = '''
+				if modifierData.ValidSuitProjectile and SessionMapState.SuitBonusProjectileVolley and SessionMapState.SuitBonusProjectileVolley[triggerArgs.SourceProjectile] and
+						SessionMapState.SuitBonusProjectileVolley[triggerArgs.SourceProjectile][triggerArgs.SourceProjectileVolley] then
+					addDamageMultiplier( modifierData, SessionMapState.SuitBonusProjectileVolley[triggerArgs.SourceProjectile][triggerArgs.SourceProjectileVolley])
+				end
+'''
+match_indent = false
+times = 1
