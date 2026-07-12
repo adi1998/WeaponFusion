@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Fix Artemis not consuming crit charges from Anubis ticks
+- Fix Shiva only buffing the first axe omega attack projectile
+- Fix Shiva tooltip always displaying 2 max boosts
+
 ## [0.9.0] - 2026-07-11
 
 - Shiva as primary aspect now gets Destructive stacks from the secondary omega specials
