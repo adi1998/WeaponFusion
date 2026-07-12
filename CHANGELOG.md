@@ -4,7 +4,7 @@
 
 - Fix Artemis not consuming crit charges from Anubis ticks
 - Fix Shiva only buffing the first axe omega attack projectile
-- Fix Shiva tooltip always displaying 2 max boosts
+- Fix Shiva tooltip always showing max Destructive stacks as 2
 
 ## [0.9.0] - 2026-07-11
 
