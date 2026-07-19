@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-07-12
+
 - Fix Artemis not consuming crit charges from Anubis ticks
 - Fix Shiva only buffing the first axe omega attack projectile
 - Fix Shiva tooltip always showing max Destructive stacks as 2
@@ -136,7 +138,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.1...HEAD
+[0.9.1]: https://github.com/adi1998/WeaponFusion/compare/0.9.0...0.9.1
 [0.9.0]: https://github.com/adi1998/WeaponFusion/compare/0.8.1...0.9.0
 [0.8.1]: https://github.com/adi1998/WeaponFusion/compare/0.8.0...0.8.1
 [0.8.0]: https://github.com/adi1998/WeaponFusion/compare/0.7.3...0.8.0
