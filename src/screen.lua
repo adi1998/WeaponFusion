@@ -924,7 +924,7 @@ function mod.FuseAndExit(screen)
 			mod.UnequipWeapons()
 			config.last_primary = "WeaponStaffSwing"
 			config.last_secondary = "WeaponStaffSwing"
-			config.last_aspect = ""
+			config.last_aspect = "None"
 			UnfuseWeapons()
 			mod.EquipWeapons()
 			game.RequestPreRunLoadoutChangeSave()

@@ -5,7 +5,7 @@ local config = {
   aspect = "BaseStaffAspect_Secondary";
   last_primary = "WeaponStaffSwing";
   last_secondary = "WeaponStaffSwing";
-  last_aspect = "BaseStaffAspect_Secondary";
+  last_aspect = "None";
   random_fusion_each_run = false;
   allow_same_weapon_fusion = false;
 }
