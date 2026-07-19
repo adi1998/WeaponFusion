@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix unfuse option not properly unfusing weapons
+
 ## [0.9.1] - 2026-07-12
 
 - Fix Artemis not consuming crit charges from Anubis ticks

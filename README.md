@@ -15,7 +15,7 @@ There's almost no way I could have tested every possible combo of weapons/aspect
 
 ## Usage
 
-Salute the silver pool to fuse weapons. It's recommended to only use this if you atleast have every weapon unlocked. If you do not have every weapon unlocked, just don't fuse them :).
+Salute the silver pool to fuse weapons. Fusion will only be possible once all weapons are unlocked.
 
 Fusion can only be performed in the Crossroads training grounds.
 
