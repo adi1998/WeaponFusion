@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-07-19
+
 - Fix unfuse option not properly unfusing weapons
 
 ## [0.9.1] - 2026-07-12
@@ -140,7 +142,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.2...HEAD
+[0.9.2]: https://github.com/adi1998/WeaponFusion/compare/0.9.1...0.9.2
 [0.9.1]: https://github.com/adi1998/WeaponFusion/compare/0.9.0...0.9.1
 [0.9.0]: https://github.com/adi1998/WeaponFusion/compare/0.8.1...0.9.0
 [0.8.1]: https://github.com/adi1998/WeaponFusion/compare/0.8.0...0.8.1
