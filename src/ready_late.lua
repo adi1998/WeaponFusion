@@ -213,17 +213,19 @@ modutil.mod.Path.Context.Wrap.Static("CheckSkullImpulseStart", function ()
 	end)
 end)
 
-modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1.Call", function ()
-	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
-		if traitName == "DaggerBlockAspect" then
-			return base(traitName) or base(traitName.."_Secondary")
-		end
-		return base(traitName)
-	end)
-	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
-		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
-	end)
-end)
+-- moved to lovely patch to avoid breaking global env
+
+-- modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnHit.CombatLogic.1.Call", function ()
+-- 	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+-- 		if traitName == "DaggerBlockAspect" then
+-- 			return base(traitName) or base(traitName.."_Secondary")
+-- 		end
+-- 		return base(traitName)
+-- 	end)
+-- 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
+-- 		return HeroHasTraitWrap(base, traitName, "DaggerBlockAspect")
+-- 	end)
+-- end)
 
 modutil.mod.Path.Context.Wrap.Static("ModUtil.Hades.Triggers.OnBlinkFinished.WeaponLogic.2.Call", function (triggerArgs)
 	modutil.mod.Path.Wrap("GetWeaponDataValue", function (base, args)
