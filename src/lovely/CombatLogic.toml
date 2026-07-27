@@ -20,7 +20,7 @@ payload = '''
 match_indent = false
 times = 1
 
-# # Reverting lovely and using Context.Env for these
+# # Reverting lovely and using Context.Env instead
 # [[patches]]
 # [patches.pattern]
 # target = "CombatLogic.lua"
