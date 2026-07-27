@@ -101,14 +101,16 @@ end
 
 modutil.mod.Path.Wrap("StartOver", function (base, args)
     args = args or {}
-    if config.random_fusion_each_run and not args.ActiveBounty then
+    local bountyData = game.BountyData[args.ActiveBounty] or {}
+    if config.random_fusion_each_run and ( not args.ActiveBounty or bountyData.UseRandomWeaponUpgrade ) then
+        -- random fusion for normal runs, Dream Dives and packaged random bounties
         PickRandomFusion()
-        if args.StartingRoomName == "Dream_Intro" then
+        if args.StartingRoomName == "Dream_Intro" and not args.ActiveBounty then
             game.GameState.StoredActiveShrineBounty = game.GameState.ActiveShrineBounty
             game.GameState.ActiveShrineBounty = nil
         end
-    end
-    if args.ActiveBounty then
+    elseif args.ActiveBounty and not (bountyData.UseRandomWeaponUpgrade and config.random_fusion_each_run) then
+        -- unfuse for non random packaged bounties or random bounties if random_fusion_each_run is disabled
         local weaponKit = "WeaponStaffSwing"
         for weapon, _ in pairs(mod.WeaponData) do
             if game.CurrentRun.Hero.Weapons[weapon] then

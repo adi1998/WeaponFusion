@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Random weapon fusion
+
 ## [0.9.2] - 2026-07-19
 
 - Fix unfuse option not properly unfusing weapons
