@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- Random weapon fusion
+- Random weapon fusion now applies to Chaos Above/Below and similar trials.
+- Fix a crash that occurs when HermesDuos is installed.
 
 ## [0.9.2] - 2026-07-19
 
