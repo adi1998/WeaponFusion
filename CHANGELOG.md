@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-07-27
+
 - Random weapon fusion now applies to Chaos Above/Below and similar trials.
 - Fix crash that occurs when HermesDuos is installed.
 
@@ -145,7 +147,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.3...HEAD
+[0.9.3]: https://github.com/adi1998/WeaponFusion/compare/0.9.2...0.9.3
 [0.9.2]: https://github.com/adi1998/WeaponFusion/compare/0.9.1...0.9.2
 [0.9.1]: https://github.com/adi1998/WeaponFusion/compare/0.9.0...0.9.1
 [0.9.0]: https://github.com/adi1998/WeaponFusion/compare/0.8.1...0.9.0
