@@ -1,4 +1,4 @@
-modutil.mod.Path.Context.Wrap.Static("DoThrowEx", function (weaponName)
+modutil.mod.Path.Context.Env("DoThrowEx", function (weaponName)
     modutil.mod.Path.Wrap("GetDerivedPropertyChangeValues", function (base, args)
         local derivedValues = base(args)
         if args.ProjectileName == "ProjectileThrowCharged" and game.HeroHasTrait("StaffSelfHitAspect") and game.SessionMapState[_PLUGIN.guid.."DoThrowExRecord"] then
@@ -38,7 +38,7 @@ modutil.mod.Path.Context.Wrap.Static("DoThrowEx", function (weaponName)
     end)
 end)
 
-modutil.mod.Path.Context.Wrap.Static("StartCastRepeatThread", function (triggerArgs, functionArgs)
+modutil.mod.Path.Context.Env("StartCastRepeatThread", function (triggerArgs, functionArgs)
 	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
 		if traitName == "StaffSelfHitAspect" then
 			return base(traitName) or base(traitName.."_Secondary")
@@ -47,7 +47,7 @@ modutil.mod.Path.Context.Wrap.Static("StartCastRepeatThread", function (triggerA
 	end)
 end)
 
-modutil.mod.Path.Context.Wrap.Static("WeaponCastFired", function (owner, weaponData, args, triggerArgs)
+modutil.mod.Path.Context.Env("WeaponCastFired", function (owner, weaponData, args, triggerArgs)
 	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
 		if traitName == "StaffSelfHitAspect" then
 			return base(traitName) or base(traitName.."_Secondary")

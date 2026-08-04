@@ -996,3 +996,8 @@ game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractGameStateRequire
 		}
 	}
 }
+
+-- UnloadPackages({Name = "zerp-CodexTab"})
+-- LoadPackages({Name = "zerp-CodexTab"})
+-- -- game.ScreenData.Codex.ComponentData.Background.AnimationName = "GUI\\Screens\\Codex\\CodexTabPatch" 
+-- game.ScreenData.Codex.ComponentData.Background.AnimationName = "zerp-CodexTab" .. "\\CodexTabPatch"

@@ -1,4 +1,4 @@
-modutil.mod.Path.Context.Wrap.Static("CheckAxeCastArm", function (triggerArgs, functionArgs)
+modutil.mod.Path.Context.Env("CheckAxeCastArm", function (triggerArgs, functionArgs)
     modutil.mod.Path.Wrap("GetInProjectilesBlast", function (base, args)
         local ids = base(args)
         if game.SessionMapState[_PLUGIN.guid .. "CheckAxeCastArmProjectileName"] == "ProjectileThrowCharged" and not game.IsEmpty(ids) then
