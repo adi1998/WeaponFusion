@@ -68,7 +68,7 @@ jobs:
             --repo adi1998/thunderstore-cli \
             --pattern "*linux-x64.tar.gz"
           tar xvf tcli-0.3.3-hades2-linux-x64.tar.gz
-          export PATH="$PWD/tcli-0.3.3-hades2-linux-x64:$PATH"
+          echo "$PWD/tcli-0.3.3-hades2-linux-x64" >> "$GITHUB_PATH"
 
       - name: Build package
         run: |
