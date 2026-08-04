@@ -2,9 +2,15 @@
 
 ## [Unreleased]
 
+- Fix manifest
+
 ## [0.9.5] - 2026-08-04
 
 ## [0.9.4] - 2026-08-04
+
+#### Dev
+
+- Replace Context.Wrap.Static with Context.Env
 
 ## [0.9.3] - 2026-07-27
 
