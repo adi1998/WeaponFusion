@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.5] - 2026-08-04
+
 ## [0.9.4] - 2026-08-04
 
 ## [0.9.3] - 2026-07-27
@@ -149,7 +151,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.4...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.5...HEAD
+[0.9.5]: https://github.com/adi1998/WeaponFusion/compare/0.9.4...0.9.5
 [0.9.4]: https://github.com/adi1998/WeaponFusion/compare/0.9.3...0.9.4
 [0.9.3]: https://github.com/adi1998/WeaponFusion/compare/0.9.2...0.9.3
 [0.9.2]: https://github.com/adi1998/WeaponFusion/compare/0.9.1...0.9.2
