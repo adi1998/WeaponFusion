@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix duplicated omega special of Momus plus Anubis fusion not inheriting the damage and radius boost.
+
 ## [0.9.6] - 2026-08-04
 
 - Fix manifest

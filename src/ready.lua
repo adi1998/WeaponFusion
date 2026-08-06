@@ -689,11 +689,11 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
     return val
 end)
 
-modutil.mod.Path.Wrap("TorchSpecialAutofire", function (base, ...)
+modutil.mod.Path.Wrap("TorchSpecialAutofire", function (base, args)
     if not game.CurrentRun.Hero.Weapons["WeaponTorchSpecial"] then
         return
     end
-    return base(...)
+    return base(args)
 end)
 
 modutil.mod.Path.Wrap("TorchPrimaryAutofire", function (base, ...)
