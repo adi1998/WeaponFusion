@@ -14,6 +14,10 @@ function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
 				Type = "Projectile",
 				MatchProjectileName = true,
 			})
+			if game.HeroHasTrait("StaffRaiseDeadAspect_Secondary") and isEx then
+				derivedValues.PropertyChanges.DamageRadius = 435
+				derivedValues.PropertyChanges.Damage = 110
+			end
 			local angle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
 			game.CreateProjectileFromUnit({
 				WeaponName = weaponName,

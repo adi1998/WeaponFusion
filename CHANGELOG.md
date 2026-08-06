@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- Fix duplicated omega special of Momus plus Anubis fusion not inheriting the damage and radius boost.
+- Fix duplicated Anubis omega special from Momus/Eos not inheriting the damage and radius boost.
 - Eos will now duplicate Supay base special.
 - Secondary Supay will no longer auto-fire basic torch aspects' attacks.
 
