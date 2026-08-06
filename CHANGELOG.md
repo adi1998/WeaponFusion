@@ -4,7 +4,8 @@
 
 - Fix duplicated Anubis omega special from Momus/Eos not inheriting the damage and radius boost.
 - Eos will now duplicate Supay base special.
-- Secondary Supay will no longer auto-fire basic torch aspects' attacks.
+- Secondary Supay will no longer auto-fire basic torch aspects' attacks.\
+- Adjust Counter Barrage rocket spawn workaround
 
 ## [0.9.6] - 2026-08-04
 
