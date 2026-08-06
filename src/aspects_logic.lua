@@ -560,10 +560,10 @@ modutil.mod.Path.Wrap("BlockLaunchMissile", function (base, blocker, args, trigg
 				local projectile = game.CreateProjectileFromUnit({ WeaponName = game.WeaponData["WeaponSuit"].SecondaryWeapon, Name = projectileName,
 					DestinationId = game.CurrentRun.Hero.ObjectId, TargetIdOverride = enemyId, Id = game.CurrentRun.Hero.ObjectId, FireFromTarget = true,
 					Duration = 0.5, EaseOut = 1, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges,
-					Angle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId }) + game.RandomFloat(-100, 100), PerfectCharge = triggerArgs.PerfectCharge
+					Angle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId }) + game.RandomFloat(-120, 120), PerfectCharge = triggerArgs.PerfectCharge
 				})
 				game.SessionMapState.InvalidSplitIds[projectile] = true
-				game.wait(0.03)
+				game.wait(0.05)
 			end
 		end
 	end
