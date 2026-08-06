@@ -697,7 +697,7 @@ modutil.mod.Path.Wrap("TorchSpecialAutofire", function (base, args)
 end)
 
 modutil.mod.Path.Wrap("TorchPrimaryAutofire", function (base, ...)
-    if not game.CurrentRun.Hero.Weapons["WeaponTorch"] then
+    if not game.HeroHasTrait("TorchAutofireAspect") then
         return
     end
     return base(...)

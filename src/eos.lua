@@ -287,6 +287,27 @@ modutil.mod.Path.Wrap("HandleAttachRecord", function (base, weaponData, function
 		triggerArgs.NumProjectiles = triggerArgs.NumProjectiles or 2
 		triggerArgs.ProjectileName = triggerArgs.ProjectileName or "ProjectileTorchOrbitEx"
 	end
+	if weaponData.Name == "WeaponTorch" and game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) and triggerArgs.ProjectileId then
+		if not game.IsEmpty(game.SessionMapState[_PLUGIN.guid .. "EosTorchOrbitIds"]) then
+            game.ExpireProjectiles({ ProjectileIds = game.SessionMapState[_PLUGIN.guid .. "EosTorchOrbitIds"] })
+            game.SessionMapState[_PLUGIN.guid .. "EosTorchOrbitIds"] = {}
+        end
+	end
     base(weaponData, functionArgs, triggerArgs)
     mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
+end)
+
+modutil.mod.Path.Wrap("EmptyTorchSpecialCharge", function (base, weaponName, stageReached)
+	if game.HeroHasTrait("TorchAutofireAspect_Secondary") and stageReached == 1  then
+		game.ExpireProjectiles({ ProjectileIds = game.SessionMapState[_PLUGIN.guid .. "EosTorchOrbitIds"] })
+	end
+	return base( weaponName, stageReached)
+end)
+
+modutil.mod.Path.Wrap("StartTorchRepeatDetonationThread", function (base, ...)
+	base(...)
+	if not game.IsEmpty(game.SessionMapState[_PLUGIN.guid .. "EosTorchOrbitIds"]) then
+		game.ExpireProjectiles({ ProjectileIds = game.SessionMapState[_PLUGIN.guid .. "EosTorchOrbitIds"] })
+		game.SessionMapState[_PLUGIN.guid .. "EosTorchOrbitIds"] = {}
+	end
 end)

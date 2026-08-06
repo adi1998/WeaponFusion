@@ -87,6 +87,7 @@ local function on_ready_late()
     import "ready_late.lua"
     import "momus_late.lua"
     import "charon_late.lua"
+    import "eos_late.lua"
 end
 
 local function on_reload_late()
