@@ -117,3 +117,14 @@ mods.on_all_mods_loaded(function()
 		loader.load("late", on_ready_late, on_reload_late)
 	end)
 end)
+
+local function on_post_TraitData_Aspect()
+    import "PostTraitData_Aspect.lua"
+end
+
+-- make changes before SetupRunData is called the first time
+rom.on_import.post(function (name)
+    if name == "TraitData_Aspect.lua" then
+        loader.load("post_trait_data_aspect", on_post_TraitData_Aspect)
+    end
+end)
