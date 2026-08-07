@@ -779,3 +779,10 @@ modutil.mod.Path.Wrap("CheckSelfBuffBlast", function (base, triggerArgs, functio
 		return base( triggerArgs, functionArgs)
 	end
 end)
+
+modutil.mod.Path.Wrap("MarkDaggerTarget", function (base, triggerArgs, weaponData, args)
+	if game.SessionMapState.BlockStagedCharge[weaponData.Name] then
+		return
+	end
+	return base(triggerArgs, weaponData, args)
+end)

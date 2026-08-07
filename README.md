@@ -11,7 +11,7 @@ Gameplay examples of what it looks like in action:
 
 Use r2modman by ebkr from [Thunderstore](https://thunderstore.io/package/ebkr/r2modman/) or [GitHub](https://github.com/ebkr/r2modmanPlus/releases/latest).
 
-There's almost no way I could have tested every possible combo of weapons/aspects/hammers here :) so it is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\Profile*.sav` in case there are issues.
+It is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\Profile*.sav` in case there are any unforeseen issues.
 
 ## Usage
 
@@ -27,17 +27,17 @@ If it feels like the fusion didn't apply properly try starting a run/reloading t
 
 ![Ingame UI](images/menu.png)
 
-### [Experimental] Same weapon fusion
+### Same weapon fusion
 
-There is also experimental support for fusing two aspects of same weapon. It can only be enabled through the ImGui menu (default keybind: INSERT) or the r2modman config editor.
+There is also support for fusing two aspects of same weapon. 
 
-![ImGui menu](images/imgui.png)
+Note: During same weapon fusion, if any hidden aspect is fused as a primary it will override both the attack and special moveset.
 
-## Some Limitations/Issues
+## Some minor limitations
 
-- Aspect of Pan as primary does nothing
-- Minor Aspect of Hel doesn't disable some omega attacks during Valkyrie Form
-- Some aspects which didn't make sense to have just its specials didn't make it in (Eos, Moros, Medea)
+- Aspect of Pan as primary does nothing when fused with any non-dagger aspect.
+- Aspects of Medea, Eos and Moros don't have a Minor counterpart since they are heavily Attack oriented.
+- Skull Aspect of Melinoe is just here as a placeholder.
 
 ## Issues and feedback
 

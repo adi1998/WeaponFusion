@@ -6,6 +6,7 @@
 - Eos will now duplicate Supay base special.
 - Secondary Supay will no longer auto-fire basic torch aspects' attacks.\
 - Adjust Counter Barrage rocket spawn workaround
+- Minor Aspect of Hel now blocks all omega attacks during Valkyrie form and properly resumes charging after it ends.
 
 ## [0.9.6] - 2026-08-04
 

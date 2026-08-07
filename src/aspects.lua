@@ -3704,3 +3704,7 @@ game.OverwriteTableKeys(game.TraitData.SuitComboAspect,
 		}
 	}
 })
+
+game.WeaponData.WeaponStaffSwing5.OnChargeFunctionNames = game.WeaponData.WeaponStaffSwing5.OnChargeFunctionNames or {}
+
+table.insert(game.WeaponData.WeaponStaffSwing5.OnChargeFunctionNames, _PLUGIN.guid .. "." .. "CheckStaffOverheat")
