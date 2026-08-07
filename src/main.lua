@@ -38,6 +38,17 @@ config = chalk.auto 'config.lua'
 -- ^ this updates our `.cfg` file in the config folder!
 public.config = config -- so other mods can access our config
 
+local function patch_config()
+    local configFile = chalk.original(config)
+    if configFile then
+        pcall(rom.config.config_file.bind, configFile, "config", "allow_same_weapon_fusion", true, "TBD")
+        configFile:remove("config", "allow_same_weapon_fusion")
+        configFile:save()
+    end
+end
+
+patch_config()
+
 local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
     if config.enabled == false then return end
