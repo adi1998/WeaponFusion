@@ -10,6 +10,7 @@
 - Minor Aspect of Hel now blocks all omega Attacks and Specials during Valkyrie form and properly resumes charging them after it ends.
 - Remove ImGui menu, its been outdated and unnecessary since the in-game UI was introduced.
 - Fix Pan plus Morrigan not having homing Specials
+- Nyx sprint blast now boosted when fused with Supay
 
 ## [0.9.6] - 2026-08-04
 

@@ -1372,7 +1372,7 @@ mod.AspectTraitData = {
 		},
 		AddOutgoingDamageModifiers =
 		{
-			ValidProjectiles = game.WeaponSets.SprintProjectileNames,
+			ValidProjectiles = game.CombineTables(game.WeaponSets.SprintProjectileNames, {"NyxSprintBlast"}),
 			ValidWeaponMultiplier =
 			{
 				BaseValue = 1.10,
@@ -3745,3 +3745,5 @@ for _, weaponName in ipairs(checkWeaponOverheatList) do
 	game.WeaponData[weaponName].OnChargeFunctionNames = game.WeaponData[weaponName].OnChargeFunctionNames or {}
 	table.insert(game.WeaponData[weaponName].OnChargeFunctionNames, _PLUGIN.guid .. "." .. "CheckWeaponOverheat")
 end
+
+game.TraitData.TorchAutofireAspect.AddOutgoingDamageModifiers.ValidProjectiles = game.CombineTables(game.TraitData.TorchAutofireAspect.AddOutgoingDamageModifiers.ValidProjectiles, {"NyxSprintBlast"})
