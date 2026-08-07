@@ -3705,6 +3705,14 @@ game.OverwriteTableKeys(game.TraitData.SuitComboAspect,
 	}
 })
 
-game.WeaponData.WeaponStaffSwing5.OnChargeFunctionNames = game.WeaponData.WeaponStaffSwing5.OnChargeFunctionNames or {}
+local checkWeaponOverheatList =
+{
+	"WeaponStaffSwing5",
+	"WeaponAxeSpecialSwing",
+	"WeaponTorchSpecial"
+}
 
-table.insert(game.WeaponData.WeaponStaffSwing5.OnChargeFunctionNames, _PLUGIN.guid .. "." .. "CheckStaffOverheat")
+for _, weaponName in ipairs(checkWeaponOverheatList) do
+	game.WeaponData[weaponName].OnChargeFunctionNames = game.WeaponData[weaponName].OnChargeFunctionNames or {}
+	table.insert(game.WeaponData[weaponName].OnChargeFunctionNames, _PLUGIN.guid .. "." .. "CheckWeaponOverheat")
+end

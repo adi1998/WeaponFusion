@@ -27,14 +27,21 @@ function mod.OverheatApply( triggerArgs )
 	game.SessionMapState.OverheatConsecutiveHit = 0
 	game.SessionMapState.Overheat = true
 	game.ModifyTextBox({ Id = game.ScreenAnchors.LobUI, FadeTarget = 1, FadeDuration = 0.2 })
+	game.SessionMapState.BlockStagedCharge.WeaponStaffBall = true
 	game.SessionMapState.BlockStagedCharge.WeaponStaffSwing5 = true
 	game.SessionMapState.BlockStagedCharge.WeaponDagger5 = true
+	game.SessionMapState.BlockStagedCharge.WeaponDaggerThrow = true
     game.SessionMapState.BlockStagedCharge.WeaponTorch = true
+	game.SessionMapState.BlockStagedCharge.WeaponTorchSpecial = true
     game.SessionMapState.BlockStagedCharge.WeaponAxe = true
     game.SessionMapState.BlockStagedCharge.WeaponAxeSpin = true
+	game.SessionMapState.BlockStagedCharge.WeaponAxeSpecialSwing = true
     game.SessionMapState.BlockStagedCharge.WeaponSuit = true
     game.SessionMapState.BlockStagedCharge.WeaponSuitCharged = true
+	game.SessionMapState.BlockStagedCharge.WeaponSuitRanged = true
+	game.SessionMapState.BlockStagedCharge.WeaponLob = true
 	game.SessionMapState.BlockStagedCharge.WeaponLobSpecial = true
+
 	local totalSpeedChange = triggerArgs.Modifier
 	if totalSpeedChange ~= 1 then
 		local allPropertyChanges =
@@ -48,7 +55,8 @@ function mod.OverheatApply( triggerArgs )
                 "WeaponDagger", "WeaponDaggerDash", "WeaponDagger2", "WeaponDaggerMultiStab", "WeaponDaggerDouble",
                 "WeaponTorch",
                 "WeaponAxe", "WeaponAxe2", "WeaponAxe3", "WeaponAxeDash", "WeaponAxe4", "WeaponAxe5",
-                "WeaponSuit", "WeaponSuit2", "WeaponSuitDouble", "WeaponSuitDash"
+                "WeaponSuit", "WeaponSuit2", "WeaponSuitDouble", "WeaponSuitDash",
+				"WeaponLob",
             },
 			ChangeValue = totalSpeedChange,
 			SpeedPropertyChanges = true,
@@ -83,7 +91,7 @@ function mod.OverheatApply( triggerArgs )
 end
 
 modutil.mod.Path.Wrap("OverheatApply", function (base, triggerArgs)
-    if not game.CurrentRun.Hero.Weapons["WeaponLob"] then
+    if not game.CurrentRun.Hero.Weapons["WeaponLob"] or not game.CurrentRun.Hero.Weapons["WeaponLobSpecial"] then
         return mod.OverheatApply(triggerArgs)
     end
     return base(triggerArgs)
@@ -99,15 +107,24 @@ local function resumeCharging(weaponName, triggerArgs, chargeFunction)
 end
 
 modutil.mod.Path.Wrap("OverheatClear", function (base, triggerArgs)
-    if not game.CurrentRun.Hero.Weapons["WeaponLob"] then
+    if not game.CurrentRun.Hero.Weapons["WeaponLob"] or not game.CurrentRun.Hero.Weapons["WeaponLobSpecial"] then
+		game.SessionMapState.BlockStagedCharge.WeaponStaffBall = nil
 		game.SessionMapState.BlockStagedCharge.WeaponStaffSwing5 = nil
 		game.SessionMapState.BlockStagedCharge.WeaponDagger5 = nil
+		game.SessionMapState.BlockStagedCharge.WeaponDaggerThrow = nil
 		game.SessionMapState.BlockStagedCharge.WeaponTorch = nil
+		game.SessionMapState.BlockStagedCharge.WeaponTorchSpecial = nil
 		game.SessionMapState.BlockStagedCharge.WeaponAxe = nil
 		game.SessionMapState.BlockStagedCharge.WeaponAxeSpin = nil
+		game.SessionMapState.BlockStagedCharge.WeaponAxeSpecialSwing = nil
 		game.SessionMapState.BlockStagedCharge.WeaponSuit = nil
 		game.SessionMapState.BlockStagedCharge.WeaponSuitCharged = nil
+		game.SessionMapState.BlockStagedCharge.WeaponSuitRanged = nil
 
+		resumeCharging("WeaponStaffBall", triggerArgs)
+		resumeCharging("WeaponDaggerThrow", triggerArgs)
+		resumeCharging("WeaponTorchSpecial", triggerArgs)
+		resumeCharging("WeaponSuitRanged", triggerArgs)
 		resumeCharging("WeaponTorch", triggerArgs)
 		resumeCharging("WeaponDagger5", triggerArgs, game.MarkDaggerTarget)
 		resumeCharging("WeaponAxeSpin", triggerArgs)
@@ -116,7 +133,7 @@ modutil.mod.Path.Wrap("OverheatClear", function (base, triggerArgs)
     return base(triggerArgs)
 end)
 
-function mod.CheckStaffOverheat(triggerArgs, weaponData, args)
+function mod.CheckWeaponOverheat(triggerArgs, weaponData, args)
 	if game.SessionMapState.BlockStagedCharge[weaponData.Name] then
 		game.RunWeaponMethod({ Id = game.CurrentRun.Hero.ObjectId, Weapon = weaponData.Name, Method = "ForceControlRelease" })
 	end
