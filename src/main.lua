@@ -78,7 +78,6 @@ local function on_reload()
     -- only do things that are safe to run over and over.
     if config.enabled == false then return end
 
-    import 'imgui.lua'
     import 'screen.lua'
 end
 

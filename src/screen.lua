@@ -946,9 +946,8 @@ function mod.FuseAndExit(screen)
 	local secondaryAspect = WeaponMinorAspectData[secondaryWeapon][secondaryIndex]
 
 	local sameAspect = primaryAspect == string.gsub(secondaryAspect, "_Secondary", "")
-	local sameWeapon = (primaryWeapon == secondaryWeapon and not config.allow_same_weapon_fusion)
 
-	if sameAspect or sameWeapon then
+	if sameAspect then
 		game.Shake({ Id = screen.Components["WeaponImageData1"..primaryWeapon].Id, Distance = 7, Speed = 700, Duration = 0.3 })
 		game.Shake({ Id = screen.Components["WeaponImageData2"..primaryWeapon].Id, Distance = 7, Speed = 700, Duration = 0.3 })
 		game.PlaySound({ Name = "/SFX/WrathOver", Id = game.CurrentRun.Hero.ObjectId })
