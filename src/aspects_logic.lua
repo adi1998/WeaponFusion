@@ -789,3 +789,17 @@ modutil.mod.Path.Wrap("MarkDaggerTarget", function (base, triggerArgs, weaponDat
 	end
 	return base(triggerArgs, weaponData, args)
 end)
+
+function mod.RemoveWeaponAmmoFire(triggerArgs)
+	if game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"] then
+		return
+	end
+	return game.RemoveWeaponAmmoFire(triggerArgs)
+end
+
+function mod.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
+	if game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"] then
+		return
+	end
+	return game.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
+end

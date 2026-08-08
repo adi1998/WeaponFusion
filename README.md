@@ -36,8 +36,8 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 ## Some minor limitations
 
 - Aspect of Pan as primary does nothing when fused with any non-dagger aspect.
-- Aspects of Medea, Eos and Moros don't have a Minor counterpart since they are heavily Attack oriented.
-- Skull Aspect of Melinoe is just here as a placeholder.
+- Aspects of Medea, Eos and Moros don't have a Minor Aspect since they are heavily Attack oriented.
+- Skull's Minor Aspect of Melinoe only affects Persephone and Medea (they're the only other ones with Ammo).
 
 ## Issues and feedback
 

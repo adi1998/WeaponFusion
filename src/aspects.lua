@@ -3141,6 +3141,36 @@ mod.AspectTraitData = {
 		{
 			WeaponLob_Mesh = "WeaponLob_Mesh"
 		},
+		AddOutgoingDamageModifiers =
+		{
+			ValidWeapons = { "WeaponLob", "WeaponLobPulse" },
+			SourceWeapon = "WeaponLob",
+			LinkedWeapon = "WeaponLobPulse",
+			ExcludeLinked = true,
+			MissingAmmoBaseDamageAddition = { BaseValue = 3 },
+			ReportValues = { ReportedWeaponMultiplier = "MissingAmmoBaseDamageAddition"},
+		},
+		OnProjectileDeathFunction =
+		{
+			Name = _PLUGIN.guid .. ".".. "RemoveWeaponAmmoFire",
+		},
+		OnWeaponFiredFunctions = 
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimaryWeapons,
+			FunctionName = _PLUGIN.guid .. ".".. "CheckWeaponAmmoFire",
+		},
+		StatLines =
+		{
+			"AmmoDamageStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedWeaponMultiplier",
+				ExtractAs = "DamageIncrease",
+				IncludeSigns = true
+			},
+		},
 		PropertyChanges =
 		{
 			{

@@ -11,6 +11,7 @@
 - Remove ImGui menu, its been outdated and unnecessary since the in-game UI was introduced.
 - Fix Pan plus Morrigan not having homing Specials
 - Nyx sprint blast now boosted when fused with Supay
+- Skull's Minor Aspect of Melinoe now boosts other skull aspects.
 
 ## [0.9.6] - 2026-08-04
 
