@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-08
+
 - Same weapon fusion no longer experimental :)
 - Fix duplicated Anubis omega special from Momus/Eos not inheriting the damage and radius boost.
 - Eos will now duplicate Supay base special.
@@ -172,7 +174,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/0.9.6...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/adi1998/WeaponFusion/compare/0.9.6...1.0.0
 [0.9.6]: https://github.com/adi1998/WeaponFusion/compare/0.9.5...0.9.6
 [0.9.5]: https://github.com/adi1998/WeaponFusion/compare/0.9.4...0.9.5
 [0.9.4]: https://github.com/adi1998/WeaponFusion/compare/0.9.3...0.9.4
