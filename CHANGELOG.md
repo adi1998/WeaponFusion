@@ -11,8 +11,9 @@
 - Remove ImGui menu, its been outdated and unnecessary since the in-game UI was introduced.
 - Fix Pan plus Morrigan not having homing Specials
 - Nyx sprint blast now gets boosted when fused with Supay
-- Skull's Minor Aspect of Melinoe now boosts other skull aspects.
-- Nyx Nightspawns added for Shiva special
+- Skull's Minor Aspect of Melinoe now boosts other skull aspects
+- Nyx Nightspawns added for Shiva and Hel special
+- Nyx's omega Boost can now trigger Medea's attack explosion
 
 ## [0.9.6] - 2026-08-04
 

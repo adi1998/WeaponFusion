@@ -2,12 +2,14 @@ local newNyxAttackProjectiles = {
     "ProjectileStaffBall",
     "ProjectileDaggerThrow",
     "ProjectileSuitGrenade",
-    "ProjectileSuitGrenadeStraight"
+    "ProjectileSuitGrenadeStraight",
+    "ProjectileLobSpecialBounce",
 }
 
 local nyxOffSets = {
     ProjectileSuitGrenade = 250,
     ProjectileSuitGrenadeStraight = 250,
+    ProjectileLobSpecialBounce = 80,
 }
 
 for index, projectileName in ipairs(newNyxAttackProjectiles) do

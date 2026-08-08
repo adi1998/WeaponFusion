@@ -474,7 +474,7 @@ game.OnWeaponChargeCanceled{ "WeaponLob",
 if game.TraitData.LobCloseAttackAspect.OnEnemyDamagedAction then
 	game.TraitData.LobCloseAttackAspect.OnEnemyDamagedAction.ValidWeapons =
 	{
-		"WeaponLobSpecial", "WeaponStaffBall", "WeaponDaggerThrow", "WeaponTorchSpecial", "WeaponAxeSpecial", "WeaponSuitRanged"
+		"WeaponLobSpecial", "WeaponStaffBall", "WeaponDaggerThrow", "WeaponTorchSpecial", "WeaponAxeSpecial", "WeaponSuitRanged", "WeaponSprintEx"
 	}
 end
 
