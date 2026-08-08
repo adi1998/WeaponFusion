@@ -1,16 +1,25 @@
-if game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction then
-    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.ValidProjectiles, "ProjectileStaffBall")
-    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileNameMap["ProjectileStaffBall"] = "ProjectileStaffBall"
-    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileVfx["ProjectileStaffBall"] = "NyxMissileSpawner"
+local newNyxAttackProjectiles = {
+    "ProjectileStaffBall",
+    "ProjectileDaggerThrow",
+    "ProjectileSuitGrenade",
+    "ProjectileSuitGrenadeStraight"
+}
 
-    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.ValidProjectiles, "ProjectileDaggerThrow")
-    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileNameMap["ProjectileDaggerThrow"] = "ProjectileDaggerThrow"
-    game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileVfx["ProjectileDaggerThrow"] = "NyxMissileSpawner"
-end
+local nyxOffSets = {
+    ProjectileSuitGrenade = 250,
+    ProjectileSuitGrenadeStraight = 250,
+}
 
-if game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction then
-    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileStaffBall")
-    table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileDaggerThrow")
+for index, projectileName in ipairs(newNyxAttackProjectiles) do
+    if game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction then
+        table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.ValidProjectiles, projectileName)
+        game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileNameMap[projectileName] = projectileName
+        game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileVfx[projectileName] = "NyxMissileSpawner"
+        game.TraitData.SuitMarkCritAspect.OnProjectileDeathFunction.Args.ProjectileOffsets[projectileName] = nyxOffSets[projectileName]
+    end
+    if game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction then
+        table.insert(game.TraitData.SuitMarkCritAspect.OnProjectileCreationFunction.ValidProjectiles, projectileName)
+    end
 end
 
 local nyxPropertyChanges = {
@@ -39,28 +48,28 @@ local nyxPropertyChanges = {
     },
 }
 
-modutil.mod.Path.Wrap("NyxHitBuffApply", function (base, triggerArgs)
+modutil.mod.Path.Wrap("NyxHitBuffApply", function(base, triggerArgs)
     local victim = triggerArgs.Victim
-	if not triggerArgs.Reapplied and victim == game.CurrentRun.Hero then
+    if not triggerArgs.Reapplied and victim == game.CurrentRun.Hero then
         game.ApplyUnitPropertyChanges(game.CurrentRun.Hero, nyxPropertyChanges)
     end
     return base(triggerArgs)
 end)
 
-modutil.mod.Path.Wrap("NyxHitBuffClear", function (base, triggerArgs)
+modutil.mod.Path.Wrap("NyxHitBuffClear", function(base, triggerArgs)
     local victim = triggerArgs.Victim
-	if victim == game.CurrentRun.Hero then
-		game.ApplyUnitPropertyChanges( game.CurrentRun.Hero, nyxPropertyChanges, true, true)
-	end
+    if victim == game.CurrentRun.Hero then
+        game.ApplyUnitPropertyChanges(game.CurrentRun.Hero, nyxPropertyChanges, true, true)
+    end
     return base(triggerArgs)
 end)
 
-modutil.mod.Path.Wrap("CheckProjectileSpawn", function (base, triggerArgs, functionArgs)
+modutil.mod.Path.Wrap("CheckProjectileSpawn", function(base, triggerArgs, functionArgs)
     if triggerArgs.WeaponName == "WeaponTorch" and not functionArgs.IgnoreAdvancedSplitValidity and game.HeroHasTrait("TorchSplitAttackTrait") then
         functionArgs.SpawnArc = 40
     end
     if triggerArgs.WeaponName == "WeaponDaggerThrow" then
-        triggerArgs.Angle = game.GetAngle({Id = game.CurrentRun.Hero.ObjectId})
+        triggerArgs.Angle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
         functionArgs.MatchProjectileName = false
     end
     return base(triggerArgs, functionArgs)

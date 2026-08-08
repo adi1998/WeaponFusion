@@ -227,8 +227,11 @@ modutil.mod.Path.Context.Env("CheckProjectileSpawn", function ()
 		-- if string.match(args.WeaponName, "WeaponDagger") then
 		-- 	args.AttachToTarget = true
 		-- end
+		if game.Contains({"ProjectileSuitGrenade", "ProjectileSuitGrenadeStraight"}, args.Name) then
+			args.AttachToTarget = true
+		end
 		local projectileId = base(args)
-		if args.WeaponName ~= "WeaponSuitRanged" then
+		if args.WeaponName ~= "WeaponSuitRanged" or game.Contains({"ProjectileSuitGrenade", "ProjectileSuitGrenadeStraight"}, args.Name) then
 			game.SessionMapState.InvalidSplitIds[projectileId] = true
 		end
 		return projectileId

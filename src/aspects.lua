@@ -1991,6 +1991,8 @@ mod.AspectTraitData = {
 				"ProjectileSuit",
 				"ProjectileSuit2",
 				"ProjectileSuitDouble",
+				"ProjectileSuitGrenade",
+				"ProjectileSuitGrenadeStraight",
 			},
 			Args =
 			{
@@ -2015,6 +2017,8 @@ mod.AspectTraitData = {
 					-- ProjectileDaggerSliceLeft = 150,
 					-- ProjectileDaggerSliceDouble = 150,
 					ProjectileDaggerThrow = 30,
+					ProjectileSuitGrenade = 250,
+					ProjectileSuitGrenadeStraight = 250
 				},
 				ProjectileVfx =
 				{
@@ -2025,6 +2029,8 @@ mod.AspectTraitData = {
 					ProjectileStaffSwing2 = "NyxMissileSpawner",
 					ProjectileStaffSwing3 = "NyxMissileSpawner",
 					--ProjectileSuitRangedCharged = "NyxMissileSpawner",
+					ProjectileSuitGrenade = "NyxMissileSpawner",
+					ProjectileSuitGrenadeStraight = "NyxMissileSpawner"
 				},
 				ProjectileNameMapIgnores = 
 				{
@@ -2049,6 +2055,8 @@ mod.AspectTraitData = {
 					ProjectileTorchGhost = "ProjectileTorchGhostSplit",
 					ProjectileLobBullet = "ProjectileLobBullet",
 					ProjectileLob = "ProjectileLob",
+					ProjectileSuitGrenade = "ProjectileSuitGrenade",
+					ProjectileSuitGrenadeStraight = "ProjectileSuitGrenadeStraight",
 				},
 				DamageMultiplier = { BaseValue = 0.15 },
 				ReportValues =
@@ -2091,6 +2099,8 @@ mod.AspectTraitData = {
 				"ProjectileTorchGhost",
 				"ProjectileLobBullet",
 				"ProjectileLob",
+				"ProjectileSuitGrenade",
+				"ProjectileSuitGrenadeStraight",
 			},
 			Name = "CheckSplitValidity",
 			Args =
