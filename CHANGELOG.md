@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-24
+
 - Fusion state is now stored in the save file.
 
 ## [1.0.0] - 2026-08-08
@@ -176,7 +178,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.0.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/adi1998/WeaponFusion/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/adi1998/WeaponFusion/compare/0.9.6...1.0.0
 [0.9.6]: https://github.com/adi1998/WeaponFusion/compare/0.9.5...0.9.6
 [0.9.5]: https://github.com/adi1998/WeaponFusion/compare/0.9.4...0.9.5
