@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fusion state is now stored in the save file.
+
 ## [1.0.0] - 2026-08-08
 
 - Same weapon fusion no longer experimental :)

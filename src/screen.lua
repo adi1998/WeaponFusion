@@ -507,12 +507,12 @@ function mod.OpenWeaponFusionScreen()
         local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
 		state.PrimaryIndex = game.GetIndex(screen.WeaponList[index].PrimaryAspects, traitData1.Name)
 		state.SecondaryIndex = 1
-		if game.TraitData[config.last_aspect] and game.Contains(WeaponMinorAspectData[weaponName], config.last_aspect) then
-			traitData2 = game.TraitData[config.last_aspect:gsub("_Secondary$", "")]
+		if game.TraitData[FusionSaveData.last_aspect] and game.Contains(WeaponMinorAspectData[weaponName], FusionSaveData.last_aspect) then
+			traitData2 = game.TraitData[FusionSaveData.last_aspect:gsub("_Secondary$", "")]
 			state.SecondaryIndex = game.GetIndex(WeaponMinorAspectData[weaponName], traitData2.Name.."_Secondary")
 		end
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
-		if config.last_primary == weaponName then
+		if FusionSaveData.last_primary == weaponName then
 			local outlineData = game.ShallowCopyTable( mod.PrimaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData1"..weaponName].Id
 			game.AddOutline( outlineData )
@@ -520,7 +520,7 @@ function mod.OpenWeaponFusionScreen()
 			screen.SelectedPrimary = index
 		end
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData2"..weaponName].Id })
-		if config.last_secondary == weaponName then
+		if FusionSaveData.last_secondary == weaponName then
 			local outlineData = game.ShallowCopyTable( mod.SecondaryWeaponOutline )
 			outlineData.Id = components["WeaponImageData2"..weaponName].Id
 			game.AddOutline( outlineData )
@@ -922,9 +922,9 @@ function mod.FuseAndExit(screen)
 			game.SetVolume({Id = completeSoundId, Value = 0.8})
 			game.Flash({ Id = screen.Components.UnfuseHoldButtonGraphic.Id, Speed = 0.8, MinFraction = 0.1, MaxFraction = 0.3, Color = game.Color.White })
 			mod.UnequipWeapons()
-			config.last_primary = "WeaponStaffSwing"
-			config.last_secondary = "WeaponStaffSwing"
-			config.last_aspect = "None"
+			FusionSaveData.last_primary = "WeaponStaffSwing"
+			FusionSaveData.last_secondary = "WeaponStaffSwing"
+			FusionSaveData.last_aspect = "None"
 			UnfuseWeapons()
 			mod.EquipWeapons()
 			game.RequestPreRunLoadoutChangeSave()
@@ -958,10 +958,10 @@ function mod.FuseAndExit(screen)
 
 	mod.UnequipWeapons()
     UnfuseWeapons()
-    config.last_primary = primaryWeapon
-    config.last_secondary = secondaryWeapon
-    config.last_aspect = secondaryAspect
-    FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
+    FusionSaveData.last_primary = primaryWeapon
+    FusionSaveData.last_secondary = secondaryWeapon
+    FusionSaveData.last_aspect = secondaryAspect
+    FuseWeapon(FusionSaveData.last_primary, FusionSaveData.last_secondary, FusionSaveData.last_aspect)
     mod.EquipWeapons({PrimaryUpgrade = primaryAspect})
 	game.RequestPreRunLoadoutChangeSave()
 	mod.CloseWeaponFusionScreen(screen)

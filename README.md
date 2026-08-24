@@ -13,6 +13,12 @@ Use r2modman by ebkr from [Thunderstore](https://thunderstore.io/package/ebkr/r2
 
 It is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\Profile*.sav` in case there are any unforeseen issues.
 
+## Update and un-installation
+
+It is recommended to only update or uninstall the mod while in the Crossoroads. If weapons seem broken after update/uninstall try re-fusing or cycling through all of them.
+
+It is recommended to unfuse weapons before uninstalltion.
+
 ## Usage
 
 Salute the silver pool to fuse weapons. Fusion will only be possible once all weapons are unlocked.

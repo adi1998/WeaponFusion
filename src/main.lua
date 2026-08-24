@@ -38,20 +38,8 @@ config = chalk.auto 'config.lua'
 -- ^ this updates our `.cfg` file in the config folder!
 public.config = config -- so other mods can access our config
 
-local function patch_config()
-    local configFile = chalk.original(config)
-    if configFile then
-        pcall(rom.config.config_file.bind, configFile, "config", "allow_same_weapon_fusion", true, "TBD")
-        configFile:remove("config", "allow_same_weapon_fusion")
-        configFile:save()
-    end
-end
-
-patch_config()
-
 local function on_ready()
     -- what to do when we are ready, but not re-do on reload.
-    if config.enabled == false then return end
     mod = modutil.mod.Mod.Register(_PLUGIN.guid)
     function mod.dump(o, depth, max_depth)
         max_depth = max_depth or 4
@@ -87,13 +75,10 @@ end
 local function on_reload()
     -- what to do when we are ready, but also again on every reload.
     -- only do things that are safe to run over and over.
-    if config.enabled == false then return end
-
     import 'screen.lua'
 end
 
 local function on_ready_late()
-    if config.enabled == false then return end
     import "ready_late.lua"
     import "momus_late.lua"
     import "charon_late.lua"

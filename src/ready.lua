@@ -585,11 +585,70 @@ function UnfuseWeapons()
     end
 end
 
-UnfuseWeapons()
+game.OnAnyLoad
+{
+    function ()
+        if FusionSaveData and not game.IsEmpty(FusionSaveData.ShowMigrationMessage) then
+            local len = #FusionSaveData.ShowMigrationMessage
+            for i = len, 1, -1 do
+                game.thread(game.InCombatText, game.CurrentRun.Hero.ObjectId, FusionSaveData.ShowMigrationMessage[i], 5*len, { OffsetY = -120, UseProgressiveStack = true, PreDelay = 1, SkipRise = true })
+            end
+            FusionSaveData.ShowMigrationMessage = {}
+        end
+    end
+}
 
-if mod.WeaponData[config.last_primary] and mod.WeaponData[config.last_secondary] then
-    FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
+table.insert(game.GlobalSaveWhitelist, _PLUGIN.guid .. "SaveData")
+
+local function loadWrap(wrap, ...)
+    wrap()
+    return ...
 end
+
+local function loadFusionState()
+    if not game[_PLUGIN.guid .. "SaveData"] then
+        print("Initializing mod savedata")
+    else
+        print("Loading mod savedata")
+    end
+    game[_PLUGIN.guid .. "SaveData"] = game[_PLUGIN.guid .. "SaveData"] or { }
+    FusionSaveData = game[_PLUGIN.guid .. "SaveData"]
+    FusionSaveData.last_primary = FusionSaveData.last_primary or "WeaponStaffSwing"
+    FusionSaveData.last_secondary = FusionSaveData.last_secondary or "WeaponStaffSwing"
+    FusionSaveData.last_aspect = FusionSaveData.last_aspect or "None"
+
+    if config.last_aspect ~= "MovedToSaveData" and not FusionSaveData.MovedToSaveData then
+        local msg = {"WeaponFusion: Old config discovered, migrating config to savedata."}
+        print(msg[1])
+        FusionSaveData.last_primary = config.last_primary
+        FusionSaveData.last_secondary = config.last_secondary
+        FusionSaveData.last_aspect = config.last_aspect
+
+        if not mod.WeaponData[FusionSaveData.last_primary] or not mod.WeaponData[FusionSaveData.last_secondary] then
+            table.insert(msg, "Invalid data discovered after migration, restoring to default config.")
+            print(msg[2])
+            FusionSaveData.last_primary = "WeaponStaffSwing"
+            FusionSaveData.last_secondary = "WeaponStaffSwing"
+            FusionSaveData.last_aspect = "None"
+        end
+        table.insert(msg, "Retrigger fusion manually to fix broken fusion, if any.")
+        FusionSaveData.ShowMigrationMessage = msg
+        FusionSaveData.MovedToSaveData = true
+
+        config.last_primary = "MovedToSaveData"
+        config.last_secondary = "MovedToSaveData"
+        config.last_aspect = "MovedToSaveData"
+    end
+
+    UnfuseWeapons()
+    if mod.WeaponData[FusionSaveData.last_primary] and mod.WeaponData[FusionSaveData.last_secondary] then
+        FuseWeapon(FusionSaveData.last_primary, FusionSaveData.last_secondary, FusionSaveData.last_aspect)
+    end
+end
+
+modutil.mod.Path.Wrap("Load", function (base, ...)
+    return loadWrap(loadFusionState, base(...))
+end)
 
 game.SetupRunData()
 
@@ -685,8 +744,7 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
             end
         end
     end
-    local val = base(args)
-    return val
+    return base(args)
 end)
 
 modutil.mod.Path.Wrap("TorchSpecialAutofire", function (base, args)

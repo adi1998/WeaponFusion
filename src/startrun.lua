@@ -23,7 +23,7 @@ function mod.UnequipWeapons()
 end
 
 function mod.EquipWeapons(args)
-    local weaponKit = game.WeaponData[config.last_primary]
+    local weaponKit = game.WeaponData[FusionSaveData.last_primary]
     args = args or {}
 	game.AddInputBlock({ Name = "PickupWeaponKit" })
 	if game.GameState.ActiveObjectiveSet == nil or game.ObjectiveSetData[game.GameState.ActiveObjectiveSet] == nil or not game.ObjectiveSetData[game.GameState.ActiveObjectiveSet].BlockWeaponObjectives then
@@ -92,10 +92,10 @@ function PickRandomFusion()
 
     mod.UnequipWeapons()
     UnfuseWeapons()
-    config.last_primary = randomWeaponKit
-    config.last_secondary = secondRandomWeapon
-    config.last_aspect = secondRandomUpgrade
-    FuseWeapon(config.last_primary, config.last_secondary, config.last_aspect)
+    FusionSaveData.last_primary = randomWeaponKit
+    FusionSaveData.last_secondary = secondRandomWeapon
+    FusionSaveData.last_aspect = secondRandomUpgrade
+    FuseWeapon(FusionSaveData.last_primary, FusionSaveData.last_secondary, FusionSaveData.last_aspect)
     mod.EquipWeapons({PrimaryUpgrade = randomWeaponUpgrade})
 end
 
@@ -118,9 +118,9 @@ modutil.mod.Path.Wrap("StartOver", function (base, args)
             end
         end
         mod.UnequipWeapons()
-        config.last_primary = weaponKit
-        config.last_secondary = weaponKit
-        config.last_aspect = "None"
+        FusionSaveData.last_primary = weaponKit
+        FusionSaveData.last_secondary = weaponKit
+        FusionSaveData.last_aspect = "None"
         UnfuseWeapons()
         mod.EquipWeapons({ PrimaryUpgrade = game.GameState.LastWeaponUpgradeName[weaponKit] or game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponKit][1] })
     end
