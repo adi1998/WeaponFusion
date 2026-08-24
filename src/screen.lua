@@ -535,7 +535,7 @@ function mod.OpenWeaponFusionScreen()
 	game.TeleportCursor({ OffsetX = screen.ItemStartX + screen.ButtonOffsetX, OffsetY = screen.ItemStartY, ForceUseCheck = true })
 
 	if config.random_fusion_each_run then
-		local modify = game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
+		game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
 	end
 
 	if rom.mods[AspectYoungMel] then

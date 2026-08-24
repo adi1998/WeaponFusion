@@ -86,7 +86,6 @@ local function on_ready_late()
 end
 
 local function on_reload_late()
-    if config.enabled == false then return end
 end
 
 -- this allows us to limit certain functions to not be reloaded.
