@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix fusion menu for non 16:9 aspect ratio resolutions
+
 ## [1.1.0] - 2026-08-24
 
 - Fusion state is now stored in the save file.

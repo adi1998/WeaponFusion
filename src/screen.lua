@@ -455,8 +455,11 @@ function EnableYmMesh()
 end
 
 function mod.OpenWeaponFusionScreen()
-	game.waitUnmodified(0.1, "KillScreenTest")
+	game.AltAspectRatioFramesShow()
     local screen = game.DeepCopyTable( mod.FusionScreenData )
+
+	screen.ItemStartX = screen.ItemStartX + game.ScreenCenterNativeOffsetX
+	screen.ItemStartY = screen.ItemStartY + game.ScreenCenterNativeOffsetY
 
     for index, weaponName in ipairs(WeaponDisplayOrder) do
         local weaponComponent = game.DeepCopyTable(screen.WeaponImageData)
@@ -569,6 +572,8 @@ function mod.CreateAspectInfoItem(button)
 	local traitData
 	local groupName = "Combat_Menu"
 	local offset = {X = 960, Y = 840}
+	offset.X = offset.X + game.ScreenCenterNativeOffsetX
+	offset.Y = offset.Y + game.ScreenCenterNativeOffsetY
 	local textOffset = -70 - 350
 	local titleBoxYOffset = -20
 
@@ -689,6 +694,7 @@ function mod.CloseWeaponFusionScreen(screen)
     if screen == nil or not screen.CanClose then
 		return
 	end
+	game.AltAspectRatioFramesHide()
     screen.CanClose = false
 	game.SetAnimation({ DestinationId = screen.Components.Background.Id, Name = "WeaponUpgradeOut" })
 
