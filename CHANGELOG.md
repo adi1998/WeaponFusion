@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-08-26
+
 - Fix fusion menu for non 16:9 aspect ratio resolutions.
 - Disable hitstun for Supay plus Trick Knives.
 
@@ -181,7 +183,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.1.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.1.1...HEAD
+[1.1.1]: https://github.com/adi1998/WeaponFusion/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/adi1998/WeaponFusion/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/adi1998/WeaponFusion/compare/0.9.6...1.0.0
 [0.9.6]: https://github.com/adi1998/WeaponFusion/compare/0.9.5...0.9.6
