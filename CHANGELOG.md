@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- Fix fusion menu for non 16:9 aspect ratio resolutions
+- Fix fusion menu for non 16:9 aspect ratio resolutions.
+- Disable hitstun for Supay plus Trick Knives.
 
 ## [1.1.0] - 2026-08-24
 
