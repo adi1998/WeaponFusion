@@ -609,6 +609,10 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 		if chosenProjectile == "ProjectileAxeSpecial" and secondWeapon == "WeaponAxeSpecial" and not derivedValues.PropertyChanges.StartFx then
 			derivedValues.PropertyChanges.StartFx = "AxeSwipeUpper"
 		end
+		local disableEffects = nil
+		if chosenProjectile == "ProjectileTorchOrbit" and game.HeroHasTrait("TorchAutofireAspect_Secondary") then
+			disableEffects = true
+		end
 
 		local spread = traitArgs.Spread
 		if chosenProjectile == "ProjectileTorchOrbit" then
@@ -618,7 +622,7 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 		end
 
 		for i=1, traitArgs.Projectiles do
-			local projectileId = game.CreateProjectileFromUnit({ WeaponName = secondWeapon, Name = chosenProjectile, Id = game.CurrentRun.Hero.ObjectId,
+			local projectileId = game.CreateProjectileFromUnit({ WeaponName = secondWeapon, Name = chosenProjectile, Id = game.CurrentRun.Hero.ObjectId, DisableEffects = disableEffects,
 				Angle = startAngle - spread/2 + (i - 1) * spread/(traitArgs.Projectiles - 1 ), DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges })
 		end
 	else
