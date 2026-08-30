@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 - Fix Seething Marauder plus Momus being created on Melione instead of the duplicator.
-- Fix Physic Whirlwind plus momus lasting for 30+ seconds.
+- Fix Physic Whirlwind plus Momus lasting for 30+ seconds.
 
 ## [1.1.1] - 2026-08-26
 

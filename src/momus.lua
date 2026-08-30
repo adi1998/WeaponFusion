@@ -476,7 +476,7 @@ function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
 		Type = "Projectile",
 	})
 
-	if game.HeroHasTrait("AxeFreeSpinTrait") then
+	if game.HeroHasTrait("AxeFreeSpinTrait") and not game.HeroHasTrait("AxeRallyAspect") then
 		numProjectiles = 1
 		derivedValues.PropertyChanges.TotalFuse = 0.22 * 5
 		projectileInterval = projectileInterval * 5
