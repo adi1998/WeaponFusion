@@ -475,6 +475,13 @@ function mod.StartAxePrimaryRepeatThread(startX, startY, angle, args)
 		WeaponName = weaponName,
 		Type = "Projectile",
 	})
+
+	if game.HeroHasTrait("AxeFreeSpinTrait") then
+		numProjectiles = 1
+		derivedValues.PropertyChanges.TotalFuse = 0.22 * 5
+		projectileInterval = projectileInterval * 5
+	end
+
 	while repeats < functionArgs.Repeats do
 		game.waitUnmodified(functionArgs.Interval - functionArgs.PreAttackDuration, threadName )
 		if functionArgs.AttackAnimationName then
@@ -907,4 +914,19 @@ modutil.mod.Path.Wrap("ClearOriginMarker", function (base, triggerArgs, function
 		end
 	end
 	return base(triggerArgs, functionArgs)
+end)
+
+modutil.mod.Path.Wrap("CheckAxeNova", function (base, weaponOrTriggerArgs, args)
+	if weaponOrTriggerArgs.name == "ProjectileAxeSpin" and not game.HeroHasTrait("AxeFreeSpinTrait") and game.HeroHasTrait("StaffSelfHitAspect_Secondary") and weaponOrTriggerArgs.ProjectileId then
+		game.CreateProjectileFromUnit({
+			Name = args.ProjectileName,
+			Id = game.CurrentRun.Hero.ObjectId,
+			DamageMultiplier = args.DamageMultiplier,
+			ProjectileDestinationId = weaponOrTriggerArgs.ProjectileId,
+			FireFromTarget = true,
+			AttachToTarget = true,
+		})
+		return
+	end
+	return base(weaponOrTriggerArgs, args)
 end)

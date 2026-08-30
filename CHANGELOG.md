@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Fix Seething Marauder plus Momus being created on Melione instead of the duplicator.
+- Fix Physic Whirlwind plus momus lasting for 30+ seconds.
+
 ## [1.1.1] - 2026-08-26
 
 - Fix fusion menu for non 16:9 aspect ratio resolutions.
