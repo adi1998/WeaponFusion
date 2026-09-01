@@ -287,7 +287,9 @@ function PatchHammerAspectRequirement(requirement)
         }
         for _, traitName in ipairs(requirement.IsAny) do
             table.insert(newRequirement.HasAny, traitName)
-            table.insert(newRequirement.HasAny, traitName.."_Secondary")
+            if game.TraitData[traitName.."_Secondary"] then
+                table.insert(newRequirement.HasAny, traitName.."_Secondary")
+            end
         end
     end
     if requirement.IsNone or requirement.HasNone then
@@ -298,7 +300,9 @@ function PatchHammerAspectRequirement(requirement)
         }
         for _, traitName in ipairs(requirement.IsNone or requirement.HasNone) do
             table.insert(newRequirement.HasNone, traitName)
-            table.insert(newRequirement.HasNone, traitName.."_Secondary")
+            if game.TraitData[traitName.."_Secondary"] then
+                table.insert(newRequirement.HasNone, traitName.."_Secondary")
+            end
         end
     end
     return newRequirement
@@ -781,4 +785,39 @@ modutil.mod.Path.Wrap("InvalidateCheckpoint", function(base, ...)
         return
     end
     return base(...)
+end)
+
+modutil.mod.Path.Wrap("BoonInfoPopulateTraits", function (base, screen, ...)
+    base(screen, ...)
+    local codexWeaponName = nil
+	if screen.LootName == "WeaponUpgrade" then
+		if screen.CodexScreen ~= nil then
+			codexWeaponName = screen.CodexScreen.OpenEntryName
+		else
+			codexWeaponName = game.GetEquippedWeapon()
+		end
+	end
+    if codexWeaponName and screen.CodexScreen == nil then
+        local traitsToRemove = {}
+        for _, traitName in ipairs(screen.TraitList) do
+            local traitData = game.TraitData[traitName]
+            if traitData and not game.IsGameStateEligible(traitData, {
+                traitData.GameStateRequirements[1]
+            }) then
+                table.insert(traitsToRemove, traitName)
+            end
+        end
+
+        for _, traitName in ipairs(traitsToRemove) do
+            game.RemoveValueAndCollapse(screen.TraitList, traitName)
+        end
+
+        for i, traitName in ipairs( screen.TraitSortOrder[screen.LootName] ) do
+            local traitData = game.TraitData[traitName]
+            if traitData ~= nil and game.IsGameStateEligible(traitData, { traitData.GameStateRequirements[1] }) and traitData.CodexWeapon ~= codexWeaponName and
+                ( traitData.CodexGameStateRequirements == nil or game.IsGameStateEligible( traitData, traitData.CodexGameStateRequirements ) ) then
+                    table.insert(screen.TraitList, traitName)
+            end
+        end
+    end
 end)

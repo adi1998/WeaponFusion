@@ -1,0 +1,31 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "BoonInfoLogic.lua"
+pattern = '''
+if requirement.IsAny ~= nil and #path == 3 and path[1] == "GameState" and path[2] == "LastWeaponUpgradeName" then
+'''
+position = "before"
+payload = '''
+--#region injected by WeaponFusion to handle secondary aspect requirements.
+if requirement.HasAny and table.concat(path) == "CurrentRun" .. "Hero" .. "TraitDictionary" then
+    local anyRequirementsVisible = false
+    for i, traitName in ipairs( requirement.HasAny ) do
+        local traitData = TraitData[traitName]
+        if traitData.CodexGameStateRequirements == nil or IsGameStateEligible( traitData, traitData.CodexGameStateRequirements ) then
+            anyRequirementsVisible = true
+            break
+        end
+    end
+    if anyRequirementsVisible then
+        hasRequirement = true
+        startY = CreateTraitRequirementList( screen, { Text = "BoonInfo_OneOf", TextSingular = "BoonInfo_OneOf_Singular" }, requirement.HasAny, startY )
+    end
+end
+--#endregion
+'''
+match_indent = true
+times = 1

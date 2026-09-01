@@ -2,8 +2,10 @@
 
 ## [Unreleased]
 
-- Fix Seething Marauder plus Momus being created on Melione instead of the duplicator.
+- Fix Seething Marauder being created on Melione instead of the Momus duplicator.
 - Fix Physic Whirlwind plus Momus lasting for 30+ seconds.
+- Fix crash on opening the hammer Codex Menu.
+- Fix some hammer requirements not showing up properly in the codex.
 
 ## [1.1.1] - 2026-08-26
 
