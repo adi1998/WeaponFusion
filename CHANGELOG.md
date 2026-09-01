@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-09-01
+
 - Fix Seething Marauder being created on Melione instead of the Momus duplicator.
 - Fix Physic Whirlwind plus Momus lasting for 30+ seconds.
 - Fix crash on opening the hammer Codex Menu.
@@ -188,7 +190,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.1.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.1.2...HEAD
+[1.1.2]: https://github.com/adi1998/WeaponFusion/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/adi1998/WeaponFusion/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/adi1998/WeaponFusion/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/adi1998/WeaponFusion/compare/0.9.6...1.0.0
