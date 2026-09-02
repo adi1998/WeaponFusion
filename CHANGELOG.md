@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Torch omega specials now cleave-cast on creation *and* deletion of projectiles.
+
 ## [1.1.2] - 2026-09-01
 
 - Fix Seething Marauder being created on Melione instead of the Momus duplicator.

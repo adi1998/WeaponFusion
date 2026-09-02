@@ -9,6 +9,7 @@ game.TraitData.AxeArmCastAspect.OnProjectileDeathFunction = {
 
 if game.TraitData.AxeArmCastAspect.OnProjectileCreationFunction then
 	table.insert(game.TraitData.AxeArmCastAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileThrowCharged")
+	table.insert(game.TraitData.AxeArmCastAspect.OnProjectileCreationFunction.ValidProjectiles, "ProjectileTorchOrbitEx")
 end
 
 function mod.CheckAxeCastArm(triggerArgs, functionArgs)

@@ -11,7 +11,7 @@ if requirement.IsAny ~= nil and #path == 3 and path[1] == "GameState" and path[2
 position = "before"
 payload = '''
 --#region injected by WeaponFusion to handle secondary aspect requirements.
-if requirement.HasAny and table.concat(path) == "CurrentRun" .. "Hero" .. "TraitDictionary" then
+if requirement.HasAny and path and table.concat(path) == "CurrentRun" .. "Hero" .. "TraitDictionary" then
     local anyRequirementsVisible = false
     for i, traitName in ipairs( requirement.HasAny ) do
         local traitData = TraitData[traitName]
