@@ -620,6 +620,7 @@ local function loadFusionState()
     FusionSaveData.last_primary = FusionSaveData.last_primary or "WeaponStaffSwing"
     FusionSaveData.last_secondary = FusionSaveData.last_secondary or "WeaponStaffSwing"
     FusionSaveData.last_aspect = FusionSaveData.last_aspect or "None"
+    FusionSaveData.random_fusion_each_run = FusionSaveData.random_fusion_each_run or false
 
     if config.last_aspect ~= "MovedToSaveData" and not FusionSaveData.MovedToSaveData then
         local msg = {"WeaponFusion: Old config discovered, migrating config to savedata."}
@@ -627,6 +628,7 @@ local function loadFusionState()
         FusionSaveData.last_primary = config.last_primary
         FusionSaveData.last_secondary = config.last_secondary
         FusionSaveData.last_aspect = config.last_aspect
+        FusionSaveData.random_fusion_each_run = config.random_fusion_each_run
 
         if not mod.WeaponData[FusionSaveData.last_primary] or not mod.WeaponData[FusionSaveData.last_secondary] then
             table.insert(msg, "Invalid data discovered after migration, restoring to default config.")

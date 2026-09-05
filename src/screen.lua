@@ -478,8 +478,15 @@ function mod.OpenWeaponFusionScreen()
 
     local components = screen.Components
 
-	-- print("compnents")
-	-- print(mod.dump(screen.Components, 0, 2))
+	screen.WeaponMinorAspectData = {}
+	for weapon, aspects in pairs(WeaponMinorAspectData) do
+		screen.WeaponMinorAspectData[weapon] = {}
+		for _, aspect in ipairs(aspects) do
+			if game.GameState.WeaponsUnlocked[aspect:gsub("_Secondary", "")] then
+				table.insert(screen.WeaponMinorAspectData[weapon], aspect)
+			end
+		end
+	end
 
 	screen.WeaponList = {}
 
@@ -495,7 +502,7 @@ function mod.OpenWeaponFusionScreen()
 	end
 
 	for _, weaponName in ipairs(WeaponDisplayOrder) do
-		table.insert(screen.WeaponList,{ WeaponName = weaponName, PrimaryAspects = weaponUpgrades[weaponName], SecondaryAspects = WeaponMinorAspectData[weaponName] })
+		table.insert(screen.WeaponList,{ WeaponName = weaponName, PrimaryAspects = weaponUpgrades[weaponName], SecondaryAspects = screen.WeaponMinorAspectData[weaponName] })
 	end
 
 	screen.ScrollState = {}
@@ -510,9 +517,9 @@ function mod.OpenWeaponFusionScreen()
         local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
 		state.PrimaryIndex = game.GetIndex(screen.WeaponList[index].PrimaryAspects, traitData1.Name)
 		state.SecondaryIndex = 1
-		if game.TraitData[FusionSaveData.last_aspect] and game.Contains(WeaponMinorAspectData[weaponName], FusionSaveData.last_aspect) then
+		if game.TraitData[FusionSaveData.last_aspect] and game.Contains(screen.WeaponMinorAspectData[weaponName], FusionSaveData.last_aspect) then
 			traitData2 = game.TraitData[FusionSaveData.last_aspect:gsub("_Secondary$", "")]
-			state.SecondaryIndex = game.GetIndex(WeaponMinorAspectData[weaponName], traitData2.Name.."_Secondary")
+			state.SecondaryIndex = game.GetIndex(screen.WeaponMinorAspectData[weaponName], traitData2.Name.."_Secondary")
 		end
         game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData1.WeaponKitGrannyModel, DestinationId = components["WeaponImageData1"..weaponName].Id })
 		if FusionSaveData.last_primary == weaponName then
@@ -537,7 +544,7 @@ function mod.OpenWeaponFusionScreen()
 
 	game.TeleportCursor({ OffsetX = screen.ItemStartX + screen.ButtonOffsetX, OffsetY = screen.ItemStartY, ForceUseCheck = true })
 
-	if config.random_fusion_each_run then
+	if FusionSaveData.random_fusion_each_run then
 		game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
 	end
 
@@ -555,7 +562,7 @@ function mod.OpenWeaponFusionScreen()
     screen.KeepOpen = true
 	screen.CanClose = true
 
-	screen.RandomButtonCache = config.random_fusion_each_run
+	screen.RandomButtonCache = FusionSaveData.random_fusion_each_run
 
 	game.HandleScreenInput( screen )
 end
@@ -585,7 +592,7 @@ function mod.CreateAspectInfoItem(button)
 		game.SetTraitTextData( traitData )
 	else
 		local aspectIndex = screen.ScrollState[index].SecondaryIndex
-		local traitName = WeaponMinorAspectData[weaponName][aspectIndex]
+		local traitName = screen.WeaponMinorAspectData[weaponName][aspectIndex]
 		local rawTraitData = game.TraitData[traitName] or game.TraitData[game.ScreenData.GameStats.WeaponBaseAspectMapping[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]]
 		traitData = game.GetProcessedTraitData({ Unit = game.CurrentRun.Hero, TraitName = rawTraitData.Name, Rarity = game.GetRarityKey( game.GetWeaponUpgradeLevel( string.gsub(rawTraitData.Name, "_Secondary", "") ), game.TraitRarityData.WeaponRarityUpgradeOrder ) })
 		game.SetTraitTextData( traitData )
@@ -716,8 +723,8 @@ function mod.CloseWeaponFusionScreen(screen)
 		EnableYmMesh()
 	end
 
-	if config.random_fusion_each_run ~= screen.RandomButtonCache then
-		local fusionStatus = config.random_fusion_each_run and "{#AltUpgradeFormat}ON" or "{#AltPenaltyFormat}OFF"
+	if FusionSaveData.random_fusion_each_run ~= screen.RandomButtonCache then
+		local fusionStatus = FusionSaveData.random_fusion_each_run and "{#AltUpgradeFormat}ON" or "{#AltPenaltyFormat}OFF"
 		game.thread( game.InCombatTextArgs, { TargetId= game.CurrentRun.Hero.ObjectId, Text = "Random fusion turned "..fusionStatus, SkipRise = false, SkipFlash = false, Duration = 1.5, ShadowScaleX = 1.2})
 	end
 end
@@ -851,12 +858,12 @@ function mod.CycleAspectsDown(screen)
 	local weaponData = game.WeaponData[weaponName]
 	if row == 2 then
 		local aspectIndex = screen.ScrollState[index].SecondaryIndex
-		local numAspects = #(WeaponMinorAspectData[weaponName])
+		local numAspects = #(screen.WeaponMinorAspectData[weaponName])
 		local newAspectIndex =  aspectIndex % numAspects + 1
 		screen.ScrollState[index].SecondaryIndex = newAspectIndex
-		local traitName = WeaponMinorAspectData[weaponName][newAspectIndex]
+		local traitName = screen.WeaponMinorAspectData[weaponName][newAspectIndex]
 		local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
-		if game.TraitData[traitName] and game.Contains(WeaponMinorAspectData[weaponName], traitName) then
+		if game.TraitData[traitName] and game.Contains(screen.WeaponMinorAspectData[weaponName], traitName) then
 			traitData2 = game.TraitData[traitName:gsub("_Secondary$", "")]
 		end
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData"..row..weaponName].Id })
@@ -884,12 +891,12 @@ function mod.CycleAspectsUp(screen)
 	local weaponData = game.WeaponData[weaponName]
 	if row == 2 then
 		local aspectIndex = screen.ScrollState[index].SecondaryIndex
-		local numAspects = #(WeaponMinorAspectData[weaponName])
+		local numAspects = #(screen.WeaponMinorAspectData[weaponName])
 		local newAspectIndex =  (aspectIndex - 2) % numAspects + 1
 		screen.ScrollState[index].SecondaryIndex = newAspectIndex
-		local traitName = WeaponMinorAspectData[weaponName][newAspectIndex]
+		local traitName = screen.WeaponMinorAspectData[weaponName][newAspectIndex]
 		local traitData2 = game.TraitData[game.ScreenData.WeaponUpgradeScreen.DisplayOrder[weaponName][1]]
-		if game.TraitData[traitName] and game.Contains(WeaponMinorAspectData[weaponName], traitName) then
+		if game.TraitData[traitName] and game.Contains(screen.WeaponMinorAspectData[weaponName], traitName) then
 			traitData2 = game.TraitData[traitName:gsub("_Secondary$", "")]
 		end
 		game.SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation .. "_FusionScreen", GrannyModel = traitData2.WeaponKitGrannyModel, DestinationId = components["WeaponImageData"..row..weaponName].Id })
@@ -949,7 +956,7 @@ function mod.FuseAndExit(screen)
 	local primaryWeapon = screen.WeaponList[selectedPrimary].WeaponName
 	local secondaryWeapon = screen.WeaponList[selectedSecondary].WeaponName
 	local primaryAspect = screen.WeaponList[selectedPrimary].PrimaryAspects[primaryIndex]
-	local secondaryAspect = WeaponMinorAspectData[secondaryWeapon][secondaryIndex]
+	local secondaryAspect = screen.WeaponMinorAspectData[secondaryWeapon][secondaryIndex]
 
 	local sameAspect = primaryAspect == string.gsub(secondaryAspect, "_Secondary", "")
 
@@ -974,8 +981,8 @@ function mod.FuseAndExit(screen)
 end
 
 function mod.ToggleRandomEachRun(screen, button)
-	config.random_fusion_each_run = config.random_fusion_each_run == false
-	if config.random_fusion_each_run then
+	FusionSaveData.random_fusion_each_run = not FusionSaveData.random_fusion_each_run
+	if FusionSaveData.random_fusion_each_run then
 		game.MouseOverContextualAction(button)
 		game.PlaySound({ Name = screen.ToggleOffSound, Id = button.Id })
 	else

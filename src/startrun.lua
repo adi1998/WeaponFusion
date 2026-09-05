@@ -87,7 +87,13 @@ function PickRandomFusion()
     print("selected random weapon", randomWeaponKit, randomWeaponUpgrade)
     game.RemoveValueAndCollapse(weaponKits, randomWeaponKit)
     local secondRandomWeapon = game.GetRandomArrayValue(weaponKits)
-    local secondRandomUpgrade = game.GetRandomArrayValue(WeaponMinorAspectData[secondRandomWeapon])
+    local unlockedMinorAspects = {}
+    for _, aspect in ipairs(WeaponMinorAspectData[secondRandomWeapon]) do
+        if game.GameState.WeaponsUnlocked[aspect:gsub("_Secondary", "")] then
+            table.insert(unlockedMinorAspects, aspect)
+        end
+    end
+    local secondRandomUpgrade = game.GetRandomArrayValue(unlockedMinorAspects)
     print("selected second random weapon", secondRandomWeapon, secondRandomUpgrade)
 
     mod.UnequipWeapons()
@@ -102,14 +108,14 @@ end
 modutil.mod.Path.Wrap("StartOver", function (base, args)
     args = args or {}
     local bountyData = game.BountyData[args.ActiveBounty] or {}
-    if config.random_fusion_each_run and ( not args.ActiveBounty or bountyData.UseRandomWeaponUpgrade ) then
+    if FusionSaveData.random_fusion_each_run and ( not args.ActiveBounty or bountyData.UseRandomWeaponUpgrade ) then
         -- random fusion for normal runs, Dream Dives and packaged random bounties
         PickRandomFusion()
         if args.StartingRoomName == "Dream_Intro" and not args.ActiveBounty then
             game.GameState.StoredActiveShrineBounty = game.GameState.ActiveShrineBounty
             game.GameState.ActiveShrineBounty = nil
         end
-    elseif args.ActiveBounty and not (bountyData.UseRandomWeaponUpgrade and config.random_fusion_each_run) then
+    elseif args.ActiveBounty and not (bountyData.UseRandomWeaponUpgrade and FusionSaveData.random_fusion_each_run) then
         -- unfuse for non random packaged bounties or random bounties if random_fusion_each_run is disabled
         local weaponKit = "WeaponStaffSwing"
         for weapon, _ in pairs(mod.WeaponData) do

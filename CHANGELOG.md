@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Only show minor aspects if the basic aspect has been unlocked.
+- Update random fusion to account for unlocked aspects.
+
 ## [1.1.3] - 2026-09-02
 
 - Torch omega specials now cleave-cast on creation *and* deletion of projectiles.
