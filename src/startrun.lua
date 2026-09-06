@@ -76,7 +76,7 @@ function PickRandomFusion()
     local weaponUpgrades = game.DeepCopyTable(game.ScreenData.WeaponUpgradeScreen.DisplayOrder)
     for weaponKit, upgradeList in pairs(weaponUpgrades) do
         for index, upgrade in ipairs(upgradeList) do
-            if not game.GameState.WeaponsUnlocked[upgrade] or bannedPrimaryAspects[upgrade] then
+            if index ~= 1 and ( not game.GameState.WeaponsUnlocked[upgrade] or bannedPrimaryAspects[upgrade] ) then
                 upgradeList[index] = nil
             end
         end
@@ -88,8 +88,8 @@ function PickRandomFusion()
     game.RemoveValueAndCollapse(weaponKits, randomWeaponKit)
     local secondRandomWeapon = game.GetRandomArrayValue(weaponKits)
     local unlockedMinorAspects = {}
-    for _, aspect in ipairs(WeaponMinorAspectData[secondRandomWeapon]) do
-        if game.GameState.WeaponsUnlocked[aspect:gsub("_Secondary", "")] then
+    for index, aspect in ipairs(WeaponMinorAspectData[secondRandomWeapon]) do
+        if index == 1 or game.GameState.WeaponsUnlocked[aspect:gsub("_Secondary", "")] then
             table.insert(unlockedMinorAspects, aspect)
         end
     end

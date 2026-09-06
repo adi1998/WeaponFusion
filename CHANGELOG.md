@@ -2,8 +2,9 @@
 
 ## [Unreleased]
 
-- Only show minor aspects if the basic aspect has been unlocked.
+- Only show minor aspects if the regular aspect has been unlocked.
 - Update random fusion to account for unlocked aspects.
+- Ensure that `Aspect of Melinoe` for every weapon is always considered unlocked.
 
 ## [1.1.3] - 2026-09-02
 

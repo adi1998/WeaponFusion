@@ -481,8 +481,8 @@ function mod.OpenWeaponFusionScreen()
 	screen.WeaponMinorAspectData = {}
 	for weapon, aspects in pairs(WeaponMinorAspectData) do
 		screen.WeaponMinorAspectData[weapon] = {}
-		for _, aspect in ipairs(aspects) do
-			if game.GameState.WeaponsUnlocked[aspect:gsub("_Secondary", "")] then
+		for index, aspect in ipairs(aspects) do
+			if index == 1 or game.GameState.WeaponsUnlocked[aspect:gsub("_Secondary", "")] then
 				table.insert(screen.WeaponMinorAspectData[weapon], aspect)
 			end
 		end
@@ -494,7 +494,7 @@ function mod.OpenWeaponFusionScreen()
 
 	for weaponKit, upgradeList in pairs(weaponUpgrades) do
 		for index, upgrade in ipairs(upgradeList) do
-			if not game.GameState.WeaponsUnlocked[upgrade] and index ~= 1 then
+			if ( not game.GameState.WeaponsUnlocked[upgrade] ) and index ~= 1 then
 				upgradeList[index] = nil
 			end
 		end
