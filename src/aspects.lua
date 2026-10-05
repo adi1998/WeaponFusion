@@ -1,6 +1,63 @@
 local artemisValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack", "WeaponTransformSpecial"} )
 game.RemoveValueAndCollapse(artemisValidWeapons, "WeaponAxeSpin")
 
+local heroPrimaryNonExWeapons =
+{
+	"WeaponStaffSwing",
+	"WeaponStaffSwing2",
+	"WeaponStaffSwing3",
+	"WeaponStaffDash",
+
+	"WeaponDagger",
+	"WeaponDagger2",
+	"WeaponDaggerDouble",
+	"WeaponDaggerMultiStab",
+	"WeaponDaggerDash",
+
+	"WeaponAxe",
+	"WeaponAxe2",
+	"WeaponAxe3",
+	"WeaponAxeDash",
+
+	"WeaponTorch",
+
+	"WeaponLob",
+
+	"WeaponSuit",
+	"WeaponSuit2",
+	"WeaponSuitDouble",
+	"WeaponSuitDash",
+}
+
+local heroPrimaryWeaponsSuitSet = {
+	"WeaponStaffSwing",
+	"WeaponStaffSwing2",
+	"WeaponStaffSwing3",
+	"WeaponStaffDash",
+	"WeaponStaffSwing5",
+
+	"WeaponDagger",
+	"WeaponDagger2",
+	"WeaponDaggerDouble",
+	"WeaponDaggerMultiStab",
+	"WeaponDaggerDash",
+	"WeaponDagger5",
+
+	"WeaponAxe",
+	"WeaponAxe2",
+	"WeaponAxe3",
+	"WeaponAxeDash",
+
+	"WeaponTorch",
+
+	"WeaponLob",
+
+	"WeaponSuit",
+	"WeaponSuit2",
+	"WeaponSuitDouble",
+	"WeaponSuitDash",
+}
+
 mod.AspectTraitData = {
     AxeArmCastAspect_Secondary =
 	{
@@ -1844,10 +1901,11 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
-				WeaponNames = game.WeaponSets.HeroPrimaryWeapons,
+				WeaponNames = heroPrimaryNonExWeapons,
 				BaseValue = 0.8,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
+				ExcludeLinked = true,
 				ReportValues = { ReportedSpeed = "ChangeValue" }
 			},
 		},
@@ -3034,11 +3092,11 @@ mod.AspectTraitData = {
 		PropertyChanges =
 		{
 			{
-				WeaponNames = game.WeaponSets.HeroPrimaryWeapons,
+				WeaponNames = heroPrimaryWeaponsSuitSet,
 				BaseValue = 0.95,
 				SourceIsMultiplier = true,
 				SpeedPropertyChanges = true,
-				ExcludeLinked = true,
+				ExcludeLinked = true
 			},
 			{
 				UnitProperty = "Speed",

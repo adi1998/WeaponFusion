@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix Minor Aspect of Thanatos and Minor Mel Suit Aspect not boosting Attack speed for Morrigan blades.
+
 ## [1.2.0] - 2026-09-06
 
 - Only show minor aspects if the regular aspect has been unlocked.
