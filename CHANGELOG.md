@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 - Fix Minor Aspect of Thanatos and Minor Mel Suit Aspect not boosting Attack speed for Morrigan blades.
-- Nergal now allows Morrigan Specials and Torch Omega Specials to build Berserk from multihits.
+- Nergal now allows Morrigan Specials, Torch Omega Specials and Anubis Omega Attack to build Berserk from multihits.
 
 ## [1.2.0] - 2026-09-06
 
