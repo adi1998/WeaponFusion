@@ -1,4 +1,25 @@
 
+local function checkFrenzyCount_common(victim, functionArgs, triggerArgs, rallyTraitName)
+	if game.IsEmpty( game.CurrentRun.Hero.ActiveEffects ) or not game.CurrentRun.Hero.ActiveEffects.Frenzy then
+		game.IncrementTableValue( game.MapState, "FrenzyHits" )
+		local requiredCount = 21
+		local traitData = game.GetHeroTrait(rallyTraitName)
+		if traitData.OnEnemyDamagedAction and traitData.OnEnemyDamagedAction.Args then
+			requiredCount = traitData.OnEnemyDamagedAction.Args.RequiredCount or requiredCount
+		end
+		if game.ScreenAnchors.AxeUIChargeAmount then
+			game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = game.MapState.FrenzyHits / requiredCount, Instant = true })
+		end
+	end
+
+	if game.MapState.FrenzyHits >= functionArgs.RequiredCount then
+		game.MapState.FrenzyHits = 0
+		local dataProperties = game.MergeTables(game.EffectData[functionArgs.EffectName].DataProperties, functionArgs.DataProperties)
+		dataProperties.Duration = dataProperties.Duration + game.GetTotalHeroTraitValue("FrenzyDurationBonus")
+		game.ApplyEffect( game.MergeTables({ DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = functionArgs.EffectName, DataProperties = dataProperties }))
+	end
+end
+
 function mod.CheckFrenzyCount(victim, functionArgs, triggerArgs)
 
 	local passesHitCheck = functionArgs.FirstHitOnly == nil or (functionArgs.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, "CheckFrenzyCount_Secondary" ))
@@ -12,27 +33,69 @@ function mod.CheckFrenzyCount(victim, functionArgs, triggerArgs)
 	end
 	if passesHitCheck then
 		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, "CheckFrenzyCount_Secondary")
-		if game.IsEmpty( game.CurrentRun.Hero.ActiveEffects ) or not game.CurrentRun.Hero.ActiveEffects.Frenzy then
-			local startingCount = game.MapState.FrenzyHits or 0
-			game.IncrementTableValue( game.MapState, "FrenzyHits" )
-			local requiredCount = 21
-			local traitData = game.GetHeroTrait("AxeRallyAspect_Secondary")
-			if traitData.OnEnemyDamagedAction and traitData.OnEnemyDamagedAction.Args then
-				requiredCount = traitData.OnEnemyDamagedAction.Args.RequiredCount or requiredCount
-			end
-			if game.ScreenAnchors.AxeUIChargeAmount then
-				game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = game.MapState.FrenzyHits / requiredCount, Instant = true })
-			end
-		end
-
-		if game.MapState.FrenzyHits >= functionArgs.RequiredCount then
-			game.MapState.FrenzyHits = 0
-			local dataProperties = game.MergeTables(game.EffectData[functionArgs.EffectName].DataProperties, functionArgs.DataProperties)
-			dataProperties.Duration = dataProperties.Duration + game.GetTotalHeroTraitValue("FrenzyDurationBonus")
-			game.ApplyEffect( game.MergeTables({ DestinationId = game.CurrentRun.Hero.ObjectId, Id = game.CurrentRun.Hero.ObjectId, EffectName = functionArgs.EffectName, DataProperties = dataProperties }))
-		end
+		checkFrenzyCount_common(victim, functionArgs, triggerArgs, "AxeRallyAspect_Secondary")
 	end
 end
+
+local checkFrenzyCount_MultihitData = {
+	MultihitProjectileWhitelistLookup = game.ToLookup({
+		"ProjectileDaggerThrow",
+		"ProjectileDaggerThrowCharged",
+		"ProjectileTorchOrbitEx",
+		"ProjectileTorchSupayBallEx"
+	}),
+	MultihitProjectileConditions = {
+		ProjectileDaggerThrow = {
+			TraitNameRequirements  =
+			{
+				{
+					TraitName = "DaggerTripleAspect_Secondary",
+					Cooldown = 0.2,
+				},
+			},
+		},
+		ProjectileDaggerThrowCharged = {
+			TraitNameRequirements  =
+			{
+				{
+					TraitName = "DaggerTripleAspect_Secondary",
+					Cooldown = 0.25,
+				},
+			},
+		},
+		ProjectileTorchOrbitEx = {
+			Cooldown = 0.7,
+		},
+		ProjectileTorchSupayBallEx = {
+			Cooldown = 0.7,
+		}
+	}
+}
+
+modutil.mod.Path.Wrap("CheckFrenzyCount", function (base, victim, functionArgs, triggerArgs)
+	local sourceProjectile = triggerArgs.SourceProjectile
+	local cooldownName = _PLUGIN.guid .. "CheckFrenzyCount_Custom"
+	if checkFrenzyCount_MultihitData.MultihitProjectileWhitelistLookup[sourceProjectile] then
+		-- reset FirstHitRecord for custom multihits
+		game.SessionMapState.FirstHitRecord[triggerArgs.ProjectileId] = game.SessionMapState.FirstHitRecord[triggerArgs.ProjectileId] or {}
+		game.SessionMapState.FirstHitRecord[triggerArgs.ProjectileId]["CheckFrenzyCount"] = nil
+
+		local conditions = game.ShallowCopyTable(checkFrenzyCount_MultihitData.MultihitProjectileConditions[triggerArgs.SourceProjectile])
+		if conditions.TraitNameRequirements then
+			for _, traitConditions in pairs( conditions.TraitNameRequirements ) do
+				if traitConditions.TraitName and game.HeroHasTrait(traitConditions.TraitName) then
+					conditions = game.ShallowCopyTable(traitConditions)
+					break
+				end
+			end
+		end
+		if not conditions.Cooldown or game.CheckCooldown( cooldownName .. triggerArgs.ProjectileId, conditions.Cooldown ) then
+			checkFrenzyCount_common(victim, functionArgs, triggerArgs, "AxeRallyAspect")
+		end
+		return
+	end
+	return base(victim, functionArgs, triggerArgs)
+end)
 
 function mod.CheckPerfectAxeCrit( victim, args, triggerArgs )
 	if game.IsExWeapon( triggerArgs.SourceWeapon, { Combat = true }, triggerArgs ) then

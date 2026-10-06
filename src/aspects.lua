@@ -416,10 +416,12 @@ mod.AspectTraitData = {
 				MultihitProjectileWhitelist =
 				{
 					"ProjectileStaffSingle",
+					"ProjectileStaffWall"
 				},
 				MultihitProjectileConditions =
 				{
 					ProjectileStaffSingle = { Cooldown = 0.5 },
+					ProjectileStaffWall = { Cooldown = 0.6 },
 				},
 				DataProperties =
 				{

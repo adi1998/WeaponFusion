@@ -12,7 +12,7 @@ pattern = '''
 '''
 position = "after"
 payload = '''
-				--#region injected by WeaponFusion to handle Shiva bonuses
+				--#region injected by WeaponFusion to handle custom Shiva bonuses
 				if modifierData.ValidSuitProjectile and SessionMapState.SuitBonusProjectileVolley and SessionMapState.SuitBonusProjectileVolley[triggerArgs.SourceProjectile] and
 						SessionMapState.SuitBonusProjectileVolley[triggerArgs.SourceProjectile][triggerArgs.SourceProjectileVolley] then
 					addDamageMultiplier( modifierData, SessionMapState.SuitBonusProjectileVolley[triggerArgs.SourceProjectile][triggerArgs.SourceProjectileVolley])
