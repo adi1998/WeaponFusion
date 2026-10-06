@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-10-06
+
 - Fix Minor Aspect of Thanatos and Minor Mel Suit Aspect not boosting Attack speed for Morrigan blades.
 - Nergal now allows Morrigan Specials, Torch Omega Specials and Anubis Omega Attack to build Berserk from multihits.
 
@@ -203,7 +205,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.2.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.2.1...HEAD
+[1.2.1]: https://github.com/adi1998/WeaponFusion/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/adi1998/WeaponFusion/compare/1.1.3...1.2.0
 [1.1.3]: https://github.com/adi1998/WeaponFusion/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/adi1998/WeaponFusion/compare/1.1.1...1.1.2
