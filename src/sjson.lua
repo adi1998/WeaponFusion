@@ -5,7 +5,7 @@ local traitTextOrder = {
     "Description",
 }
 
-local traitTextEnFile = rom.path.combine(rom.paths.Content, "Game\\Text\\en\\TraitText.en.sjson")
+local traitTextEnFile = rom.path.combine(rom.paths.Content(), "Game\\Text\\en\\TraitText.en.sjson")
 
 local traitTextList = {
     {
@@ -172,7 +172,7 @@ WeaponDisplayOrder = {
     "WeaponLob"
 }
 
-local weaponAnimationFile = rom.path.combine(rom.paths.Content, "Game\\Animations\\Model\\Weapon_Animation.sjson")
+local weaponAnimationFile = rom.path.combine(rom.paths.Content(), "Game\\Animations\\Model\\Weapon_Animation.sjson")
 
 local animList = {}
 for index, value in ipairs(WeaponDisplayOrder) do
@@ -199,7 +199,7 @@ sjson.hook(weaponAnimationFile, function (data)
     return data
 end)
 
-local guiFile = rom.path.combine(rom.paths.Content, "Game\\Obstacles\\GUI.sjson")
+local guiFile = rom.path.combine(rom.paths.Content(), "Game\\Obstacles\\GUI.sjson")
 
 sjson.hook(guiFile, function (data)
     local blankButton = {
@@ -363,7 +363,7 @@ local perfectString = sjson.to_object({
     DisplayName = "Perfect"
 }, { "Id", "DisplayName" })
 
-local screenTextPath = rom.path.combine(rom.paths.Content, 'Game\\Text\\en\\ScreenText.en.sjson')
+local screenTextPath = rom.path.combine(rom.paths.Content(), 'Game\\Text\\en\\ScreenText.en.sjson')
 
 sjson.hook(screenTextPath, function(data)
     local boonPerfectFound
@@ -377,7 +377,7 @@ sjson.hook(screenTextPath, function(data)
     end
 end)
 
-local melinoeHeraVfxPath = rom.path.combine(rom.paths.Content, "Game\\Animations\\Melinoe_Hera_VFX.sjson")
+local melinoeHeraVfxPath = rom.path.combine(rom.paths.Content(), "Game\\Animations\\Melinoe_Hera_VFX.sjson")
 
 sjson.hook(melinoeHeraVfxPath, function (data)
     table.insert(data.Animations, sjson.to_object(
