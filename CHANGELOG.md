@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-27
+
 - Add Nyx Nightspawn for torch special.
 
 ## [1.2.1] - 2026-10-06
@@ -207,7 +209,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.2.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/adi1998/WeaponFusion/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/adi1998/WeaponFusion/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/adi1998/WeaponFusion/compare/1.1.3...1.2.0
 [1.1.3]: https://github.com/adi1998/WeaponFusion/compare/1.1.2...1.1.3
