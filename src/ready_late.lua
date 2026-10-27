@@ -234,6 +234,10 @@ modutil.mod.Path.Context.Env("CheckProjectileSpawn", function ()
 			args.ImpactIgnoresFromId = nil
 			args.Angle = math.random(0,360)
 		end
+		if args.Name == "ProjectileTorchOrbit" then
+			args.DataProperties = args.DataProperties or {}
+			args.DataProperties.Range = 380
+		end
 		local projectileId = base(args)
 		if args.WeaponName ~= "WeaponSuitRanged" or game.Contains({"ProjectileSuitGrenade", "ProjectileSuitGrenadeStraight"}, args.Name) then
 			game.SessionMapState.InvalidSplitIds[projectileId] = true

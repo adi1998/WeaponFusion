@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add Nyx Nightspawn for torch special.
+
 ## [1.2.1] - 2026-10-06
 
 - Fix Minor Aspect of Thanatos and Minor Mel Suit Aspect not boosting Attack speed for Morrigan blades.
