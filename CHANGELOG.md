@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-10-28
+
 - Increase poseidon splash cap for torch special Nightspawns.
 - Skelly now spawns while exiting the fusion menu.
 
@@ -212,7 +214,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.3.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/adi1998/WeaponFusion/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/adi1998/WeaponFusion/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/adi1998/WeaponFusion/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/adi1998/WeaponFusion/compare/1.1.3...1.2.0
