@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Increase poseidon splash cap for torch special Nightspawns.
+- Skelly now spawns while exiting the fusion menu.
+
 ## [1.3.0] - 2026-10-27
 
 - Add Nyx Nightspawn for torch special.

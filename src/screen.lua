@@ -719,6 +719,8 @@ function mod.CloseWeaponFusionScreen(screen)
 	game.ShowCombatUI( screen.Name )
 	game.wait( 0.3 )
 
+	game.SpawnSkelly(1)
+
 	if rom.mods[AspectYoungMel] then
 		EnableYmMesh()
 	end

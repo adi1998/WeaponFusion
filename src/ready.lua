@@ -823,3 +823,13 @@ modutil.mod.Path.Wrap("BoonInfoPopulateTraits", function (base, screen, ...)
         end
     end
 end)
+
+modutil.mod.Path.Wrap("CheckPoseidonSplash", function (base, victim, functionArgs, triggerArgs)
+    if not game.HeroHasTrait("TorchAutofireAspect_Secondary") and game.HeroHasTrait("SuitMarkCritAspect") and triggerArgs.SourceProjectile == "ProjectileTorchOrbit" then
+        local conditions = functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile]
+        if conditions and conditions.Count then
+            conditions.Count = 6
+        end
+    end
+    return base(victim, functionArgs, triggerArgs)
+end)

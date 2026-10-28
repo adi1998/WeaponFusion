@@ -72,8 +72,12 @@ modutil.mod.Path.Wrap("NyxHitBuffClear", function(base, triggerArgs)
 end)
 
 modutil.mod.Path.Wrap("CheckProjectileSpawn", function(base, triggerArgs, functionArgs)
-    if triggerArgs.WeaponName == "WeaponTorchSpecial" and game.HeroHasTrait("TorchAutofireAspect_Secondary") then
-        return
+    if triggerArgs.WeaponName == "WeaponTorchSpecial" then
+        if game.HeroHasTrait("TorchAutofireAspect_Secondary") then
+            return
+        else
+            functionArgs.SpawnArc = 180
+        end
     end
     if triggerArgs.WeaponName == "WeaponTorch" and not functionArgs.IgnoreAdvancedSplitValidity and game.HeroHasTrait("TorchSplitAttackTrait") then
         functionArgs.SpawnArc = 40
