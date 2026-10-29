@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- Allow dagger specials to detonante Moros ghosts while returning to player.
+- Allow dagger specials to detonate Moros ghosts while returning to player.
 
 ## [1.3.1] - 2026-10-28
 
