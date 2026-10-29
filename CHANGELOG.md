@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Allow dagger specials to detonante Moros ghosts while returning to player.
+
 ## [1.3.1] - 2026-10-28
 
 - Increase poseidon splash cap for torch special Nightspawns.

@@ -61,15 +61,20 @@ local function on_ready()
         end
     end
     import 'sjson.lua'
+
     import 'aspects.lua'
     import 'aspects_logic.lua'
+
     import 'charon.lua'
     import 'hel.lua'
     import 'nyx.lua'
     import 'momus.lua'
     import 'eos.lua'
+
     import 'ready.lua'
     import 'startrun.lua'
+
+    import 'memory_patches.lua'
 end
 
 local function on_reload()
