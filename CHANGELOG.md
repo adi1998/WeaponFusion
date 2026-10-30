@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-10-30
+
 - Allow Medea to trigger attacks more consistently with Torch and Dagger specials.
 
 ## [1.4.0] - 2026-10-29
@@ -220,7 +222,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.4.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.4.1...HEAD
+[1.4.1]: https://github.com/adi1998/WeaponFusion/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/adi1998/WeaponFusion/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/adi1998/WeaponFusion/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/adi1998/WeaponFusion/compare/1.2.1...1.3.0
