@@ -535,11 +535,27 @@ game.OnWeaponChargeCanceled{ "WeaponLob",
 }
 
 if game.TraitData.LobCloseAttackAspect.OnEnemyDamagedAction then
-	game.TraitData.LobCloseAttackAspect.OnEnemyDamagedAction.ValidWeapons =
+	local lobTraitData = game.TraitData.LobCloseAttackAspect
+	lobTraitData.OnEnemyDamagedAction.ValidWeapons =
 	{
 		"WeaponLobSpecial", "WeaponStaffBall", "WeaponDaggerThrow", "WeaponTorchSpecial", "WeaponAxeSpecial", "WeaponSuitRanged", "WeaponSprintEx"
 	}
+	lobTraitData.OnEnemyDamagedAction.FirstHitOnly = nil
+	lobTraitData.OnEnemyDamagedAction.Args = lobTraitData.OnEnemyDamagedAction.Args or {}
+	lobTraitData.OnEnemyDamagedAction.Args.FirstHitOnly = true
+	lobTraitData.OnEnemyDamagedAction.Args.MultihitWeaponWhitelist = {
+		"WeaponTorchSpecial",
+		"WeaponDaggerThrow"
+	}
 end
+
+modutil.mod.Path.Wrap("CheckLobDetonate", function (base, victim, functionArgs, triggerArgs)
+	if ( not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "CheckLobDetonate") or
+		(triggerArgs.SourceWeapon == nil or (functionArgs.MultihitWeaponWhitelistLookup and functionArgs.MultihitWeaponWhitelistLookup[triggerArgs.SourceWeapon]))) then
+			game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "CheckLobDetonate" )
+			base(victim, functionArgs, triggerArgs)
+	end
+end)
 
 game.WeaponData.WeaponBlink.OnFiredFunctionNames = game.WeaponData.WeaponBlink.OnFiredFunctionNames or {}
 

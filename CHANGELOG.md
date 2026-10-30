@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Allow Medea to trigger attacks more consistently with Torch and Dagger specials.
+
 ## [1.4.0] - 2026-10-29
 
 - Allow dagger specials to detonate Moros ghosts while returning to player.
