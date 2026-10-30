@@ -109,6 +109,11 @@ function mod.HandleAttachRecord(weaponData, functionArgs, triggerArgs)
 				WeaponName = weaponName,
 				Type = "Projectile",
 			})
+
+			if weaponName == "WeaponAxeSpecial" and not derivedValues.PropertyChanges.StartFx then
+				derivedValues.PropertyChanges.StartFx = "AxeSwipeUpper"
+			end
+
 			local location = game.GetLocation({Id = game.SessionMapState.CurrentExProjectile, IsProjectile = true })
 			local startX = location.X
 			local startY = location.Y

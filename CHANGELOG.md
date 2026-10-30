@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix Eos' duplicated Axe special not having vfx.
+
 ## [1.4.1] - 2026-10-30
 
 - Allow Medea to trigger attacks more consistently with Torch and Dagger specials.
