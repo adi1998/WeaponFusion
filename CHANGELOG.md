@@ -24,7 +24,7 @@
 ## [1.2.1] - 2026-10-06
 
 - Fix Minor Aspect of Thanatos and Minor Mel Suit Aspect not boosting Attack speed for Morrigan blades.
-- Nergal now allows Morrigan Specials, Torch Omega Specials and Anubis Omega Attack to build Berserk from multihits.
+- Nergal now allows Morrigan Specials, Torch ᘯSpecials and Anubis ᘯAttack to build Berserk from multihits.
 
 ## [1.2.0] - 2026-09-06
 
@@ -34,7 +34,7 @@
 
 ## [1.1.3] - 2026-09-02
 
-- Torch omega specials now cleave-cast on creation *and* deletion of projectiles.
+- Torch ᘯSpecial now triggers cleave-cast on creation *and* deletion of projectiles.
 
 ## [1.1.2] - 2026-09-01
 
@@ -55,17 +55,17 @@
 ## [1.0.0] - 2026-08-08
 
 - Same weapon fusion no longer experimental :)
-- Fix duplicated Anubis omega special from Momus/Eos not inheriting the damage and radius boost.
+- Fix duplicated Anubis ᘯSpecial from Momus/Eos not inheriting the damage and radius boost.
 - Eos will now duplicate Supay base special.
 - Minor Aspect of Supay will no longer auto-fire basic torch aspects' attacks.
 - Adjust Counter Barrage rocket spawn workaround
-- Minor Aspect of Hel now blocks all omega Attacks and Specials during Valkyrie form and properly resumes charging them after it ends.
+- Minor Aspect of Hel now blocks all ᘯAttacks and ᘯSpecials during Valkyrie form and properly resumes charging them after it ends.
 - Remove ImGui menu (its been outdated and unnecessary since the in-game UI was introduced).
 - Fix Pan plus Morrigan not having homing Specials
 - Nyx sprint blast now gets boosted when fused with Supay
 - Skull's Minor Aspect of Melinoe now boosts other skull aspects
 - Nyx Nightspawns added for Shiva and Hel special
-- Nyx's omega Boost can now trigger Medea's attack explosion
+- Nyx's ᘯBoost can now trigger Medea's attack explosion
 
 ## [0.9.6] - 2026-08-04
 
@@ -91,24 +91,24 @@
 ## [0.9.1] - 2026-07-12
 
 - Fix Artemis not consuming crit charges from Anubis ticks
-- Fix Shiva only buffing the first axe omega attack projectile
+- Fix Shiva only buffing the first axe ᘯAttack projectile
 - Fix Shiva tooltip always showing max Destructive stacks as 2
 
 ## [0.9.0] - 2026-07-11
 
-- Shiva as primary aspect now gets Destructive stacks from the secondary omega specials
+- Shiva as primary aspect now gets Destructive stacks from the secondary ᘯSpecial
 - Fix fusion menu fusing unexpected aspects if not all aspects for a weapon are unlocked
 
 ## [0.8.1] - 2026-07-08
 
 - Fix Morrigan special Nightspawn
-- Fix Torch omega attack firing in the opposite direction
+- Fix Torch ᘯAttack firing in the opposite direction
 - SKip checkpoint invalidation in some cases to avoid losing runs
 
 ## [0.8.0] - 2026-06-18
 
 - Implement Nyx Nightspawns for staff attack and special, torch attack, skull attack and dagger special
-- Allow Nyx omega Boost to activate Valkyire form
+- Allow Nyx ᘯBoost to activate Valkyire form
 - Fix attack Nightspawns for coat attacks during same weapon fusion
 
 ## [0.7.3] - 2026-06-16
@@ -117,7 +117,7 @@
 - Fix Exceptional Talent for Minor Aspect of Hel
 - Fix Artemis not boosting Supay Attacks
 - Fix Axe not consuming Artemis crit charges
-- Fix Psychic Whirlwind breaking daggers omega special
+- Fix Psychic Whirlwind breaking daggers ᘯSpecial
 
 ## [0.7.2] - 2026-06-10
 
@@ -135,7 +135,7 @@
 
 ## [0.6.3] - 2026-06-04
 
-- Remove hitstop from Morrigan's Blood Triad and Dagger Omega Attack
+- Remove hitstop from Morrigan's Blood Triad and Dagger ᘯAttack
 - Fix Nergal and Thanatos not working properly after the Anubis fix
 
 ## [0.6.2] - 2026-05-26
@@ -153,14 +153,14 @@
 
 ## [0.5.0] - 2026-05-17
 
-- Add Minor Aspect of Momus, able to duplicate every omega attack
-- Add proper support for Charon as primary aspect, all other weapons' omega specials trigger cleave-cast
+- Add Minor Aspect of Momus, able to duplicate every ᘯ attack
+- Add proper support for Charon as primary aspect, all other weapons' ᘯ specials trigger cleave-cast
 - Add Minor Aspects of Melinoe for all weapons except skulls
-- Fix Eos' duplicate skull omega specials not being created properly
+- Fix Eos' duplicate skull ᘯSpecial not being created properly
 - Fix Supay attack not auto firing when Melinoe puts the flames away to use another weapon
 - Fix Anubis base attack not increasing stacks for Thanatos and Nergal
 - Fix Minor Aspect of Artemis boosting regular attack speed for torches and skull
-- Primary Anubis no longer increases Mana cost for fused omega specials
+- Primary Anubis no longer increases Mana cost for fused ᘯSpecials
 - Fix axe always having Psychic Whirlwind active for fused specials
 
 ## [0.4.2] - 2026-05-14
@@ -194,14 +194,14 @@
 
 - Moros now doesn't destroy the special projectiles immediately
 - Fix skulls and Shiva not detonating Moros flames
-- Slightly reduce Artemis omega attack speed
-- Artemis now also boosts staff omega attack speed
+- Slightly reduce Artemis ᘯ attack speed
+- Artemis now also boosts staff ᘯ attack speed
 
 ## [0.2.0] - 2026-05-09
 
 - Adds the Argent Skull with Aspect of Persephone available as a secondary aspect
 - Add option for random fusion every run
-- Fix Shiva not boosting some omega attacks
+- Fix Shiva not boosting some ᘯ attacks
 - Fusing weapons now instantly swaps to the fused weapon, primary aspect still needs to be changed using the in-game UI
 - Fusion now triggers a save
 - Fix for SkyFall not unequipping properly in the Crossroads, when switching weapons
