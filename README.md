@@ -1,6 +1,6 @@
 ## Weapon Fusion
 
-Hades II mod allowing you to fuse any* 2 weapons and their aspects. Takes Attacks and Specials from different weapons and combines them into a single weapon. Also supprts some AspectYoungMel aspects.
+Hades II mod allowing you to fuse any* 2 weapons and their aspects. Takes Attacks and Specials from different weapons and combines them into a single weapon. Also supports some [AspectYoungMel](https://old.thunderstore.io/c/hades-ii/p/JarlUlsfark/AspectYoungMel/) aspects.
 
 Gameplay examples of what it looks like in action: 
 
@@ -15,9 +15,9 @@ It is recommended to backup your save from `%USERPROFILE%\Saved Games\Hades II\P
 
 ## Update and un-installation
 
-It is recommended to only update or uninstall the mod while in the Crossoroads. If weapons seem broken after update/uninstall try re-fusing or cycling through all of them.
+It is recommended to only update or uninstall the mod while in the Crossroads. If weapons seem broken after update/uninstall try re-fusing or cycling through all the weapons once.
 
-It is recommended to unfuse weapons before uninstalltion.
+It is recommended to un-fuse weapons before un-installtion.
 
 ## Usage
 
@@ -39,13 +39,19 @@ There is also support for fusing two aspects of same weapon.
 
 Note: During same weapon fusion, if any hidden aspect is fused as a primary it will override both the attack and special moveset.
 
+## Some custom interactions
+
+- Medea plus Nyx allows the ᘯBoost to trigger the Attack explosion.
+- Shiva plus Torch or Dagger build Destructive per ᘯSpecial hit, rather than being in the ᘯSpecial blast area.
+- Hel plus Nyx allows the ᘯBoost to trigger Valkyrie form as well.
+
 ## Some minor limitations
 
 - Aspect of Pan as primary does nothing when fused with any non-dagger aspect.
 - Aspects of Medea, Eos and Moros don't have a Minor Aspect since they are heavily Attack oriented.
 - Skull's Minor Aspect of Melinoe only affects Persephone and Medea (they're the only other ones with Ammo).
-- Some weapons' attack/special will not produce Nyx's Nightspawn
+- Dagger Attack, Axe Attack/Special, Skull Special(except Hel) do not produce Nyx's Nightspawn.
 
 ## Issues and feedback
 
-Report any issues or feedback [here](https://github.com/adi1998/WeaponFusion/issues) or on [Discord](https://discord.gg/KuMbyrN).
+Report any issues or feedback [here](https://github.com/adi1998/WeaponFusion/issues) or on [Hades Modding Discord](https://discord.gg/KuMbyrN).
