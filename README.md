@@ -51,6 +51,8 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 - Aspects of Medea, Eos and Moros don't have a Minor Aspect since they are heavily Attack oriented.
 - Skull's Minor Aspect of Melinoe only affects Persephone and Medea (they're the only other ones with Ammo).
 - Dagger Attack, Axe Attack/Special, Skull Special(except Hel) do not produce Nyx's Nightspawn.
+- Eos will not duplicate the skull Special(except Hel).
+- Trick Knives will not duplicate the skull Special(expect Hel).
 
 ## Issues and feedback
 
