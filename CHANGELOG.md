@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Nyx ᘯBoost crit is boosted by Thanatos axe.
+
 ## [1.4.2] - 2026-10-31
 
 - Fix Eos' duplicated Axe special not having vfx.
