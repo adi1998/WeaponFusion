@@ -105,6 +105,9 @@ mod.FusionScreenData = {
 		}
     },
 
+	RandomToggleOffColor = { 0.35, 0.35, 0.35, 1.0 },
+	RandomToggleOnColor = { 0.20, 0.90, 0.90, 1.0 },
+
     ComponentData = {
         DefaultGroup = "Combat_Menu",
 		UseNativeScreenCenter = true,
@@ -545,7 +548,9 @@ function mod.OpenWeaponFusionScreen()
 	game.TeleportCursor({ OffsetX = screen.ItemStartX + screen.ButtonOffsetX, OffsetY = screen.ItemStartY, ForceUseCheck = true })
 
 	if FusionSaveData.random_fusion_each_run then
-		game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = { 0.50, 0.90, 0.80, 1.0 }, ColorDuration = 0.2 })
+		game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = screen.RandomToggleOnColor, ColorDuration = 0.2 })
+	else
+		game.ModifyTextBox({ Id = components.RandomToggle.Id, ColorTarget = screen.RandomToggleOffColor, ColorDuration = 0.2 })
 	end
 
 	if rom.mods[AspectYoungMel] then
@@ -985,10 +990,10 @@ end
 function mod.ToggleRandomEachRun(screen, button)
 	FusionSaveData.random_fusion_each_run = not FusionSaveData.random_fusion_each_run
 	if FusionSaveData.random_fusion_each_run then
-		game.MouseOverContextualAction(button)
+		game.ModifyTextBox({ Id = button.Id, ColorTarget = screen.RandomToggleOnColor, ColorDuration = 0.2 })
 		game.PlaySound({ Name = screen.ToggleOffSound, Id = button.Id })
 	else
-		game.MouseOffContextualAction(button)
+		game.ModifyTextBox({ Id = button.Id, ColorTarget = screen.RandomToggleOffColor, ColorDuration = 0.2 })
 		game.PlaySound({ Name = screen.ToggleOnSound, Id = button.Id })
 	end
 end
