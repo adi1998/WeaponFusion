@@ -41,7 +41,7 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 
 ## Some custom interactions
 
-- Medea plus Nyx allows the ᘯBoost to trigger the Attack explosion.
+- Medea plus Nyx also allows the ᘯBoost to trigger the Attack explosion.
 - Shiva plus Torch or Dagger build Destructive per ᘯSpecial hit, rather than being in the ᘯSpecial blast area.
 - Hel plus Nyx allows the ᘯBoost to trigger Valkyrie form as well.
 
