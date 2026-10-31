@@ -1,6 +1,8 @@
 local artemisValidWeapons = game.CombineTables( game.WeaponSets.HeroPrimarySecondaryWeapons, {"WeaponTransformAttack", "WeaponTransformSpecial"} )
 game.RemoveValueAndCollapse(artemisValidWeapons, "WeaponAxeSpin")
 
+local daggerTripleValidWeapons = game.CombineTables(game.WeaponSets.HeroAllWeapons, {"WeaponSprintEx"})
+
 local heroPrimaryNonExWeapons =
 {
 	"WeaponStaffSwing",
@@ -1029,7 +1031,7 @@ mod.AspectTraitData = {
 		},
 		OnEnemyDamagedAction = 
 		{
-			ValidWeapons = game.WeaponSets.HeroAllWeapons,
+			ValidWeapons = daggerTripleValidWeapons,
 			FunctionName = "CheckFinisher",
 			Args =
 			{
@@ -3847,3 +3849,5 @@ for _, weaponName in ipairs(checkWeaponOverheatList) do
 end
 
 game.TraitData.TorchAutofireAspect.AddOutgoingDamageModifiers.ValidProjectiles = game.CombineTables(game.TraitData.TorchAutofireAspect.AddOutgoingDamageModifiers.ValidProjectiles, {"NyxSprintBlast"})
+
+game.TraitData.DaggerTripleAspect.OnEnemyDamagedAction.ValidWeapons = daggerTripleValidWeapons

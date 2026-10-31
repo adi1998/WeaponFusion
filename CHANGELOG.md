@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fix Eos' duplicated Axe special not having vfx.
+- Nyx ᘯBoost can inflict Traid with Morrigan.
 
 ## [1.4.1] - 2026-10-30
 
