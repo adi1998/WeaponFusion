@@ -7,8 +7,12 @@ local function checkFrenzyCount_common(victim, functionArgs, triggerArgs, rallyT
 		if traitData.OnEnemyDamagedAction and traitData.OnEnemyDamagedAction.Args then
 			requiredCount = traitData.OnEnemyDamagedAction.Args.RequiredCount or requiredCount
 		end
-		if game.ScreenAnchors.AxeUIChargeAmount then
-			game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = game.MapState.FrenzyHits / requiredCount, Instant = true })
+		local anchor_id = game.ScreenAnchors.AxeUIChargeAmount
+		if game.HeroHasTrait("AxeRallyAspect_Secondary") then
+			anchor_id = game.ScreenAnchors.AxeUIChargeAmount_Secondary
+		end
+		if anchor_id then
+			game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = anchor_id, Fraction = game.MapState.FrenzyHits / requiredCount, Instant = true })
 		end
 	end
 
@@ -158,42 +162,42 @@ modutil.mod.Path.Wrap("ShowAxeUI", function (base)
 		return
 	end
 
-	if game.ScreenAnchors.AxeUI ~= nil then
+	if game.ScreenAnchors.AxeUI_Secondary ~= nil then
 		return
 	end
 
-	game.ScreenAnchors.AxeUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
-	game.ScreenAnchors.AxeUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
+	game.ScreenAnchors.AxeUI_Secondary = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
+	game.ScreenAnchors.AxeUIChargeAmount_Secondary = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
 
 	if game.HeroHasTrait("AxeRallyAspect_Secondary") then
-		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount })
+		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount_Secondary })
 		local currentHits = game.MapState.FrenzyHits or 0
 		local requiredCount = 12
 		local traitData = game.GetHeroTrait("AxeRallyAspect_Secondary")
 		if traitData.OnWeaponFiredFunctions and traitData.OnWeaponFiredFunctions.FunctionArgs then
 			requiredCount = traitData.OnWeaponFiredFunctions.FunctionArgs.RequiredCount or requiredCount
 		end
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = currentHits / requiredCount, Instant = true })
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount_Secondary, Fraction = currentHits / requiredCount, Instant = true })
 		if currentHits >= requiredCount then
-			game.SetAnimation({Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = game.ScreenAnchors.AxeUI })
+			game.SetAnimation({Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = game.ScreenAnchors.AxeUI_Secondary })
 		end
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI_Secondary, Duration = 0, Fraction = 0 })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount_Secondary, Duration = 0, Fraction = 0 })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
 	elseif game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") then
 		local trait = game.GetHeroTrait("AxePerfectCriticalAspect_Secondary")
 		local currentCrit = game.round(trait.PerfectCritChance * 100 * game.GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true } ))
 		local maxCrit = game.round(trait.ReportedMaxCrit * 100 * game.GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true } ))
-		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount })
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount, Fraction = currentCrit/ maxCrit, Instant = true })
+		game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount_Secondary })
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.AxeUIChargeAmount_Secondary, Fraction = currentCrit/ maxCrit, Instant = true })
 
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = 0, Fraction = 0 })
-		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI_Secondary, Duration = 0, Fraction = 0 })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUI_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount_Secondary, Duration = 0, Fraction = 0 })
+		game.SetAlpha({ Id = game.ScreenAnchors.AxeUIChargeAmount_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
 		game.CreateTextBox({
-			Id = game.ScreenAnchors.AxeUI,
+			Id = game.ScreenAnchors.AxeUI_Secondary,
 			OffsetX = 26, OffsetY = -2,
 			Text = "UI_CritText",
 			TextSymbolScale = 0.88,
@@ -204,6 +208,20 @@ modutil.mod.Path.Wrap("ShowAxeUI", function (base)
 			Justification = "Left",LuaKey = "TempTextData", LuaValue = { Amount = currentCrit }
 		})
 	end
+end)
+
+modutil.mod.Path.Wrap("HideAxeUI", function (base, args)
+	if game.ScreenAnchors.AxeUI_Secondary == nil then
+		return
+	end
+	args = args or {}
+	local ids = { game.ScreenAnchors.AxeUI_Secondary, game.ScreenAnchors.AxeUIChargeAmount_Secondary }
+	game.SetAlpha({ Ids = ids, Duration = args.FadeDuration or game.HUDScreen.FadeOutDuration, Fraction = 0.0 })
+	game.ScreenAnchors.AxeUI_Secondary = nil
+	game.ScreenAnchors.AxeUIChargeAmount_Secondary = nil
+	game.wait( game.HUDScreen.FadeOutDuration )
+	game.Destroy({ Ids = ids })
+	return base(args)
 end)
 
 modutil.mod.Path.Wrap("ShowSuitUI", function (base, args)

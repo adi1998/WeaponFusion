@@ -245,3 +245,54 @@ modutil.mod.Path.Context.Env("CheckProjectileSpawn", function ()
 		return projectileId
 	end)
 end)
+
+modutil.mod.Path.Context.Env("FrenzyApply", function ()
+	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
+		if args.Name == "StaffReloadTimer" and game.HeroHasTrait("AxeRallyAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.AxeUIChargeAmount_Secondary
+		end
+		if args.Name == "StaffReloadTimerReady" and game.HeroHasTrait("AxeRallyAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.AxeUI_Secondary
+		end
+		return base(args)
+	end)
+	modutil.mod.Path.Wrap("SetAnimationFrameTarget", function (base, args)
+		if args.Name == "StaffReloadTimer" and game.HeroHasTrait("AxeRallyAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.AxeUIChargeAmount_Secondary
+		end
+		return base(args)
+	end)
+end)
+
+modutil.mod.Path.Context.Env("FrenzyClear", function ()
+	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
+		if args.Name == "StaffReloadTimerOut" and game.HeroHasTrait("AxeRallyAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.AxeUI_Secondary
+		end
+		return base(args)
+	end)
+end)
+
+modutil.mod.Path.Context.Env("FrenzyStartAnimation", function ()
+	modutil.mod.Path.Wrap("CreateAnimation", function (base, args)
+		if args.Name == "KeepsakeLevelUpFlare" and game.HeroHasTrait("AxeRallyAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.AxeUI_Secondary
+		end
+		return base(args)
+	end)
+end)
+
+modutil.mod.Path.Context.Env("UpdateAxeUI", function ()
+	modutil.mod.Path.Wrap("SetAnimationFrameTarget", function (base, args)
+		if args.Name == "StaffReloadTimer" and game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.AxeUIChargeAmount_Secondary
+		end
+		return base(args)
+	end)
+	modutil.mod.Path.Wrap("ModifyTextBox", function (base, args)
+		if args.Text == "UI_CritText" and game.HeroHasTrait("AxePerfectCriticalAspect_Secondary") then
+			args.Id = game.ScreenAnchors.AxeUI_Secondary
+		end
+		return base(args)
+	end)
+end)
