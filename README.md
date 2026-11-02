@@ -45,13 +45,13 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 - Shiva plus Torch or Dagger build Destructive per ᘯSpecial hit, rather than being in the ᘯSpecial blast area.
 - Hel plus Nyx allows the ᘯBoost to trigger Valkyrie form as well.
 
-## Some minor limitations
+## Some limitations
 
 - Aspect of Pan as primary does nothing when fused with any non-dagger aspect.
 - Aspects of Medea, Eos and Moros don't have a Minor Aspect since they are heavily Attack oriented.
 - Skull's Minor Aspect of Melinoe only affects Persephone and Medea (they're the only other ones with Ammo).
 - Dagger Attack, Axe Attack/Special, Skull Special(except Hel) do not produce Nyx's Nightspawn.
-- Eos will not duplicate the skull Special(except Hel).
+- Eos' Daybreaker will not duplicate the skull Special(except Hel).
 - Trick Knives will not duplicate the skull Special(expect Hel).
 
 ## Issues and feedback
