@@ -155,17 +155,23 @@ modutil.mod.Path.Context.Env("SkullImpulseTransform", function (weaponData, func
 	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
 		return GetHeroTraitWrap(base, traitName, "LobImpulseAspect")
 	end)
-end)
-
-modutil.mod.Path.Context.Env("ChargeSkullImpulse", function (victim, args, triggerArgs)
-	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
-		return GetHeroTraitWrap(base, traitName, "LobImpulseAspect")
+	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
+        if args.Name == "StaffReloadTimerOut" and game.HeroHasTrait("LobGunAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.LobUI_Secondary
+		end
+		return base(args)
 	end)
 end)
 
-modutil.mod.Path.Context.Env("UpdateLobUI", function ( spellItem, args, user )
-	modutil.mod.Path.Wrap("HeroHasTrait", function (base, traitName)
-		return HeroHasTraitWrap(base, traitName, "LobImpulseAspect")
+modutil.mod.Path.Context.Env("ChargeSkullImpulse", function ()
+	modutil.mod.Path.Wrap("GetHeroTrait", function (base, traitName)
+		return GetHeroTraitWrap(base, traitName, "LobImpulseAspect")
+	end)
+	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
+        if args.Name == "StaffReloadTimerReady" and game.HeroHasTrait("LobGunAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.LobUI_Secondary
+		end
+		return base(args)
 	end)
 end)
 

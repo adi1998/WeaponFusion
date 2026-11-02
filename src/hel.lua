@@ -21,12 +21,14 @@ function mod.OverheatApply( triggerArgs )
 	if triggerArgs.Reapplied then
 		return
 	end
-	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount, Fraction = 1, Instant = true })
-	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount, PlaySpeed = 100 / triggerArgs.Duration })
-    game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount, Fraction = 0 })
+	local lobui_anchor = (game.HeroHasTrait("LobGunAspect_Secondary") and game.ScreenAnchors.LobUI) or game.ScreenAnchors.LobUI_Secondary
+	local lobui_charge_anchor = (game.HeroHasTrait("LobGunAspect_Secondary") and game.ScreenAnchors.LobUIChargeAmount) or game.ScreenAnchors.LobUIChargeAmount_Secondary
+	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = lobui_charge_anchor, Fraction = 1, Instant = true })
+	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = lobui_charge_anchor, PlaySpeed = 100 / triggerArgs.Duration })
+    game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = lobui_charge_anchor, Fraction = 0 })
 	game.SessionMapState.OverheatConsecutiveHit = 0
 	game.SessionMapState.Overheat = true
-	game.ModifyTextBox({ Id = game.ScreenAnchors.LobUI, FadeTarget = 1, FadeDuration = 0.2 })
+	game.ModifyTextBox({ Id = lobui_anchor, FadeTarget = 1, FadeDuration = 0.2 })
 	game.SessionMapState.BlockStagedCharge.WeaponStaffBall = true
 	game.SessionMapState.BlockStagedCharge.WeaponStaffSwing5 = true
 	game.SessionMapState.BlockStagedCharge.WeaponDagger5 = true
@@ -86,7 +88,7 @@ function mod.OverheatApply( triggerArgs )
 	end
 	game.thread( game.UpdateLobUI )
 	game.thread( game.OverheatStartPresentation, triggerArgs )
-    game.SetAnimation({Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.LobUI })
+    game.SetAnimation({Name = "StaffReloadTimerReady", DestinationId = lobui_anchor })
 	game.SetCastArmDisabled( "Overheat" )
 end
 
@@ -130,6 +132,9 @@ modutil.mod.Path.Wrap("OverheatClear", function (base, triggerArgs)
 		resumeCharging("WeaponAxeSpin", triggerArgs)
 		resumeCharging("WeaponSuitCharged", triggerArgs)
     end
+	if game.ScreenAnchors.LobUI_Secondary and game.HeroHasTrait("LobGunAspect_Secondary") then
+		game.SetAnimation({ Name = "StaffReloadTimerOut", DestinationId = game.ScreenAnchors.LobUI_Secondary})
+	end
     return base(triggerArgs)
 end)
 
@@ -138,3 +143,10 @@ function mod.CheckWeaponOverheat(triggerArgs, weaponData, args)
 		game.RunWeaponMethod({ Id = game.CurrentRun.Hero.ObjectId, Weapon = weaponData.Name, Method = "ForceControlRelease" })
 	end
 end
+
+modutil.mod.Path.Wrap("OverheatStartPresentation", function (base, triggerArgs)
+	if game.ScreenAnchors.LobUI_Secondary and game.HeroHasTrait("LobGunAspect_Secondary") then
+		game.CreateAnimation({Name = "KeepsakeLevelUpFlare", DestinationId = game.ScreenAnchors.LobUI_Secondary, GroupName = "Overlay"})
+	end
+	return base(triggerArgs)
+end)

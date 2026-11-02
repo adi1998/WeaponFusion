@@ -437,29 +437,55 @@ modutil.mod.Path.Wrap("ShowLobUI", function (base)
 		return
 	end
 
-	if game.ScreenAnchors.LobUI ~= nil then
+	if game.ScreenAnchors.LobUI_Secondary ~= nil then
 		return
 	end
-	game.ScreenAnchors.LobUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
-	game.ScreenAnchors.LobUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
-	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount })
+	game.ScreenAnchors.LobUI_Secondary = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+	game.ScreenAnchors.LobUIChargeAmount_Secondary = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset })
+	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount_Secondary })
 	if game.HeroHasTrait("LobImpulseAspect_Secondary") then
 		local trait = game.GetHeroTrait("LobImpulseAspect_Secondary")
 		local currentCharge = trait.Charge
 		local maxCharge = trait.OnEnemyDamagedAction.Args.MaxCharge
 		local currentChargeText = game.round( currentCharge, 1)
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount, Fraction = currentCharge/ maxCharge, Instant = true })
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount_Secondary, Fraction = currentCharge/ maxCharge, Instant = true })
 
 		if trait.Charge >= trait.OnEnemyDamagedAction.Args.MaxCharge then
-			game.SetAnimation({ Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = game.ScreenAnchors.LobUI })
+			game.SetAnimation({ Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = game.ScreenAnchors.LobUI_Secondary })
 		end
 	elseif game.HeroHasTrait("LobGunAspect_Secondary") then
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount, Fraction = 0, Instant = true })
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount_Secondary, Fraction = 0, Instant = true })
 	end
-	game.SetAlpha({ Id = game.ScreenAnchors.LobUI, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.LobUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-	game.SetAlpha({ Id = game.ScreenAnchors.LobUIChargeAmount, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.LobUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUI_Secondary, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUI_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUIChargeAmount_Secondary, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.LobUIChargeAmount_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+end)
+
+modutil.mod.Path.Wrap("UpdateLobUI", function (base, trait)
+	if not trait then
+		return
+	end
+	if game.HeroHasTrait("LobImpulseAspect_Secondary") then
+		local currentCharge = trait.Charge
+		local maxCharge = trait.OnEnemyDamagedAction.Args.MaxCharge
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount_Secondary, Fraction = currentCharge/ maxCharge, Instant = true })
+	end
+	return base(trait)
+end)
+
+modutil.mod.Path.Wrap("HideLobUI", function (base, args)
+	if game.ScreenAnchors.LobUI_Secondary == nil then
+		return
+	end
+	args = args or {}
+	local ids = { game.ScreenAnchors.LobUI_Secondary, game.ScreenAnchors.LobUIChargeAmount_Secondary }
+	game.SetAlpha({ Ids = ids, Duration = args.FadeDuration or game.HUDScreen.FadeOutDuration, Fraction = 0.0 })
+	game.ScreenAnchors.LobUI_Secondary = nil
+	game.ScreenAnchors.LobUIChargeAmount_Secondary = nil
+	game.wait( game.HUDScreen.FadeOutDuration )
+	game.Destroy({ Ids = ids })
+	return base(args)
 end)
 
 game.OnWeaponChargeCanceled{ "WeaponAxeSpin",

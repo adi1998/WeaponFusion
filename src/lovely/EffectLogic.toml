@@ -1,0 +1,18 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "EffectLogic.lua"
+pattern = '''
+if ScreenAnchors.LobUI then
+'''
+position = "at"
+payload = '''
+--#region modified by WeaponFusion to only trigger this when primary Hel is active
+if ScreenAnchors.LobUI and HeroHasTrait("LobGunAspect") then
+--#endregion
+'''
+match_indent = true
+times = 1

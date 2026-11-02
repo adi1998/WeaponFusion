@@ -1,0 +1,18 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "PowersLogic.lua"
+pattern = '''
+if prevCharge < args.MaxCharge and  trait.Charge >= args.MaxCharge and ScreenAnchors.LobUI then	
+'''
+position = "at"
+payload = '''
+--#region modified by WeaponFusion to move
+if prevCharge < args.MaxCharge and  trait.Charge >= args.MaxCharge and (ScreenAnchors.LobUI or ScreenAnchors.LobUI_Secondary) then
+--#endregion
+'''
+match_indent = true
+times = 1
