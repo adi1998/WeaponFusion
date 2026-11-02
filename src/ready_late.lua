@@ -168,7 +168,7 @@ modutil.mod.Path.Context.Env("ChargeSkullImpulse", function ()
 		return GetHeroTraitWrap(base, traitName, "LobImpulseAspect")
 	end)
 	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
-        if args.Name == "StaffReloadTimerReady" and game.HeroHasTrait("LobGunAspect_Secondary") then
+        if args.Name == "StaffReloadTimerReady" and game.HeroHasTrait("LobImpulseAspect_Secondary") then
 			args.DestinationId = game.ScreenAnchors.LobUI_Secondary
 		end
 		return base(args)

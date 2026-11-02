@@ -30,3 +30,15 @@ modutil.mod.Path.Context.Env("OverheatClear", function ()
 		return base(args)
 	end)
 end)
+
+modutil.mod.Path.Context.Env("HandleGunBehavior", function ()
+    modutil.mod.Path.Wrap("ApplyEffect", function (base, args)
+        if args.EffectName == "HelOverheat" and game.HeroHasTrait("LobImpulseAspect_Secondary") then
+            local traitData = game.GetHeroTrait("LobImpulseAspect_Secondary")
+            args.DataProperties.Duration = args.DataProperties.Duration + (traitData.Charge or 0)
+            traitData.Charge = 0
+            game.UpdateLobUI(traitData)
+        end
+        return base(args)
+    end)
+end)
