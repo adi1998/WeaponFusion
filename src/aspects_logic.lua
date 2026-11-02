@@ -140,6 +140,7 @@ function mod.CheckPerfectAxeCrit( victim, args, triggerArgs )
 end
 
 modutil.mod.Path.Wrap("SetupPerfectCritUI", function (base)
+	base()
 	if game.SessionMapState.WeaponsDisabled then
 		return
 	end
@@ -152,7 +153,6 @@ modutil.mod.Path.Wrap("SetupPerfectCritUI", function (base)
     		game.CreateAnimation({ Name = "ThanatosMaxMortalityFx", DestinationId = game.CurrentRun.Hero.ObjectId })
     	end
 	end
-	return base()
 end)
 
 modutil.mod.Path.Wrap("ShowAxeUI", function (base)
@@ -211,6 +211,7 @@ modutil.mod.Path.Wrap("ShowAxeUI", function (base)
 end)
 
 modutil.mod.Path.Wrap("HideAxeUI", function (base, args)
+	base(args)
 	if game.ScreenAnchors.AxeUI_Secondary == nil then
 		return
 	end
@@ -221,7 +222,6 @@ modutil.mod.Path.Wrap("HideAxeUI", function (base, args)
 	game.ScreenAnchors.AxeUIChargeAmount_Secondary = nil
 	game.wait( game.HUDScreen.FadeOutDuration )
 	game.Destroy({ Ids = ids })
-	return base(args)
 end)
 
 modutil.mod.Path.Wrap("ShowSuitUI", function (base, args)
@@ -288,6 +288,7 @@ modutil.mod.Path.Wrap("UpdateSuitUI", function (base)
 end)
 
 modutil.mod.Path.Wrap("HideSuitUI", function (base, args)
+	base(args)
 	if game.ScreenAnchors.SuitUI_Secondary == nil then
 		return
 	end
@@ -298,7 +299,6 @@ modutil.mod.Path.Wrap("HideSuitUI", function (base, args)
 	game.ScreenAnchors.SuitUIChargeAmount_Secondary = nil
 	game.wait( game.HUDScreen.FadeOutDuration )
 	game.Destroy({ Ids = ids })
-	return base(args)
 end)
 
 modutil.mod.Path.Wrap("ShivaAttackBoostApply", function (base, triggerArgs)
@@ -480,6 +480,7 @@ modutil.mod.Path.Wrap("ShowLobUI", function (base)
 end)
 
 modutil.mod.Path.Wrap("UpdateLobUI", function (base, trait)
+	base(trait)
 	if not trait then
 		return
 	end
@@ -488,10 +489,10 @@ modutil.mod.Path.Wrap("UpdateLobUI", function (base, trait)
 		local maxCharge = trait.OnEnemyDamagedAction.Args.MaxCharge
 		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.LobUIChargeAmount_Secondary, Fraction = currentCharge/ maxCharge, Instant = true })
 	end
-	return base(trait)
 end)
 
 modutil.mod.Path.Wrap("HideLobUI", function (base, args)
+	base(args)
 	if game.ScreenAnchors.LobUI_Secondary == nil then
 		return
 	end
@@ -502,7 +503,6 @@ modutil.mod.Path.Wrap("HideLobUI", function (base, args)
 	game.ScreenAnchors.LobUIChargeAmount_Secondary = nil
 	game.wait( game.HUDScreen.FadeOutDuration )
 	game.Destroy({ Ids = ids })
-	return base(args)
 end)
 
 game.OnWeaponChargeCanceled{ "WeaponAxeSpin",

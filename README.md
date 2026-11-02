@@ -55,7 +55,6 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 - Dagger Attack, Axe Attack/Special, Skull Special(except Hel) do not produce Nyx's Nightspawn.
 - Eos' Daybreaker will not duplicate the skull Special(except Hel).
 - Trick Knives will not duplicate the skull Special(expect Hel).
-- Persephone plus Hel: building up Sprouted charge does nothing.
 
 ## Issues and feedback
 
