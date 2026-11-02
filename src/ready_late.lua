@@ -302,3 +302,39 @@ modutil.mod.Path.Context.Env("UpdateAxeUI", function ()
 		return base(args)
 	end)
 end)
+
+modutil.mod.Path.Context.Env("NyxBuffStartPresentation", function ()
+	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
+		if args.Name == "StaffReloadTimer" and game.HeroHasTrait("SuitMarkCritAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.SuitUIChargeAmount_Secondary
+		end
+		if args.Name == "StaffReloadTimerReady" and game.HeroHasTrait("SuitMarkCritAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.SuitUI_Secondary
+		end
+		return base(args)
+	end)
+	modutil.mod.Path.Wrap("SetAnimationFrameTarget", function (base, args)
+		if args.Name == "StaffReloadTimer" and game.HeroHasTrait("SuitMarkCritAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.SuitChargeAmount_Secondary
+		end
+		return base(args)
+	end)
+end)
+
+modutil.mod.Path.Context.Env("NyxBuffEndPresentation", function ()
+	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
+		if args.Name == "StaffReloadTimerOut" and game.HeroHasTrait("SuitMarkCritAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.SuitUI_Secondary
+		end
+		return base(args)
+	end)
+end)
+
+modutil.mod.Path.Context.Env("BlockSelfBuff", function ()
+	modutil.mod.Path.Wrap("SetAnimation", function (base, args)
+		if args.Name == "StaffReloadTimerReady" and game.HeroHasTrait("SuitComboAspect_Secondary") then
+			args.DestinationId = game.ScreenAnchors.SuitUI_Secondary
+		end
+		return base(args)
+	end)
+end)

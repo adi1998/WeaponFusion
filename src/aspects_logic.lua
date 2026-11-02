@@ -230,21 +230,21 @@ modutil.mod.Path.Wrap("ShowSuitUI", function (base, args)
 	if (not game.HeroHasTrait("SuitMarkCritAspect_Secondary") and not game.HeroHasTrait("SuitComboAspect_Secondary")) or not game.ShowingCombatUI then
 		return
 	end
-	if game.ScreenAnchors.SuitUI ~= nil then
-		game.SetAlpha({ Ids = { game.ScreenAnchors.SuitUI, game.ScreenAnchors.SuitUIChargeAmount }, Duration = args.FadeDuration or game.HUDScreen.FadeInDuration, Fraction = args.Fraction or game.ConfigOptionCache.HUDOpacity })
+	if game.ScreenAnchors.SuitUI_Secondary ~= nil then
+		game.SetAlpha({ Ids = { game.ScreenAnchors.SuitUI_Secondary, game.ScreenAnchors.SuitUIChargeAmount_Secondary }, Duration = args.FadeDuration or game.HUDScreen.FadeInDuration, Fraction = args.Fraction or game.ConfigOptionCache.HUDOpacity })
 		return
 	end
 
-	game.ScreenAnchors.SuitUI = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
-	game.ScreenAnchors.SuitUIChargeAmount = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
-	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount })
-	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = 0, Instant = true })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUIChargeAmount, Duration = 0, Fraction = 0 })
-	game.SetAlpha({ Id = game.ScreenAnchors.SuitUIChargeAmount, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+	game.ScreenAnchors.SuitUI_Secondary = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = "Combat_Menu_TraitTray_Overlay_Additive", X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
+	game.ScreenAnchors.SuitUIChargeAmount_Secondary = game.CreateScreenObstacle({ Name = "BlankObstacle", Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 150, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset})
+	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount_Secondary })
+	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount_Secondary, Fraction = 0, Instant = true })
+	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI_Secondary, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.SuitUI_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
+	game.SetAlpha({ Id = game.ScreenAnchors.SuitUIChargeAmount_Secondary, Duration = 0, Fraction = 0 })
+	game.SetAlpha({ Id = game.ScreenAnchors.SuitUIChargeAmount_Secondary, Duration = game.HUDScreen.FadeInDuration, Fraction = game.ConfigOptionCache.HUDOpacity })
 	game.CreateTextBox({
-		Id = game.ScreenAnchors.SuitUI,
+		Id = game.ScreenAnchors.SuitUI_Secondary,
 		OffsetX = 26, OffsetY = -2,
 		TextSymbolScale = 0.88,
 		Font = "NumericP22UndergroundSCHeavy", FontSize = 24,
@@ -258,6 +258,9 @@ end)
 
 modutil.mod.Path.Wrap("UpdateSuitUI", function (base)
 	base()
+	if game.ScreenAnchors.SuitUI_Secondary == nil then
+		return
+	end
 	if game.HeroHasTrait("SuitComboAspect_Secondary") then
 		local trait = game.GetHeroTrait("SuitComboAspect_Secondary")
 		local effectName = trait.OnWeaponFiredFunctions.FunctionArgs.EffectName
@@ -274,14 +277,28 @@ modutil.mod.Path.Wrap("UpdateSuitUI", function (base)
 			text = "UI_StackText_Max"
 			font = "P22UndergroundSCHeavy"
 		end
-		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = stacks/maxStacks, Instant = true })
+		game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount_Secondary, Fraction = stacks/maxStacks, Instant = true })
 		if stacks >= maxStacks then
-			game.SetAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI })
+			game.SetAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI_Secondary })
 		else
-			game.StopAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI })
+			game.StopAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI_Secondary })
 		end
-		game.ModifyTextBox({ Id = game.ScreenAnchors.SuitUI, Text =  text, Font = font, LuaKey = "TempTextData", LuaValue = { Amount = stacks}})
+		game.ModifyTextBox({ Id = game.ScreenAnchors.SuitUI_Secondary, Text =  text, Font = font, LuaKey = "TempTextData", LuaValue = { Amount = stacks}})
 	end
+end)
+
+modutil.mod.Path.Wrap("HideSuitUI", function (base, args)
+	if game.ScreenAnchors.SuitUI_Secondary == nil then
+		return
+	end
+	args = args or {}
+	local ids = { game.ScreenAnchors.SuitUI_Secondary, game.ScreenAnchors.SuitUIChargeAmount_Secondary }
+	game.SetAlpha({ Ids = ids, Duration = args.FadeDuration or game.HUDScreen.FadeOutDuration, Fraction = 0.0 })
+	game.ScreenAnchors.SuitUI_Secondary = nil
+	game.ScreenAnchors.SuitUIChargeAmount_Secondary = nil
+	game.wait( game.HUDScreen.FadeOutDuration )
+	game.Destroy({ Ids = ids })
+	return base(args)
 end)
 
 modutil.mod.Path.Wrap("ShivaAttackBoostApply", function (base, triggerArgs)
@@ -297,10 +314,10 @@ modutil.mod.Path.Wrap("ShivaAttackBoostApply", function (base, triggerArgs)
 	local trait = game.GetHeroTrait("SuitComboAspect_Secondary")
 	local maxStacks = trait.OnWeaponFiredFunctions.FunctionArgs.SelfEffectMaxStacks
 	game.PlaySound({ Name = "/SFX/Player Sounds/ShivaPowerUp", Id = game.CurrentRun.Hero.ObjectId })
-	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = victim.ActiveEffects[triggerArgs.EffectName]/maxStacks, Instant = true })
+	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount_Secondary, Fraction = victim.ActiveEffects[triggerArgs.EffectName]/maxStacks, Instant = true })
 	if victim.ActiveEffects[triggerArgs.EffectName] >= maxStacks then
 		game.SessionMapState.ShivaMaxStackPresentation = true
-		game.SetAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI })
+		game.SetAnimation({ Name = "StaffReloadTimerReady", DestinationId = game.ScreenAnchors.SuitUI_Secondary })
 	end
 end)
 
@@ -313,9 +330,9 @@ modutil.mod.Path.Wrap("ShivaAttackBoostClear", function (base, triggerArgs)
 	local victim = triggerArgs.Victim
 	local trait = game.GetHeroTrait("SuitComboAspect_Secondary")
 
-	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount, Fraction = 0, Instant = true })
+	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = game.ScreenAnchors.SuitUIChargeAmount_Secondary, Fraction = 0, Instant = true })
 	if game.SessionMapState.ShivaMaxStackPresentation then
-		game.SetAnimation({ Name = "StaffReloadTimerOut", DestinationId = game.ScreenAnchors.SuitUI })
+		game.SetAnimation({ Name = "StaffReloadTimerOut", DestinationId = game.ScreenAnchors.SuitUI_Secondary })
 		game.SessionMapState.ShivaMaxStackPresentation = nil
 	end
 	game.UpdateSuitUI()

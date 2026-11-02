@@ -10,8 +10,40 @@ if prevCharge < args.MaxCharge and  trait.Charge >= args.MaxCharge and ScreenAnc
 '''
 position = "at"
 payload = '''
---#region modified by WeaponFusion to move
+--#region modified by WeaponFusion to account for Secondary LobUI
 if prevCharge < args.MaxCharge and  trait.Charge >= args.MaxCharge and (ScreenAnchors.LobUI or ScreenAnchors.LobUI_Secondary) then
+--#endregion
+'''
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "PowersLogic.lua"
+pattern = '''
+if ScreenAnchors.SuitUI and ScreenAnchors.SuitUIChargeAmount then
+'''
+position = "at"
+payload = '''
+--#region modified by WeaponFusion to account for Secondary SuitUI
+if (ScreenAnchors.SuitUI or ScreenAnchors.SuitUI_Secondary) and (ScreenAnchors.SuitUIChargeAmount or ScreenAnchors.SuitUIChargeAmount_Secondary) then
+--#endregion
+'''
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "PowersLogic.lua"
+pattern = '''
+function NyxHitBuffClear()
+	if ScreenAnchors.SuitUI then
+'''
+position = "at"
+payload = '''
+--#region modified by WeaponFusion to account for Secondary SuitUI
+function NyxHitBuffClear()
+	if ScreenAnchors.SuitUI or ScreenAnchors.SuitUI_Secondary then
 --#endregion
 '''
 match_indent = true
