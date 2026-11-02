@@ -150,3 +150,15 @@ modutil.mod.Path.Wrap("OverheatStartPresentation", function (base, triggerArgs)
 	end
 	return base(triggerArgs)
 end)
+
+function mod.CheckLobImpulseGunBoost(triggerArgs, traitArgs)
+	local traitData = game.GetHeroTrait("LobImpulseAspect")
+	if traitData then
+		Record_projectile_id = triggerArgs.ProjectileId
+		game.ProjectileExists({Id = triggerArgs.ProjectileId})
+		mod.extend_projectile_active_duration(triggerArgs.ProjectileId, 2 + traitData.Charge)
+		traitData.Charge = 0
+		game.SetAnimation({ Name = "StaffReloadTimerOut", DestinationId = game.ScreenAnchors.LobUI })
+		game.UpdateLobUI(traitData)
+	end
+end

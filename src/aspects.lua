@@ -3376,8 +3376,8 @@ mod.AspectTraitData = {
 		},
 		OnProjectileCreationFunction =
 		{
-			ValidProjectiles = { "ProjectileLobOverheat" },
-			Name = "OnGunOverheatCreated",
+			ValidProjectiles = { "ProjectileLobGunRift" },
+			Name = _PLUGIN.guid .. "." .. "CheckLobImpulseGunBoost",
 		},
 		OnWeaponFiredFunctions =
 		{

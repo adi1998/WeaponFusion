@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 
-- Nyx ᘯBoost crit is boosted by Thanatos axe.
+- Nyx ᘯBoost crit chance is boosted by Thanatos axe.
+- Fixed overlapping UI during Same weapon fusion for axe and skull.
+- Hel plus Persephone: Sprouted charge now increases Valkyrie form duration.
+- Persephone plus Hel: Sprouted charge now increases ᘯSpecial duration.
 
 ## [1.4.2] - 2026-10-31
 

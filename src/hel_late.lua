@@ -37,6 +37,7 @@ modutil.mod.Path.Context.Env("HandleGunBehavior", function ()
             local traitData = game.GetHeroTrait("LobImpulseAspect_Secondary")
             args.DataProperties.Duration = args.DataProperties.Duration + (traitData.Charge or 0)
             traitData.Charge = 0
+            game.SetAnimation({ Name = "StaffReloadTimerOut", DestinationId = game.ScreenAnchors.LobUI_Secondary })
             game.UpdateLobUI(traitData)
         end
         return base(args)

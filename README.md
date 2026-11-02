@@ -44,6 +44,8 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 - Medea plus Nyx also allows the ᘯBoost to trigger the Attack explosion.
 - Shiva plus Torch or Dagger build Destructive per ᘯSpecial hit, rather than being in the ᘯSpecial blast area.
 - Hel plus Nyx allows the ᘯBoost to trigger Valkyrie form as well.
+- Hel plus Persephone: Sprouted charge buildup increases the duration of Valkyrie form instead.
+- Persephone plus Hel: Sprouted charge buildup increases the ᘯSpecial duration instead.
 
 ## Some limitations
 
@@ -53,6 +55,7 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 - Dagger Attack, Axe Attack/Special, Skull Special(except Hel) do not produce Nyx's Nightspawn.
 - Eos' Daybreaker will not duplicate the skull Special(except Hel).
 - Trick Knives will not duplicate the skull Special(expect Hel).
+- Persephone plus Hel: building up Sprouted charge does nothing.
 
 ## Issues and feedback
 
