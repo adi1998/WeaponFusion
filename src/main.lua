@@ -63,6 +63,7 @@ local function on_ready()
     import 'sjson.lua'
 
     import 'aspects.lua'
+    import 'aspect_sub_traits.lua'
     import 'aspects_logic.lua'
 
     import 'charon.lua'
@@ -70,6 +71,7 @@ local function on_ready()
     import 'nyx.lua'
     import 'momus.lua'
     import 'eos.lua'
+    import 'pan.lua'
 
     import 'ready.lua'
     import 'startrun.lua'

@@ -574,6 +574,8 @@ function FuseWeapon(primarySource, secondarySource, secondaryAspect)
     if mod.AspectTraitData[secondaryAspect] then
         for _, traitName in ipairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder[primarySource]) do
             game.TraitData[traitName][_PLUGIN.guid .. "SecondaryAspect"] = secondaryAspect
+            game.TraitData[traitName][_PLUGIN.guid .. "SubTraits"] = mod.SubTraitMap[traitName]
+            print(traitName, mod.dump(game.TraitData[traitName][_PLUGIN.guid .. "SubTraits"]))
         end
     end
 end
@@ -582,6 +584,7 @@ function UnfuseWeapons()
     for _, aspectList in pairs(game.ScreenData.WeaponUpgradeScreen.DisplayOrder) do
         for _, aspectName in ipairs(aspectList) do
             game.TraitData[aspectName][_PLUGIN.guid .. "SecondaryAspect"] = nil
+            game.TraitData[aspectName][_PLUGIN.guid .. "SubTraits"] = nil
         end
     end
     for weapon, _ in pairs(mod.WeaponData) do
@@ -663,6 +666,15 @@ modutil.mod.Path.Wrap("SetupMap", function(base, ...)
     return base(...)
 end)
 
+local function equipSubTraits(traitList, rarity)
+    if not traitList then
+        return
+    end
+    for index, value in ipairs(traitList) do
+        game.AddTraitToHero({ TraitName = value, Rarity = rarity })
+    end
+end
+
 modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
     local val = base(hero, args)
     args = args or {}
@@ -680,6 +692,7 @@ modutil.mod.Path.Wrap("EquipWeaponUpgrade", function (base, hero, args)
             print("applying trait with level", origAspectTraitName, level)
             local rarity = game.GetRarityKey( level, game.TraitRarityData.WeaponRarityUpgradeOrder )
             print("Rarity", rarity)
+            equipSubTraits(traitData[_PLUGIN.guid .. "SubTraits"], rarity)
             game.AddTraitToHero({ TraitName = aspectTraitName, Rarity = rarity })
             local aspectTraitData = game.TraitData[aspectTraitName]
             if aspectTraitData.ReplacementGrannyModels ~= nil then
@@ -747,6 +760,13 @@ modutil.mod.Path.Wrap("UnequipWeaponUpgrade", function (base, args)
         if traitData.ReplacementGrannyModels ~= nil then
             for originalModel, _ in pairs(traitData.ReplacementGrannyModels) do
                 game.SetThingProperty({ Property = "GrannyAlternateModelAttachment", Value = originalModel, OriginalAttachmentModel = originalModel, DestinationId = game.CurrentRun.Hero.ObjectId })
+            end
+        end
+    end
+    for _, traitNames in pairs(mod.SubTraitMap) do
+        for _, traitName in ipairs(traitNames) do
+            while game.HeroHasTrait( traitName ) do
+                game.RemoveTrait( game.CurrentRun.Hero, traitName )
             end
         end
     end
