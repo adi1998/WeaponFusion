@@ -51,7 +51,7 @@ local subTraits = {
                     ProjectileAngleOffset = math.rad(12),
                     FireGraphic = "Melinoe_Dagger_SpecialEx_Fire_Slow",
                 },
-                HideStageReachedFxExceptForFinal = true ,
+                HideStageReachedFxExceptForFinal = true,
             }
         }
     }

@@ -72,3 +72,12 @@ modutil.mod.Path.Wrap("ApplyWeaponPropertyChange", function (base, unit, weaponN
     end
     return base(unit, weaponName, propertyChange, reverse, skipWeaponUpdates)
 end)
+
+modutil.mod.Path.Wrap("SuitSeekThread", function (base, weaponData, stageData)
+    if game.HeroHasTrait("DaggerHomingThrowAspect") then
+        weaponData.MaxTargets = 6 + 5
+    else
+        weaponData.MaxTargets = 6
+    end
+    return base(weaponData, stageData)
+end)
