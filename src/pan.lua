@@ -17,14 +17,14 @@ local newChargeStageModifiers = {
         },
         AddChargeStage = {
             ManaCost = 20,
-            Wait = 0.7,
+            Wait = 0.65,
             ResetIndicator = true,
             WeaponProperties = {
                 NumProjectiles = 2,
             }
         },
         AddProjectedChargeStages = {
-            NumStages = 4,
+            NumStages = 2,
             ProjectedChanges =
             {
                 NumProjectiles = 1,
@@ -38,7 +38,7 @@ local newChargeStageModifiers = {
         ValidWeapons = {"WeaponStaffBall"},
         AddChargeStage = {
             ManaCost = 60,
-            Wait = 0.7,
+            Wait = 0.65,
             ResetIndicator = true,
             WeaponProperties = {
                 NumProjectiles = 2,
@@ -48,7 +48,7 @@ local newChargeStageModifiers = {
             }
         },
         AddProjectedChargeStages = {
-            NumStages = 4,
+            NumStages = 2,
             ProjectedChanges =
             {
                 NumProjectiles = 1,

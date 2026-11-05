@@ -40,7 +40,7 @@ local subTraits = {
                 ValidWeapons = {"WeaponSuitRanged"},
                 AddProjectedChargeStages =
                 {
-                    NumStages = { BaseValue = 1 },
+                    NumStages = { BaseValue = 0.8 },
                     ProjectedChanges =
                     {
                         NumProjectiles = 1,
