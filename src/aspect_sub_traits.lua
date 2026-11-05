@@ -53,6 +53,51 @@ local subTraits = {
                 },
                 HideStageReachedFxExceptForFinal = true,
             }
+        },
+        SubAspectTrait_DaggerHomingThrowAspect_LobGun = {
+            InheritFrom = {"BaseTrait"},
+            Hidden = true,
+            RarityLevels =
+            {
+                Common =
+                {
+                    MinMultiplier = 1.0,
+                    MaxMultiplier = 1.0,
+                },
+                Rare =
+                {
+                    MinMultiplier = 2.0,
+                    MaxMultiplier = 2.0,
+                },
+                Epic =
+                {
+                    MinMultiplier = 3.0,
+                    MaxMultiplier = 3.0,
+                },
+                Heroic =
+                {
+                    MinMultiplier = 4.0,
+                    MaxMultiplier = 4.0,
+                },
+                Legendary =
+                {
+                    MinMultiplier = 5.0,
+                    MaxMultiplier = 5.0,
+                },
+                Perfect =
+                {
+                    Multiplier = 8
+                }
+            },
+            OnProjectileCreationFunction = {
+                ValidProjectiles = { "ProjectileLobGunRift" },
+                Name = _PLUGIN.guid .. "." .. "FirePanLobGun",
+                Args =
+                {
+                    ProjectileName = "ProjectileLobSpecialBounce",
+                    NumProjectiles = { BaseValue = 0.8, },
+                },
+            }
         }
     }
 }

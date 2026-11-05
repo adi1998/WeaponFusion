@@ -81,3 +81,23 @@ modutil.mod.Path.Wrap("SuitSeekThread", function (base, weaponData, stageData)
     end
     return base(weaponData, stageData)
 end)
+
+function mod.FirePanLobGun(triggerArgs, functionArgs)
+    local startAngle = game.GetAngle({ Id = game.CurrentRun.Hero.ObjectId })
+
+    local propertyWeapon = "WeaponLobSpecial"
+
+    local derivedValues = game.GetDerivedPropertyChangeValues({
+        ProjectileName = functionArgs.ProjectileName,
+        WeaponName = propertyWeapon,
+        Type = "Projectile",
+    })
+
+    local spread = 80
+
+    for i=1, functionArgs.NumProjectiles do
+        game.CreateProjectileFromUnit({ WeaponName = propertyWeapon, Name = functionArgs.ProjectileName, Id = game.CurrentRun.Hero.ObjectId,
+            Angle = startAngle - spread/2 + (i - 1) * spread/(math.ceil(functionArgs.NumProjectiles) - 1 ), DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges })
+        game.wait(0.2)
+    end
+end

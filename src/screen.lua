@@ -1078,4 +1078,6 @@ if game.CurrentRun then
 	-- game.TraitData.DaggerHomingThrowAspect.ChargeStageModifiersArray = game.CombineTablesIPairs(game.TraitData.DaggerHomingThrowAspect.ChargeStageModifiersArray, newChargeStageModifiers)
 
 	print(mod.dump(game.GetAllKeys(game.CurrentRun.Hero.TraitDictionary)))
+
+	
 end
