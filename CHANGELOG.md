@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-02
+
 - Nyx ᘯBoost crit chance is boosted by Thanatos axe.
 - Fixed overlapping UI during Same weapon fusion for axe, skull and coat.
 - Hel plus Persephone: Sprouted charge now increases Valkyrie form duration.
@@ -232,7 +234,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.4.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.5.0...HEAD
+[1.5.0]: https://github.com/adi1998/WeaponFusion/compare/1.4.2...1.5.0
 [1.4.2]: https://github.com/adi1998/WeaponFusion/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/adi1998/WeaponFusion/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/adi1998/WeaponFusion/compare/1.3.1...1.4.0
