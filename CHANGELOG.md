@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-06
+
 - Increase ᘯSpecial count for Staff, Torch and Coat when fused with Pan.
 - Pan plus Skull ᘯSpecial now tracks enemies in cast.
 - Pan plus Hel fires extra Special projectiles along with the ᘯSpecial.
@@ -238,7 +240,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.5.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.6.0...HEAD
+[1.6.0]: https://github.com/adi1998/WeaponFusion/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/adi1998/WeaponFusion/compare/1.4.2...1.5.0
 [1.4.2]: https://github.com/adi1998/WeaponFusion/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/adi1998/WeaponFusion/compare/1.4.0...1.4.1
