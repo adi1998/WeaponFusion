@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Increase ᘯSpecial count for Staff, Torch, Hel Skull and Coat when fused with Pan.
+
 ## [1.5.0] - 2026-11-02
 
 - Nyx ᘯBoost crit chance is boosted by Thanatos axe.

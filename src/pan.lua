@@ -154,3 +154,71 @@ function mod.FirePanLobGun(triggerArgs, functionArgs)
         game.wait(0.2)
     end
 end
+
+function mod.RefreshPanTorch(projectileId)
+	local threadName = _PLUGIN.guid .. "RefreshPanTorchThread"
+	local range = 100
+	local direction = 1
+	local ready_for_swap = true
+	while true do
+		game.SetProjectileProperty({ ProjectileId = projectileId, Property = "Range", Value = range})
+		range = range + 15*direction
+		if range > 900 and ready_for_swap then
+			direction = -1
+			ready_for_swap = false
+		end
+		if range == 400 then
+			ready_for_swap = true
+		end
+		if range < 100 and ready_for_swap then
+			direction = 1
+			ready_for_swap = false
+		end
+		game.wait(0.01, threadName)
+	end
+end
+
+function mod.FirePanTorchSpecial(weaponData, functionArgs, triggerArgs)
+    if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) then
+		game.SetWeaponProperty({ WeaponName = "WeaponTorchSpecial", DestinationId = game.CurrentRun.Hero.ObjectId, Property = "ActiveProjectileCap2", Value = 10})
+        game.SessionMapState[_PLUGIN.guid .. "PanTorchSpecialIds"] = game.SessionMapState[_PLUGIN.guid .. "PanTorchSpecialIds"] or {}
+        game.ExpireProjectiles({ProjectileIds = game.SessionMapState[_PLUGIN.guid .. "PanTorchSpecialIds"]})
+        game.SessionMapState[_PLUGIN.guid .. "PanTorchSpecialIds"] = {}
+		game.killTaggedThreads(_PLUGIN.guid .. "RefreshPanTorchThread")
+		game.wait(0.1)
+        local weaponName = weaponData.Name
+        local numProjectiles = functionArgs.NumProjectiles
+        local projectileName = "ProjectileTorchOrbitEx"
+
+        local derivedValues = game.GetDerivedPropertyChangeValues({
+            ProjectileName = projectileName,
+            WeaponName = weaponName,
+            Type = "Projectile",
+            MatchProjectileName = true,
+        })
+
+        game.OverwriteTableKeys(derivedValues.PropertyChanges, {
+            Range = 800,
+            Speed = 250,
+            ArcEnd = -10800,
+            ReturnToOwnerAfterInactiveSeconds = 0,
+            MinRange = 0,
+            MaxRange = 0,
+        })
+
+        local angle = math.random(0,360)
+
+        for i = 1, numProjectiles do
+			local torchOrbitId = game.CreateProjectileFromUnit({ WeaponName = weaponName,
+				Name = projectileName,
+				Id = game.CurrentRun.Hero.ObjectId,
+                DestinationId = game.CurrentRun.Hero.ObjectId,
+				DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges, Angle = angle + i*360/numProjectiles
+			})
+			game.thread(mod.RefreshPanTorch, torchOrbitId)
+			table.insert(game.SessionMapState[_PLUGIN.guid .. "PanTorchSpecialIds"], torchOrbitId)
+		end
+		game.wait(7, _PLUGIN.guid .. "RefreshPanTorchThread")
+		game.killTaggedThreads(_PLUGIN.guid .. "RefreshPanTorchThread")
+    end
+end

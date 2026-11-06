@@ -49,7 +49,7 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 
 ## Some limitations
 
-- Aspect of Pan as primary does nothing when fused with any non-dagger aspect.
+- Aspect of Pan as primary only boosts the ᘯSpecial count for Staff, Dagger, Torch, Hel and Coat and homing only works for Dagger Specials.
 - Aspects of Medea, Eos and Moros don't have a Minor Aspect since they are heavily Attack oriented.
 - Skull's Minor Aspect of Melinoe only affects Persephone and Medea (they're the only other ones with Ammo).
 - Dagger Attack, Axe Attack/Special, Skull Special(except Hel) do not produce Nyx's Nightspawn.

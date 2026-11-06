@@ -108,7 +108,7 @@ local subTraits = {
                     TraitName = "StaffTripleShotTrait",
                     ProjectileName = "ProjectileStaffBallCharged",
                     ProjectileProperty = "Fuse",
-                    ChangeValue = 1.6666666,
+                    ChangeValue = 1.66666,
                     ChangeType = "Multiply"
                 },
                 {
@@ -116,8 +116,76 @@ local subTraits = {
                     TraitName = "StaffTripleShotTrait",
                     ProjectileName = "ProjectileStaffBallCharged",
                     ProjectileProperty = "Range",
-                    ChangeValue = 1.666666,
+                    ChangeValue = 1.66666,
                     ChangeType = "Multiply"
+                },
+            }
+        },
+        SubAspectTrait_DaggerHomingThrowAspect_Torch = {
+            InheritFrom = {"BaseTrait"},
+            Hidden = true,
+            RarityLevels =
+            {
+                Common =
+                {
+                    MinMultiplier = 1.0,
+                    MaxMultiplier = 1.0,
+                },
+                Rare =
+                {
+                    MinMultiplier = 2.0,
+                    MaxMultiplier = 2.0,
+                },
+                Epic =
+                {
+                    MinMultiplier = 3.0,
+                    MaxMultiplier = 3.0,
+                },
+                Heroic =
+                {
+                    MinMultiplier = 4.0,
+                    MaxMultiplier = 4.0,
+                },
+                Legendary =
+                {
+                    MinMultiplier = 5.0,
+                    MaxMultiplier = 5.0,
+                },
+                Perfect =
+                {
+                    Multiplier = 8
+                }
+            },
+            OnWeaponFiredFunctions =
+            {
+                ValidWeapons = {"WeaponTorchSpecial"},
+                FunctionName = _PLUGIN.guid .. "." .. "FirePanTorchSpecial",
+                FunctionArgs =
+                {
+                    NumProjectiles = { BaseValue = 1 },
+                },
+            },
+            ManaCostModifiers =
+            {
+                WeaponNames = {"WeaponTorchSpecial"},
+                ExWeapons = true,
+                ManaCostAdd = 15,
+            },
+            PropertyChanges =
+            {
+                {
+                    WeaponName = "WeaponTorchSpecial",
+                    WeaponProperty = "ActiveProjectileCap2",
+                    ChangeValue = 10,
+                    ChangeType = "Add",
+                    ExcludeLinked = true
+                },
+                {
+                    WeaponName = "WeaponTorchSpecial",
+                    WeaponProperty = "ActiveProjectileCap",
+                    ChangeValue = 5,
+                    ChangeType = "Add",
+                    ExcludeLinked = true
                 },
             }
         }
