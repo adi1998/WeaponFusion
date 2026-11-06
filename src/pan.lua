@@ -113,19 +113,6 @@ local newChargeStageModifiers = {
 
 game.TraitData.DaggerHomingThrowAspect.ChargeStageModifiersArray = game.CombineTablesIPairs(game.TraitData.DaggerHomingThrowAspect.ChargeStageModifiersArray, newChargeStageModifiers)
 
-modutil.mod.Path.Wrap("GetWeaponChargeStages", function (base, ...)
-    local retval = base(...)
-    print(mod.dump(retval))
-    return retval
-end)
-
-modutil.mod.Path.Wrap("ApplyWeaponPropertyChange", function (base, unit, weaponName, propertyChange, reverse, skipWeaponUpdates)
-    if unit == game.CurrentRun.Hero then
-        print(weaponName, mod.dump(propertyChange))
-    end
-    return base(unit, weaponName, propertyChange, reverse, skipWeaponUpdates)
-end)
-
 modutil.mod.Path.Wrap("SuitSeekThread", function (base, weaponData, stageData)
     if game.HeroHasTrait("DaggerHomingThrowAspect") then
         weaponData.MaxTargets = 6 + 5
@@ -163,14 +150,14 @@ function mod.RefreshPanTorch(projectileId)
 	while true do
 		game.SetProjectileProperty({ ProjectileId = projectileId, Property = "Range", Value = range})
 		range = range + 15*direction
-		if range > 900 and ready_for_swap then
+		if range >= 900 and ready_for_swap then
 			direction = -1
 			ready_for_swap = false
 		end
 		if range == 400 then
 			ready_for_swap = true
 		end
-		if range < 100 and ready_for_swap then
+		if range <= 100 and ready_for_swap then
 			direction = 1
 			ready_for_swap = false
 		end
@@ -222,3 +209,11 @@ function mod.FirePanTorchSpecial(weaponData, functionArgs, triggerArgs)
 		game.killTaggedThreads(_PLUGIN.guid .. "RefreshPanTorchThread")
     end
 end
+
+-- TODO: find a better way
+modutil.mod.Path.Wrap("CreateProjectileFromUnit", function (base,args)
+    if args.Name == "ProjectileThrowCharged" and game.HeroHasTrait("DaggerHomingThrowAspect") then
+        args.Name = "WeaponFusion_Pan_ProjectileThrowCharged"
+    end
+    return base(args)
+end)

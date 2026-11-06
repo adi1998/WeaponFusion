@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
-- Increase ᘯSpecial count for Staff, Torch, Hel Skull and Coat when fused with Pan.
+- Increase ᘯSpecial count for Staff, Torch and Coat when fused with Pan.
+- Pan plus Skull ᘯSpecial now tracks enemies in cast.
+- Pan plus Hel fires extra Special projectiles along with the ᘯSpecial.
 
 ## [1.5.0] - 2026-11-02
 

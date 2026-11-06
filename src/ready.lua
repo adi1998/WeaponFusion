@@ -851,5 +851,11 @@ modutil.mod.Path.Wrap("CheckPoseidonSplash", function (base, victim, functionArg
             conditions.Count = 6
         end
     end
+    if game.HeroHasTrait("DaggerHomingThrowAspect") and triggerArgs.SourceProjectile == "ProjectileTorchOrbitEx" then
+        local conditions = functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile]
+        if conditions and conditions.Cooldown then
+            conditions.Cooldown = 0.07
+        end
+    end
     return base(victim, functionArgs, triggerArgs)
 end)

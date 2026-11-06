@@ -1,0 +1,59 @@
+{
+    Projectiles = [
+        {
+            Name = "WeaponFusion_Pan_ProjectileThrowCharged"
+            InheritFrom = "ProjectileThrowCharged"
+            Type = "HOMING"
+            AdjustRateAcceleration = 6000
+            Acceleration = null
+            MaxAdjustRate = 1800
+            RequireTargetsHaveEffect = "ImpactSlow"
+            AffectsEnemies = true
+            AffectsFriends = false
+            AffectsSelf = false
+            CheckUnitImpact = true
+            CheckObstacleImpact = true
+            UnlimitedUnitPenetration = true
+            NumPenetrations = 999999
+            AttachToOwner = false
+            StartDelay = 0.04
+            Damage = 80
+            Speed = 2500
+            Range = 830
+            UseRadialImpact = false
+            UseArmor = true
+            UseVulnerability = true
+            DissipateFx = "null"
+            GroupName = "Standing"
+            ClearOnAttackEffects = true
+            ProjectileDefenseRadius = 45
+            ImmunityDuration = 0.15
+            Thing =
+            {
+                Graphic = "LobSpecialFx"
+                RotateGeometry = true
+                AttachedAnim = "null"
+                Grip = 999999
+                Points =
+                [
+                    {
+                        X = 50
+                        Y = 100
+                    }
+                    {
+                        X = 50
+                        Y = -100
+                    }
+                    {
+                        X = -50
+                        Y = -100
+                    }
+                    {
+                        X = -50
+                        Y = 100
+                    }
+                ]
+            }
+        } 
+    ]
+}

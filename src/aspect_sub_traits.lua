@@ -167,7 +167,7 @@ local subTraits = {
             },
             ManaCostModifiers =
             {
-                WeaponNames = {"WeaponTorchSpecial"},
+                WeaponNames = {"WeaponTorchSpecial", "WeaponLobSpecial"},
                 ExWeapons = true,
                 ManaCostAdd = 15,
             },
