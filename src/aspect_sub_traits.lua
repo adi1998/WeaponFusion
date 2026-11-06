@@ -98,6 +98,28 @@ local subTraits = {
                     NumProjectiles = { BaseValue = 0.8, },
                 },
             }
+        },
+        SubAspectTrait_DaggerHomingThrowAspect_Staff = {
+            InheritFrom = {"BaseTrait"},
+            Hidden = true,
+            PropertyChanges = {
+                {
+                    WeaponName = "WeaponStaffBall",
+                    TraitName = "StaffTripleShotTrait",
+                    ProjectileName = "ProjectileStaffBallCharged",
+                    ProjectileProperty = "Fuse",
+                    ChangeValue = 1.6666666,
+                    ChangeType = "Multiply"
+                },
+                {
+                    WeaponName = "WeaponStaffBall",
+                    TraitName = "StaffTripleShotTrait",
+                    ProjectileName = "ProjectileStaffBallCharged",
+                    ProjectileProperty = "Range",
+                    ChangeValue = 1.666666,
+                    ChangeType = "Multiply"
+                },
+            }
         }
     }
 }

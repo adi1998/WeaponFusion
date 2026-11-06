@@ -24,7 +24,7 @@ local newChargeStageModifiers = {
             }
         },
         AddProjectedChargeStages = {
-            NumStages = 2,
+            NumStages = {BaseValue = 0.5},
             ProjectedChanges =
             {
                 NumProjectiles = 1,
@@ -48,12 +48,65 @@ local newChargeStageModifiers = {
             }
         },
         AddProjectedChargeStages = {
-            NumStages = 2,
+            NumStages = {BaseValue = 0.5},
             ProjectedChanges =
             {
                 NumProjectiles = 1,
                 ManaCost = 20,
             },
+        }
+    },
+    {
+        TraitNames = {"StaffTripleShotTrait"},
+        FalseTraitNames = {"StaffSecondStageTrait"},
+        ValidWeapons = {"WeaponStaffBall"},
+        AddChargeStage = {
+            ManaCost = 20,
+            Wait = 0.55,
+            ResetIndicator = true,
+            WeaponProperties = {
+                NumProjectiles = 3,
+                ProjectileInterval = 0.04,
+                ProjectileAngleOffset = math.rad(15),
+                ProjectileOffsetStart = "CENTER"
+            }
+        },
+        AddProjectedChargeStages = {
+            NumStages = { BaseValue = 0.8 },
+            ProjectedChanges =
+            {
+                NumProjectiles = 1,
+                ManaCost = 10,
+            },
+        },
+        AddProjectileProperties = {
+            Range = 528
+        }
+    },
+    {
+        TraitNames = {"StaffTripleShotTrait", "StaffSecondStageTrait"},
+        ValidWeapons = {"WeaponStaffBall"},
+        AddChargeStage = {
+            ManaCost = 60,
+            Wait = 0.55,
+            ResetIndicator = true,
+            WeaponProperties = {
+                NumProjectiles = 3,
+                ProjectileInterval = 0.04,
+                ProjectileAngleOffset = math.rad(15),
+                ProjectileOffsetStart = "CENTER"
+            }
+        },
+        AddProjectedChargeStages = {
+            NumStages = { BaseValue = 0.8 },
+            ProjectedChanges =
+            {
+                NumProjectiles = 1,
+                ManaCost = 20,
+            },
+        },
+        AddProjectileProperties = {
+            Range = 528
         }
     },
 }
