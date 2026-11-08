@@ -212,6 +212,15 @@ function mod.FirePanTorchSpecial(weaponData, functionArgs, triggerArgs)
     end
 end
 
+-- the multiple custom charge stages seem to interact badly with the one in DoubleExManaBoon
+-- hard capping it as soon as the wepaon is fired to mitigate it
+function mod.ResetNumProjectileWaves(weaponData, functionArgs, triggerArgs)
+    if game.HeroHasTrait("DoubleExManaBoon") then
+        game.SetWeaponProperty({ WeaponName = "WeaponStaffBall", DestinationId = game.CurrentRun.Hero.ObjectId, Property = "NumProjectileWaves", Value = 2 })
+        game.SetWeaponProperty({ WeaponName = "WeaponStaffBall", DestinationId = game.CurrentRun.Hero.ObjectId, Property = "NumWavesQueued", Value = 1, ValueChangeType = "Absolute", DataValue = false })
+    end
+end
+
 -- TODO: find a better way
 modutil.mod.Path.Wrap("CreateProjectileFromUnit", function (base,args)
     if args.Name == "ProjectileThrowCharged" and game.HeroHasTrait("DaggerHomingThrowAspect") then

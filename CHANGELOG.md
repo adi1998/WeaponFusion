@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Pan plus Staff plus Exceptional Talent causing "infinite" Moonbursts to be created.
+
 ## [1.6.1] - 2026-11-08
 
 - Xbox Gamepass/MS Store compatibility.

@@ -119,6 +119,10 @@ local subTraits = {
                     ChangeValue = 1.66666,
                     ChangeType = "Multiply"
                 },
+            },
+            OnWeaponFiredFunctions = {
+                ValidWeapons = {"WeaponStaffBall"},
+                FunctionName = _PLUGIN.guid .. "." .. "ResetNumProjectileWaves"
             }
         },
         SubAspectTrait_DaggerHomingThrowAspect_Torch = {
