@@ -17,11 +17,13 @@ if check_projectile_impact_ptr:is_valid() and not check_projectile_impact_ptr:is
             return check_projectile_impact_hook_site:add(8)
         end
     )
+else
+	rom.log.warning("Unable to patch sgg::Projectile::CheckProjectileImpact")
 end
 
 -- sgg::Projectile *__fastcall sgg::ProjectileManager::Get(int id)
 local sgg_get_projectile_ptr = rom.memory.scan_pattern(
-	"48 83 EC 48 48 8B 05 BD 9F 4B 00 48 33 C4 48 89 " ..
+	"48 83 EC 48 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 " ..
 	"44 24 38 89 4C 24 20 83 F9 FF 74 64 0F 57 C0 4C"
 )
 
@@ -38,6 +40,8 @@ if sgg_get_projectile_ptr:is_valid() and not sgg_get_projectile_ptr:is_null() th
 			end
 		end
 	})
+else
+	rom.log.warning("Unable to hook sgg::ProjectileManager::Get")
 end
 
 function mod.extend_projectile_active_duration(id, duration)

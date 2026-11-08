@@ -61,9 +61,7 @@ for weaponName, aspectNameList in pairs(game.ScreenData.WeaponUpgradeScreen.Disp
     end
 end
 
-local bannedPrimaryAspects = {
-    ["DaggerHomingThrowAspect"] = true,
-}
+local bannedPrimaryAspects = { }
 
 function PickRandomFusion()
     local weaponKits = game.DeepCopyTable(game.BountyData.BasePackageBountyRandom.RandomWeaponKitNames)

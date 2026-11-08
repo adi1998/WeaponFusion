@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Xbox Gamepass/MS Store compatibility.
+- Remove Pan from random Primary blocklist.
+- Slightly adjust Aspect of Pan plus Torch behavior.
+
 ## [1.6.0] - 2026-11-06
 
 - Increase ᘯSpecial count for Staff, Torch and Coat when fused with Pan.

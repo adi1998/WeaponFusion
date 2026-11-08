@@ -153,6 +153,7 @@ function mod.RefreshPanTorch(projectileId)
 		if range >= 900 and ready_for_swap then
 			direction = -1
 			ready_for_swap = false
+            game.wait(0.04, threadName)
 		end
 		if range == 400 then
 			ready_for_swap = true
@@ -160,6 +161,7 @@ function mod.RefreshPanTorch(projectileId)
 		if range <= 100 and ready_for_swap then
 			direction = 1
 			ready_for_swap = false
+            game.wait(0.04, threadName)
 		end
 		game.wait(0.01, threadName)
 	end
