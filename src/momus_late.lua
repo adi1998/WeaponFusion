@@ -55,13 +55,54 @@ modutil.mod.Path.Context.Env("WeaponCastFired", function (owner, weaponData, arg
 	end)
 end)
 
-modutil.mod.Path.Context.Env("StartSpecialRepeatThread", function (startX, startY, angle, functionArgs, triggerArgs)
+local blockDualMoonShot = false
+
+modutil.mod.Path.Context.Env("StartSpecialRepeatThread", function ()
 	modutil.mod.Path.Wrap("GetDerivedPropertyChangeValues", function (base, ...)
 		local derivedValues = base(...)
 		if game.HeroHasTrait("StaffRaiseDeadAspect_Secondary") or game.HeroHasTrait("StaffRaiseDeadAspect") then
 			derivedValues.PropertyChanges.DamageRadius = 435
 			derivedValues.PropertyChanges.Damage = 110
 		end
+		if game.HeroHasTrait("DaggerHomingThrowAspect") and game.HeroHasTrait("StaffSelfHitAspect_Secondary") and game.HeroHasTrait("StaffTripleShotTrait") then
+			derivedValues.PropertyChanges.Range = 528
+		end
 		return derivedValues
+	end)
+	modutil.mod.Path.Wrap("CreateProjectileFromUnit", function (base, args)
+		local locals = modutil.mod.Locals.Stacked(3)
+		local triggerArgs = locals.triggerArgs
+		local angle = args.Angle
+		if game.HeroHasTrait("DaggerHomingThrowAspect") and game.HeroHasTrait("StaffSelfHitAspect_Secondary") then
+			local projId
+			if not blockDualMoonShot then
+				local numProjectiles = triggerArgs.NumProjectiles
+				local angleIncrement = 15
+				local centerOffset = 0
+				if numProjectiles % 2 == 0 then
+					centerOffset = angleIncrement/2
+				end
+				local start = 1
+				if numProjectiles % 2 == 1 then
+					args.Angle = angle
+					projId = base(args)
+					game.wait(0.03)
+					start = 2
+				end
+
+				for i = start, numProjectiles do
+					local angleOffset = (centerOffset + (math.floor(i/2))*angleIncrement) * (-1)^i
+					if numProjectiles % 2 == 0 then
+						angleOffset = (centerOffset + (math.floor((i+1)/2)-1)*angleIncrement) * (-1)^i
+					end
+					args.Angle = angle + angleOffset
+					projId = base(args)
+					game.wait(0.03)
+				end
+			end
+			blockDualMoonShot = not blockDualMoonShot
+			return projId
+		end
+		return base(args)
 	end)
 end)

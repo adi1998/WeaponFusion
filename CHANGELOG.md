@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- Pan plus Staff plus Exceptional Talent causing "infinite" Moonbursts to be created.
+- Fix Pan plus Staff plus Exceptional Talent causing "infinite" Moonbursts to be created.
+- Pan plus Momus now duplicates the correct amont of Staff ᘯSpecial projectiles.
 
 ## [1.6.1] - 2026-11-08
 

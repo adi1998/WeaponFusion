@@ -12,7 +12,7 @@ local newChargeStageModifiers = {
         {
             -- NumProjectiles = 1,
             ProjectileInterval = 0.04,
-            ProjectileAngleOffset = math.rad(12),
+            ProjectileAngleOffset = math.rad(15),
             ProjectileOffsetStart = "CENTER"
         },
         AddChargeStage = {
