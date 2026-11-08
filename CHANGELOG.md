@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-11-08
+
 - Xbox Gamepass/MS Store compatibility.
 - Remove Pan from random Primary blocklist.
 - Slightly adjust Aspect of Pan plus Torch behavior.
@@ -244,7 +246,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.6.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.6.1...HEAD
+[1.6.1]: https://github.com/adi1998/WeaponFusion/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/adi1998/WeaponFusion/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/adi1998/WeaponFusion/compare/1.4.2...1.5.0
 [1.4.2]: https://github.com/adi1998/WeaponFusion/compare/1.4.1...1.4.2
