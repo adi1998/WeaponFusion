@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.6.3] - 2026-11-11
+
 - Fix Pan + Staff + Exceptional Talent + Dual Moonshot causing 4 regular Special projectiles to be created.
 - Fix Pan + Momus sometimes not firing the duplicates if Dual Moonshot is not equipped.
 
@@ -254,7 +256,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.6.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.6.3...HEAD
+[1.6.3]: https://github.com/adi1998/WeaponFusion/compare/1.6.2...1.6.3
 [1.6.2]: https://github.com/adi1998/WeaponFusion/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/adi1998/WeaponFusion/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/adi1998/WeaponFusion/compare/1.5.0...1.6.0
