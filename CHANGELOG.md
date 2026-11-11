@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Fix Pan + Staff + Exceptional Talent + Dual Moonshot causing 4 regular Special projectiles to be created.
+- Fix Pan + Momus sometimes not firing the duplicates if Dual Moonshot is not equipped.
+
 ## [1.6.2] - 2026-11-08
 
 - Fix Pan plus Staff plus Exceptional Talent causing "infinite" Moonbursts to be created.

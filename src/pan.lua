@@ -216,8 +216,12 @@ end
 -- hard capping it as soon as the wepaon is fired to mitigate it
 function mod.ResetNumProjectileWaves(weaponData, functionArgs, triggerArgs)
     if game.HeroHasTrait("DoubleExManaBoon") then
-        game.SetWeaponProperty({ WeaponName = "WeaponStaffBall", DestinationId = game.CurrentRun.Hero.ObjectId, Property = "NumProjectileWaves", Value = 2 })
-        game.SetWeaponProperty({ WeaponName = "WeaponStaffBall", DestinationId = game.CurrentRun.Hero.ObjectId, Property = "NumWavesQueued", Value = 1, ValueChangeType = "Absolute", DataValue = false })
+        local numProjectileWaves = 1
+        if game.IsExWeapon( weaponData.Name, { Combat = true }, triggerArgs ) then
+            numProjectileWaves = 2
+        end
+        game.SetWeaponProperty({ WeaponName = "WeaponStaffBall", DestinationId = game.CurrentRun.Hero.ObjectId, Property = "NumProjectileWaves", Value = numProjectileWaves })
+        game.SetWeaponProperty({ WeaponName = "WeaponStaffBall", DestinationId = game.CurrentRun.Hero.ObjectId, Property = "NumWavesQueued", Value = numProjectileWaves - 1, ValueChangeType = "Absolute", DataValue = false })
     end
 end
 

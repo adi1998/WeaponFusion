@@ -75,7 +75,7 @@ modutil.mod.Path.Context.Env("StartSpecialRepeatThread", function ()
 		local angle = args.Angle
 		if game.HeroHasTrait("DaggerHomingThrowAspect") and game.HeroHasTrait("StaffSelfHitAspect_Secondary") then
 			local projId
-			if not blockDualMoonShot then
+			if not blockDualMoonShot or not game.HeroHasTrait("StaffTripleShotTrait") then
 				local numProjectiles = triggerArgs.NumProjectiles
 				local angleIncrement = 15
 				local centerOffset = 0
