@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix Random toggle indicator being delayed.
+
 ## [1.6.3] - 2026-11-11
 
 - Fix Pan + Staff + Exceptional Talent + Dual Moonshot causing 4 regular Special projectiles to be created.
