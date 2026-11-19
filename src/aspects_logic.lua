@@ -720,7 +720,7 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 			WeaponTorchSpecial = "ProjectileTorchOrbit",
 			WeaponAxeSpecial = "ProjectileAxeSpecial",
 			WeaponSuitRanged = "ProjectileSuitRangedUnguided",
-			WeaponLobSpecial = "ProjectileDaggerThrow",
+			WeaponLobSpecial = "ProjectileThrowCharged",
 			WeaponDaggerThrow = "ProjectileDaggerThrow",
 		}
 		if game.HeroHasTrait("LobGunAspect_Secondary") then
@@ -745,6 +745,21 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 			WeaponName = propertyWeapon,
 			Type = "Projectile",
 		})
+
+		if chosenProjectile == "ProjectileThrowCharged" then
+			derivedValues = game.GetDerivedPropertyChangeValues({
+				ProjectileName = chosenProjectile,
+				WeaponName = propertyWeapon,
+				Type = "Projectile",
+				MatchProjectileName = true
+			})
+			chosenProjectile = "WeaponFusion_Pan_ProjectileThrowCharged"
+			derivedValues.PropertyChanges.Damage = 45
+			if not game.HeroHasTrait("DaggerHomingThrowAspect") then
+				derivedValues.PropertyChanges.RequireTargetsHaveEffect = "null"
+				derivedValues.PropertyChanges.MaxAdjustRate = 0
+			end
+		end
 
 		if chosenProjectile == "ProjectileAxeSpecial" and secondWeapon == "WeaponAxeSpecial" and not derivedValues.PropertyChanges.StartFx then
 			derivedValues.PropertyChanges.StartFx = "AxeSwipeUpper"

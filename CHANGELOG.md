@@ -4,6 +4,7 @@
 
 - Fix Random toggle indicator being delayed.
 - Decrease Poseidon Special splash's internal cooldown when Dagger + Torch + Trick Knives is equipped.
+- Dagger + Skull(except Hel) + Trick Knives now fires 3 nerfed copies of the skull ᘯSpecial projectile instead of 3 dagger Special projectiles.
 
 ## [1.6.3] - 2026-11-11
 
