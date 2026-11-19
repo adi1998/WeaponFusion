@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fix Random toggle indicator being delayed.
+- Decrease Poseidon Special splash's internal cooldown when Dagger + Torch + Trick Knives is equipped.
 
 ## [1.6.3] - 2026-11-11
 
@@ -12,7 +13,7 @@
 ## [1.6.2] - 2026-11-08
 
 - Fix Pan plus Staff plus Exceptional Talent causing "infinite" Moonbursts to be created.
-- Pan plus Momus now duplicates the correct amont of Staff ᘯSpecial projectiles.
+- Pan plus Momus now duplicates the correct amount of Staff ᘯSpecial projectiles.
 
 ## [1.6.1] - 2026-11-08
 
