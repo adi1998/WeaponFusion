@@ -21,8 +21,8 @@ function mod.OverheatApply( triggerArgs )
 	if triggerArgs.Reapplied then
 		return
 	end
-	local lobui_anchor = (game.HeroHasTrait("LobGunAspect_Secondary") and game.ScreenAnchors.LobUI) or game.ScreenAnchors.LobUI_Secondary
-	local lobui_charge_anchor = (game.HeroHasTrait("LobGunAspect_Secondary") and game.ScreenAnchors.LobUIChargeAmount) or game.ScreenAnchors.LobUIChargeAmount_Secondary
+	local lobui_anchor = (game.HeroHasTrait("LobGunAspect_Secondary") and game.ScreenAnchors.LobUI_Secondary) or game.ScreenAnchors.LobUI
+	local lobui_charge_anchor = (game.HeroHasTrait("LobGunAspect_Secondary") and game.ScreenAnchors.LobUIChargeAmount_Secondary) or game.ScreenAnchors.LobUIChargeAmount
 	game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = lobui_charge_anchor, Fraction = 1, Instant = true })
 	game.SetAnimation({ Name = "StaffReloadTimer", DestinationId = lobui_charge_anchor, PlaySpeed = 100 / triggerArgs.Duration })
     game.SetAnimationFrameTarget({ Name = "StaffReloadTimer", DestinationId = lobui_charge_anchor, Fraction = 0 })

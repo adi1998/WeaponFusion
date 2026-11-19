@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix Hel primary Valkyrie duration indicator.
+
 ## [1.6.4] - 2026-11-19
 
 - Fix Random toggle indicator being delayed.
