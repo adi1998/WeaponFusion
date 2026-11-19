@@ -753,8 +753,7 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 				Type = "Projectile",
 				MatchProjectileName = true
 			})
-			chosenProjectile = "WeaponFusion_Pan_ProjectileThrowCharged"
-			derivedValues.PropertyChanges.Damage = 45
+			chosenProjectile = "WeaponFusion_Pan_ProjectileThrow"
 			if not game.HeroHasTrait("DaggerHomingThrowAspect") then
 				derivedValues.PropertyChanges.RequireTargetsHaveEffect = "null"
 				derivedValues.PropertyChanges.MaxAdjustRate = 0

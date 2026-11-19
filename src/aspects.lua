@@ -3851,3 +3851,12 @@ game.TraitData.TorchAutofireAspect.AddOutgoingDamageModifiers.ValidProjectiles =
 game.TraitData.DaggerTripleAspect.OnEnemyDamagedAction.ValidWeapons = game.WeaponSets.HeroAllWeaponsAndSprint
 
 game.TraitData.AxePerfectCriticalAspect.AddOutgoingCritModifiers.ValidWeapons = game.WeaponSets.HeroAllWeaponsAndSprint
+
+game.OverwriteTableKeys(game.ProjectileData, {
+	WeaponFusion_Pan_ProjectileThrowCharged = {
+		IsExProjectile = true
+	},
+	WeaponFusion_Pan_ProjectileThrow = {
+		IsNotExProjectile = true
+	}
+})

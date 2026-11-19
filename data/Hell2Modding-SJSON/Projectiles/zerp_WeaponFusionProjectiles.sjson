@@ -54,6 +54,12 @@
                     }
                 ]
             }
-        } 
+        }
+        {
+            Name = "WeaponFusion_Pan_ProjectileThrow"
+            InheritFrom = "WeaponFusion_Pan_ProjectileThrowCharged"
+            Damage = 45
+            ImmunityDuration = 0.01
+        }
     ]
 }
