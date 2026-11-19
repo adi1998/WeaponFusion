@@ -49,12 +49,12 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 
 ## Some limitations
 
-- Aspect of Pan as primary has no effect on Axe Specials.
+- Aspect of Pan as primary has no effect on Axe Specials and doesn't give homing to Staff and Torch Specials.
 - Aspects of Medea, Eos and Moros don't have a Minor Aspect since they are heavily Attack oriented.
 - Skull's Minor Aspect of Melinoe only affects Persephone and Medea (they're the only other ones with Ammo).
 - Dagger Attack, Axe Attack/Special, Skull Special(except Hel) do not produce Nyx's Nightspawn.
 - Eos' Daybreaker will not duplicate the skull Special(except Hel).
-- Trick Knives will not duplicate the skull Special(expect Hel).
+- Some combinations of weapons/aspects/boons/hammers can lead to inconsistent Vfx being applied to the weapons, but they should function mechanically like you'd expect them to.
 
 ## Issues and feedback
 
