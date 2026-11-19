@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.6.4] - 2026-11-19
+
 - Fix Random toggle indicator being delayed.
 - Decrease Poseidon Special splash's internal cooldown when Dagger + Torch + Trick Knives is equipped.
 - Dagger + Skull(except Hel) + Trick Knives now fires 3 modified copies of the skull ᘯSpecial projectile instead of 3 dagger Special projectiles.
@@ -260,7 +262,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.6.3...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.6.4...HEAD
+[1.6.4]: https://github.com/adi1998/WeaponFusion/compare/1.6.3...1.6.4
 [1.6.3]: https://github.com/adi1998/WeaponFusion/compare/1.6.2...1.6.3
 [1.6.2]: https://github.com/adi1998/WeaponFusion/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/adi1998/WeaponFusion/compare/1.6.0...1.6.1
