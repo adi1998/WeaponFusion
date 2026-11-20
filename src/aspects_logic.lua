@@ -961,3 +961,51 @@ function mod.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 	end
 	return game.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 end
+
+function mod.CheckLobDetonate(victim, functionArgs, triggerArgs)
+
+	if game.CurrentRun.Hero.Weapons.WeaponLob and not game.HeroHasTrait("LobGunAspect") and (triggerArgs.SourceProjectile == "ProjectileThrowBlink" or triggerArgs.SourceProjectile == "ProjectileThrowCharged") then
+		return game.RunWeaponMethod({ Id = game.CurrentRun.Hero.ObjectId, Weapon = "WeaponLob", Method = "ArmProjectiles" })
+	end
+
+	local passesHitCheck = functionArgs.FirstHitOnly == nil or (functionArgs.FirstHitOnly and not game.ProjectileHasUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "CheckLobDetonate" ))
+
+	if triggerArgs.SourceProjectile ~= nil and functionArgs.MultihitProjectileWhitelistLookup and functionArgs.MultihitProjectileWhitelistLookup[triggerArgs.SourceProjectile] and functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile] then
+		local conditions = functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile]
+		passesHitCheck = true
+		if conditions.Cooldown and not game.CheckCooldown( _PLUGIN.guid .. "CheckLobDetonate", conditions.Cooldown ) then
+			passesHitCheck = false
+		end
+	end
+	if passesHitCheck then
+		game.ProjectileRecordUnitHit( triggerArgs.ProjectileId, _PLUGIN.guid .. "CheckLobDetonate")
+		game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] = game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] or 0
+		game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"] = game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"] or {}
+		local lobSpecialProjectiles = game.ToLookup{
+			"ProjectileThrowBlink",
+			"ProjectileThrowCharged",
+			"ProjectileLobSpecialBounce",
+			"ProjectileLobGunRift"
+		}
+		if lobSpecialProjectiles[triggerArgs.SourceProjectile] then
+			if game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] > 0 then
+				local projectileName = "ProjectileLob"
+				local numProjectiles = game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"]
+				game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] = 0
+				local derivedValues = game.GetDerivedPropertyChangeValues({
+					ProjectileName = projectileName,
+					WeaponName = "WeaponLob",
+					Type = "Projectile",
+				})
+				derivedValues.PropertyChanges.Fuse = 0
+				derivedValues.PropertyChanges.Range = 0
+				for i = 1, numProjectiles do
+					local id = game.CreateProjectileFromUnit({WeaponName = "WeaponLob", Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges})
+					game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"][id] = true
+				end
+			end
+		elseif not game.IsExWeapon( triggerArgs.SourceWeapon, { Combat = true }, triggerArgs ) and not game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"][triggerArgs.ProjectileId] then
+			game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] = math.min(game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] + 1, 4)
+		end
+	end
+end

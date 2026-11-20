@@ -3466,6 +3466,285 @@ mod.AspectTraitData = {
 			},
 		},
 		FlavorText = "LobGunAspect_FlavorText",
+	},
+	LobCloseAttackAspect_Secondary =
+	{
+		InheritFrom = { "BaseTrait" },
+		Icon = "Hammer_Lob_14",
+		ReplacementGrannyModels =
+		{
+			WeaponLob_Mesh = "WeaponLob_Medea_Mesh"
+		},
+		CustomNameWithRequirements =
+		{
+			GameStateRequirements =
+			{
+				{
+					Path = {"CurrentRun", "Hero", "TraitDictionary"},
+					HasAny = { "LobAmmoBoostAspect", "LobImpulseAspect" },
+				}
+			},
+			Name = "LobCloseAttackAspect_Secondary_SkullPrimary"
+		},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1,
+			},
+			Rare =
+			{
+				Multiplier = 1.5,
+			},
+			Epic =
+			{
+				Multiplier = 2.0,
+			},
+			Heroic =
+			{
+				Multiplier = 2.5,
+			},
+			Legendary =
+			{
+				Multiplier = 3.0,
+			},
+			Perfect =
+			{
+				Multiplier = 4.5,
+			},
+		},
+		OnEnemyDamagedAction =
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
+			FunctionName = _PLUGIN.guid .. "." .. "CheckLobDetonate",
+			Args =
+			{
+				FirstHitOnly = true,
+				MultihitProjectileWhiteList =
+				{
+					"ProjectileStaffSingle",
+					"ProjectileStaffWall",
+				},
+				MultihitProjectileConditions =
+				{
+					ProjectileStaffSingle = { Cooldown = 0.5 },
+				},
+			}
+		},
+		AddOutgoingDamageModifiers =
+		{
+			NonExMultiplier =
+			{
+				BaseValue = 1.15,
+				SourceIsMultiplier = true,
+			},
+			ValidWeapons = game.WeaponSets.HeroPrimarySecondaryWeapons,
+			ReportValues = { ReportedWeaponMultiplier = "NonExMultiplier"},
+		},
+		OnWeaponChargeFunctions =
+		{
+			ValidWeapons = game.WeaponSets.HeroPrimaryWeapons,
+			FunctionName = "ResetLobSpecialCooldown",
+		},
+		PropertyChanges =
+		{
+			{
+				WeaponName = "WeaponLob",
+				FalseTraitNames = { "LobAmmoBoostAspect", "LobImpulseAspect" },
+				ExcludeLinked = true,
+				ProjectileName = "ProjectileLob",
+				ProjectileProperties =
+				{
+					Fuse = 0,
+					LaunchAngle = 0,
+					Range = 0,
+					DamageRadius = 460,
+					Gravity = 1500,
+					SpinRate = 0,
+					AttachToOwner = false,
+					CheckObstacleImpact = false,
+					RotateWithOwner = true,
+					CheckUnitImpact = false,
+				},
+			},
+			{
+				WeaponName = "WeaponLob",
+				TraitName = "LobAmmoBoostAspect",
+				ExcludeLinked = true,
+				ProjectileName = "ProjectileLob",
+				WeaponProperties =
+				{
+					ShowFreeAimLine = false,
+					BarrelLength = 50,
+					SelfVelocity = 0,
+					ProjectileToArm = "ProjectileLob",
+
+					SetCompleteAngleOnFire = false,
+					ChargeTime = 0.10,
+					ChargeStartAnimation = "Melinoe_Lob_Attack1_Start_Fast",
+					FireGraphic = "Melinoe_Lob_Attack1_Fire_Fast",
+				},
+				ProjectileProperties =
+				{
+					Fuse = 3.0,
+					LaunchAngle = 0,
+					Range = 0,
+					DamageRadius = 460,
+					Gravity = 1500,
+					SpinRate = 0,
+					Type = "STRAIGHT",
+					AttachToOwner = false,
+					CheckObstacleImpact = false,
+					AttachToMarker = "Melinoe_Rig:hand_00_R_JNT",
+					IgnoreCancelAttachedProjectiles = true,
+					RotateWithOwner = true,
+					CheckUnitImpact = false,
+					DetonateWhenArmed = true,
+					ReportValues = { ReportedFuse = "Fuse"},
+					GroupName = "FX_Standing_Add",
+					AttachedAnim = "MedeaFuseBacking",
+					Graphic = "MedeaFuseFx_Base",
+					StartFx = "MedeaLoadFx_Base",
+					SortMode = "Secondary"
+				},
+			},
+			{
+				WeaponName = "WeaponLob",
+				TraitName = "LobImpulseAspect",
+				ExcludeLinked = true,
+				ProjectileName = "ProjectileLob",
+				WeaponProperties =
+				{
+					ShowFreeAimLine = false,
+					BarrelLength = 50,
+					SelfVelocity = 0,
+					ProjectileToArm = "ProjectileLob",
+
+					SetCompleteAngleOnFire = false,
+					ChargeTime = 0.10,
+					ChargeStartAnimation = "Melinoe_Lob_Attack1_Start_Fast",
+					FireGraphic = "Melinoe_Lob_Attack1_Fire_Fast",
+				},
+				ProjectileProperties =
+				{
+					Fuse = 3.0,
+					LaunchAngle = 0,
+					Range = 0,
+					DamageRadius = 460,
+					Gravity = 1500,
+					SpinRate = 0,
+					Type = "STRAIGHT",
+					AttachToOwner = false,
+					CheckObstacleImpact = false,
+					AttachToMarker = "Melinoe_Rig:hand_00_R_JNT",
+					IgnoreCancelAttachedProjectiles = true,
+					RotateWithOwner = true,
+					CheckUnitImpact = false,
+					DetonateWhenArmed = true,
+					ReportValues = { ReportedFuse = "Fuse"},
+					GroupName = "FX_Standing_Add",
+					AttachedAnim = "MedeaFuseBacking",
+					Graphic = "MedeaFuseFx_Base",
+					StartFx = "MedeaLoadFx_Base",
+					SortMode = "Secondary"
+				},
+			},
+			{
+				WeaponName = "WeaponLob",
+				EffectName = "Lob1DisableCancellable",
+				EffectProperty = "Duration",
+				ChangeValue = 0.15,
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
+			{
+				FalseTraitName = "AxeFreeSpinTrait",
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "RemoveControlOnCharge2",
+				ChangeValue = "WeaponLobSpecial",
+			},
+			{
+				WeaponName = "WeaponAxeSpin",
+				WeaponProperty = "AddControlOnFireEnd2",
+				ChangeValue = "WeaponLobSpecial",
+			}
+		},
+		WeaponDataOverride =
+		{
+			WeaponLob =
+			{
+				CoalesceDoubleDamageNumbersInterval = 0.1,
+				OnProjectileDeathFunctionArgs =
+				{
+					Cooldown = 0.75,
+					CollideForces =
+					{
+						UpwardForceMin = 630,
+						UpwardForceMax = 650,
+						ForceMin = 0,
+						ForceMax = 0,
+						Scatter = 0,
+					},
+					DropForces =
+					{
+						UpwardForceMin = 535,
+						UpwardForceMax = 545,
+						ForceMin = 0,
+						ForceMax = 0,
+						Scatter = 0,
+					},
+				},
+				Sounds =
+				{
+					ChargeSounds =
+					{
+						{
+							Name = "/SFX/Player Sounds/MelinoeSkullsChargeLoop",
+							StoppedBy = { "ChargeCancel", "Fired" }
+						},
+					},
+					FireStageSounds =
+					{
+						{ Name = "/VO/MelinoeEmotes/EmotePowerAttackingStaff" },
+						{ Name = "/SFX/Player Sounds/MelSkullsOmegaAttack" },
+					},
+					ImpactSounds =
+					{
+						Invulnerable = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Armored = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Bone = "/SFX/ArrowMetalBoneSmash",
+						Brick = "/SFX/ArrowMetalStoneClang",
+						Stone = "/SFX/ArrowMetalStoneClang",
+						Organic = "/SFX/GunBulletOrganicImpact",
+						StoneObstacle = "/SFX/ArrowWallHitClankSmall",
+						BrickObstacle = "/SFX/ArrowWallHitClankSmall",
+						MetalObstacle = "/SFX/ArrowWallHitClankSmall",
+						BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
+						Shell = "/SFX/ShellImpact",
+					},
+				},
+			}
+		},
+		SkipAutoLobMagnetism = true,
+		StatLines =
+		{
+			"NonExDamageStatDisplay1",
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedWeaponMultiplier",
+				ExtractAs = "DamageIncrease",
+				Format = "PercentDelta",
+			},
+			{
+				Key = "ReportedFuse",
+				ExtractAs = "Duration",
+				DecimalPlaces = 1,
+				SkipAutoExtract = true,
+			},
+		},
+		FlavorText = "LobCloseAttackAspect_FlavorText",
 	}
 }
 

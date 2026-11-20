@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
+- Add Minor Aspect of Medea. Works as expected for same weapon fusions, other weapons get a slightly modified implementaion.
 - Fix Hel primary Valkyrie duration indicator.
+- Disable Hephaestus Legendary for Minor Aspects (it was causing more trouble than what is worth fixing).
 
 ## [1.6.4] - 2026-11-19
 

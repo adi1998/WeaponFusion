@@ -134,6 +134,18 @@ local traitTextList = {
         DisplayName = "Minor Aspect of Hel",
         Description = "You have {$Keywords.GunAspect}, which grants the way of the {$Keywords.Overheat} after your {$Keywords.SpecialEX}.",
     },
+    {
+        Id = "LobCloseAttackAspect_Secondary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Medea",
+        Description = "Your {$Keywords.Attack} builds up {$Keywords.WeaponFusion_Malice}, which explodes after landing your {$Keywords.SpecialSet}.",
+    },
+    {
+        Id = "LobCloseAttackAspect_Secondary_SkullPrimary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Medea",
+        Description = "Your {$Keywords.Attack} stays within reach, and explodes after landing your {$Keywords.SpecialSet} or {#BoldFormatGraft}{$TooltipData.ExtractData.Duration} Sec.",
+    },
 
     -- YM aspects
     {
@@ -158,6 +170,27 @@ end
 
 sjson.hook(traitTextEnFile, function (data)
     for index, value in ipairs(traitTextList) do
+        table.insert(data.Texts, sjson.to_object(value, traitTextOrder))
+    end
+    return data
+end)
+
+local helpTextEnFile = rom.path.combine(rom.paths.Content(), "Game\\Text\\en\\HelpText.en.sjson")
+
+local helpTextList = {
+    {
+        Id = "WeaponFusion_Malice",
+        InheritFrom = "BaseTooltip",
+        DisplayName = "Malice",
+        Description = "Triggers the {$Keywords.Attack} of the {#BoldFormatGraft}Argent Skull{#Prev}. Can stack upto {#BoldFormatGraft}4 {#Prev}times."
+    }
+}
+
+table.insert(game.KeywordList, "WeaponFusion_Malice")
+game.Keywords["WeaponFusion_Malice"] = "WeaponFusion_Malice"
+
+sjson.hook(helpTextEnFile, function (data)
+    for index, value in ipairs(helpTextList) do
         table.insert(data.Texts, sjson.to_object(value, traitTextOrder))
     end
     return data
