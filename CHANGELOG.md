@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix Anubis multihits not increasing Medea skull loaded count.
+
 ## [1.7.0] - 2026-11-21
 
 - Add Minor Aspect of Medea. Works as expected for same weapon fusions, other weapons get a slightly modified implementaion.

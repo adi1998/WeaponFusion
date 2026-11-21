@@ -3520,10 +3520,9 @@ mod.AspectTraitData = {
 			Args =
 			{
 				FirstHitOnly = true,
-				MultihitProjectileWhiteList =
+				MultihitProjectileWhitelist =
 				{
 					"ProjectileStaffSingle",
-					"ProjectileStaffWall",
 				},
 				MultihitProjectileConditions =
 				{
