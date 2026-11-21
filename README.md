@@ -46,6 +46,7 @@ Note: During same weapon fusion, if any hidden aspect is fused as a primary it w
 - Hel plus Nyx allows the ᘯBoost to trigger Valkyrie form as well.
 - Hel plus Persephone: Sprouted charge buildup increases the duration of Valkyrie form instead.
 - Persephone plus Hel: Sprouted charge buildup increases the ᘯSpecial duration instead.
+- Minor Aspect of Medea loads a skull on every regular attack for non Skull weapons upto a max of 4 which can only be detonated by using the Special.
 
 ## Some limitations
 
