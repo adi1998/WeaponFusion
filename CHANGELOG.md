@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-11-21
+
 - Fix Anubis multihits not increasing Medea skull loaded count.
 
 ## [1.7.0] - 2026-11-21
@@ -270,7 +272,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.7.0...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.7.1...HEAD
+[1.7.1]: https://github.com/adi1998/WeaponFusion/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/adi1998/WeaponFusion/compare/1.6.4...1.7.0
 [1.6.4]: https://github.com/adi1998/WeaponFusion/compare/1.6.3...1.6.4
 [1.6.3]: https://github.com/adi1998/WeaponFusion/compare/1.6.2...1.6.3
