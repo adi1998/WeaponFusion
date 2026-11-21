@@ -10,9 +10,9 @@
             StartFrame = 1
             Material = "Unlit"
             Loop = true
-            Duration = 0.7
+            Duration = 0.75
             PingPongScale = true
-            StartScale = 0.22
+            StartScale = 0.23
             EndScale = 0.27
         }
     ]
