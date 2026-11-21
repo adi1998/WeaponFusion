@@ -1004,8 +1004,87 @@ function mod.CheckLobDetonate(victim, functionArgs, triggerArgs)
 					game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"][id] = true
 				end
 			end
+			mod.UpdateMaliceUI()
 		elseif not game.IsExWeapon( triggerArgs.SourceWeapon, { Combat = true }, triggerArgs ) and not game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"][triggerArgs.ProjectileId] then
 			game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] = math.min(game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] + 1, 4)
+			mod.UpdateMaliceUI()
 		end
 	end
 end
+
+function mod.ShowMaliceUI(args)
+	if not game.HeroHasTrait("LobCloseAttackAspect_Secondary") or (game.CurrentRun.Hero.Weapons.WeaponLob and not game.HasHeroTraitValue( "UnlimitedAmmo" )) then
+		return
+	end
+	if game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"] then
+		game.SetAlpha({ Id = game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"], Duration = args.FadeDuration or game.HUDScreen.FadeInDuration, Fraction = args.Fraction or game.ConfigOptionCache.HUDOpacity })
+		return
+	end
+	game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"] = game.CreateScreenObstacle({ Name = "BlankObstacle",
+		Group = game.HUDScreen.ComponentData.DefaultGroup, X = game.HUDScreen.AmmoX + 120, Y = game.ScreenHeight - game.HUDScreen.AmmoBottomOffset,
+		Animation = "StaffWeapon_Uncharged",
+		Scale = 1.1,
+		Alpha = 0.0,
+	})
+	game.CreateTextBox({
+		Id = game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"],
+		OffsetX = 24, OffsetY = -2,
+		Font = "NumericP22UndergroundSCHeavy", FontSize = 24,
+		ShadowRed = 0.1, ShadowBlue = 0.1, ShadowGreen = 0.1,
+		OutlineColor = {0.113, 0.113, 0.113, 1}, OutlineThickness = 1,
+		ShadowAlpha = 1.0, ShadowBlur = 0, ShadowOffsetY = 2, ShadowOffsetX = 0,
+		Justification = "Left",
+	})
+
+	game.thread(mod.UpdateMaliceUI)
+	game.SetAlpha({ Id = game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"], Duration = args.FadeDuration or game.HUDScreen.FadeInDuration, Fraction = args.Fraction or game.ConfigOptionCache.HUDOpacity })
+end
+
+function mod.UpdateMaliceUI()
+	if game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"] == nil or game.CurrentRun.Hero == nil then
+		return
+	end
+	local ammoData =
+	{
+		Current = game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildup"] or 0,
+		Maximum = 4
+	}
+
+	if ammoData.Current == ammoData.Maximum then
+		game.SetAnimation({Name = "WeaponFusion_MaliceFullyCharged", DestinationId = game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"]})
+	elseif ammoData.Current == 0 then
+		game.SetAnimation({Name = "StaffWeapon_Uncharged", DestinationId = game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"]})
+	else
+		game.SetAnimation({Name = "StaffWeapon_Charged", DestinationId = game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"]})
+	end
+
+	game.PulseText({ ScreenAnchorReference = _PLUGIN.guid .. "MaliceIndicatorUI", ScaleTarget = 1.04, ScaleDuration = 0.05, HoldDuration = 0.05, PulseBias = 0.02})
+	game.ModifyTextBox({ Id = game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"], Text = "UI_AmmoText", OffsetY = -2, LuaKey = "TempTextData", LuaValue = ammoData, AutoSetDataProperties = false, })
+end
+
+function mod.HideMaliceUI(args)
+	if game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"] == nil then
+		return
+	end
+	args = args or {}
+
+	local ids = { game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"] }
+	for i, reloadId in pairs( ids ) do
+		game.SetAlpha({ Id = reloadId, Duration = args.FadeDuration or game.HUDScreen.FadeOutDuration, Fraction = 0.0 })
+	end
+	game.ScreenAnchors[_PLUGIN.guid .. "MaliceIndicatorUI"] = nil
+
+	game.wait( game.HUDScreen.FadeOutDuration )
+
+	game.Destroy({ Ids = ids })
+end
+
+modutil.mod.Path.Wrap("ShowAmmoUI", function (base, args)
+	mod.ShowMaliceUI(args)
+	return base(args)
+end)
+
+modutil.mod.Path.Wrap("HideAmmoUI", function (base, args)
+	mod.HideMaliceUI(args)
+	return base(args)
+end)

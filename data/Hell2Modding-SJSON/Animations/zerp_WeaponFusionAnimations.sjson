@@ -1,0 +1,19 @@
+{
+    Animations = [
+        {
+            Name = "WeaponFusion_MaliceFullyCharged"
+            FilePath = "GUI\HUD\StaffChargeUI"
+            
+            EndFrame = 1
+            Loop = true
+            NumFrames = 1
+            StartFrame = 1
+            Material = "Unlit"
+            Loop = true
+            Duration = 0.7
+            PingPongScale = true
+            StartScale = 0.22
+            EndScale = 0.27
+        }
+    ]
+}
