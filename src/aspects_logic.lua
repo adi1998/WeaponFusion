@@ -962,6 +962,14 @@ function mod.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 	return game.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 end
 
+function mod.GetPrimaryWeaponFromSecondary(secondary)
+	for weaponName, weaponData in pairs(game.WeaponData) do
+		if weaponData.SecondaryWeapon == secondary then
+			return weaponName
+		end
+	end
+end
+
 function mod.CheckLobDetonate(victim, functionArgs, triggerArgs)
 
 	if game.CurrentRun.Hero.Weapons.WeaponLob and not game.HeroHasTrait("LobGunAspect") and (triggerArgs.SourceProjectile == "ProjectileThrowBlink" or triggerArgs.SourceProjectile == "ProjectileThrowCharged") then
@@ -1000,7 +1008,7 @@ function mod.CheckLobDetonate(victim, functionArgs, triggerArgs)
 				derivedValues.PropertyChanges.Fuse = 0
 				derivedValues.PropertyChanges.Range = 0
 				for i = 1, numProjectiles do
-					local id = game.CreateProjectileFromUnit({WeaponName = "WeaponLob", Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges})
+					local id = game.CreateProjectileFromUnit({WeaponName = mod.GetPrimaryWeaponFromSecondary("WeaponLobSpecial"), Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges})
 					game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"][id] = true
 				end
 			end

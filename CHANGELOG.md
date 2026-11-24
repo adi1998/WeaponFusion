@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix Minor Aspect of Medea blasts not getting `Attack` related damage boosts.
+
 ## [1.7.1] - 2026-11-21
 
 - Fix Anubis multihits not increasing Medea skull loaded count.
