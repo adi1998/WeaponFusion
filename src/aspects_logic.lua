@@ -1007,8 +1007,9 @@ function mod.CheckLobDetonate(victim, functionArgs, triggerArgs)
 				})
 				derivedValues.PropertyChanges.Fuse = 0
 				derivedValues.PropertyChanges.Range = 0
+				local weaponName = mod.GetPrimaryWeaponFromSecondary("WeaponLobSpecial")
 				for i = 1, numProjectiles do
-					local id = game.CreateProjectileFromUnit({WeaponName = mod.GetPrimaryWeaponFromSecondary("WeaponLobSpecial"), Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges})
+					local id = game.CreateProjectileFromUnit({WeaponName = weaponName, Name = projectileName, Id = game.CurrentRun.Hero.ObjectId, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges})
 					game.SessionMapState[_PLUGIN.guid .. "LobCloseBuildupBlockList"][id] = true
 				end
 			end
