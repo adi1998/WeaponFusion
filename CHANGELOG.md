@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.7.2] - 2026-11-24
+
 - Fix Minor Aspect of Medea blasts not getting `Attack` related damage boosts.
 
 ## [1.7.1] - 2026-11-21
@@ -274,7 +276,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.7.1...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.7.2...HEAD
+[1.7.2]: https://github.com/adi1998/WeaponFusion/compare/1.7.1...1.7.2
 [1.7.1]: https://github.com/adi1998/WeaponFusion/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/adi1998/WeaponFusion/compare/1.6.4...1.7.0
 [1.6.4]: https://github.com/adi1998/WeaponFusion/compare/1.6.3...1.6.4
