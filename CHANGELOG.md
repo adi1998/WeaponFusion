@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Skull's Minor Aspect of Melinoe increases Power after every Attack. Resets every 4th Attack.
+
 ## [1.7.2] - 2026-11-24
 
 - Fix Minor Aspect of Medea blasts not getting `Attack` related damage boosts.
