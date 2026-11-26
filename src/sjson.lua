@@ -129,6 +129,12 @@ local traitTextList = {
         Description = "Your {$Keywords.AttackSet} have more {$Keywords.BaseDamage} for each {$Keywords.Shell} fired and not yet retrieved."
     },
     {
+        Id = "LobAmmoBoostAspect_Secondary_NonSkullPrimary",
+        InheritFrom = "BaseBoonMultiline",
+        DisplayName = "Minor Aspect of Melinoë",
+        Description = "Your {$Keywords.AttackSet} gain {$Keywords.BaseDamage} each time they are fired. Resets after firing {#BoldFormatGraft}4 {#Prev}times."
+    },
+    {
         Id = "LobGunAspect_Secondary",
         InheritFrom = "BaseBoonMultiline",
         DisplayName = "Minor Aspect of Hel",

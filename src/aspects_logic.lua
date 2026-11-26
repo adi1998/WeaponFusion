@@ -949,15 +949,21 @@ modutil.mod.Path.Wrap("MarkDaggerTarget", function (base, triggerArgs, weaponDat
 end)
 
 function mod.RemoveWeaponAmmoFire(triggerArgs)
-	if game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"] then
-		return
+	if (game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"]) and triggerArgs.WeaponName and triggerArgs.ProjectileVolley and triggerArgs.ProjectileVolley then
+		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] or {}
+		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName] or {}
+		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName][triggerArgs.ProjectileVolley] = nil
 	end
 	return game.RemoveWeaponAmmoFire(triggerArgs)
 end
 
 function mod.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 	if game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"] then
-		return
+		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0
+		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] or {}
+		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name] or {}
+		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name][triggerArgs.ProjectileVolley] = true
+		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] + 1) % 4
 	end
 	return game.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 end
@@ -1096,4 +1102,17 @@ end)
 modutil.mod.Path.Wrap("HideAmmoUI", function (base, args)
 	mod.HideMaliceUI(args)
 	return base(args)
+end)
+
+modutil.mod.Path.Wrap("CalculateBaseDamageAdditions", function (base, attacker, victim, triggerArgs)
+	return (function (damageAddition)
+		local weaponName = triggerArgs.SourceWeapon
+		if game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] and game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponName]
+			and game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponName][triggerArgs.SourceProjectileVolley] then
+				local traitData = game.GetHeroTrait("LobAmmoBoostAspect_Secondary")
+				local power = traitData.AddOutgoingDamageModifiers.MissingAmmoBaseDamageAddition
+				damageAddition = damageAddition + power * (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0)
+			end
+		return damageAddition
+	end)(base(attacker, victim, triggerArgs))
 end)

@@ -3179,6 +3179,17 @@ mod.AspectTraitData = {
 	LobAmmoBoostAspect_Secondary =
 	{
 		InheritFrom = {"BaseTrait"},
+		CustomNameWithRequirements =
+		{
+			GameStateRequirements =
+			{
+				{
+					Path = {"CurrentRun", "Hero", "TraitDictionary"},
+					HasNone = { "LobAmmoBoostAspect", "LobImpulseAspect" },
+				}
+			},
+			Name = "LobAmmoBoostAspect_Secondary_NonSkullPrimary"
+		},
 		RarityLevels =
 		{
 			Common =
@@ -3224,7 +3235,7 @@ mod.AspectTraitData = {
 		{
 			Name = _PLUGIN.guid .. ".".. "RemoveWeaponAmmoFire",
 		},
-		OnWeaponFiredFunctions = 
+		OnWeaponFiredFunctions =
 		{
 			ValidWeapons = game.WeaponSets.HeroPrimaryWeapons,
 			FunctionName = _PLUGIN.guid .. ".".. "CheckWeaponAmmoFire",
