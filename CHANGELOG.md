@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- Reduce Hel special's homing when fired from Trick Knives
+- Reduce Hel special's homing when fired from Trick Knives.
 
 ## [1.8.0] - 2026-11-26
 
