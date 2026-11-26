@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-11-26
+
 - Skull's Minor Aspect of Melinoe increases Power after every Attack. Resets every 4th Attack.
 
 ## [1.7.2] - 2026-11-24
@@ -278,7 +280,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.7.2...HEAD
+[unreleased]: https://github.com/adi1998/WeaponFusion/compare/1.8.0...HEAD
+[1.8.0]: https://github.com/adi1998/WeaponFusion/compare/1.7.2...1.8.0
 [1.7.2]: https://github.com/adi1998/WeaponFusion/compare/1.7.1...1.7.2
 [1.7.1]: https://github.com/adi1998/WeaponFusion/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/adi1998/WeaponFusion/compare/1.6.4...1.7.0
