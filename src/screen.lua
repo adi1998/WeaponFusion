@@ -1015,3 +1015,15 @@ game.HubRoomData.Hub_PreRun.ObstacleData[558210].SpecialInteractGameStateRequire
 		}
 	}
 }
+function mod.UpdateAmmoPowerAnimation()
+	local animations = {"WeaponFusion_MorriganPip1_Green", "WeaponFusion_MorriganPip2_Green", "WeaponFusion_MorriganPip3_Green"}
+	local animations_out = {"WeaponFusion_MorriganPip1Out_Green", "WeaponFusion_MorriganPip2Out_Green", "WeaponFusion_MorriganPip3Out_Green"}
+	if game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] == 0 then
+		game.StopAnimation({Names = animations, DestinationId = game.CurrentRun.Hero.ObjectId})
+		for index, value in ipairs(animations_out) do
+			game.CreateAnimation({Name = value, DestinationId = game.CurrentRun.Hero.ObjectId})
+		end
+		return
+	end
+	game.CreateAnimation({Name = animations[game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]], DestinationId = game.CurrentRun.Hero.ObjectId})
+end

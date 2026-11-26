@@ -3,7 +3,6 @@
         {
             Name = "WeaponFusion_MaliceFullyCharged"
             FilePath = "GUI\HUD\StaffChargeUI"
-            
             EndFrame = 1
             Loop = true
             NumFrames = 1
@@ -14,6 +13,84 @@
             PingPongScale = true
             StartScale = 0.23
             EndScale = 0.27
+        }
+        {
+            Name = "WeaponFusion_MorriganPip1_Green"
+            InheritFrom = "MorriganPip1"
+            CreateAnimation = "WeaponFusion_MorriganPipStartFlare1_Cyan"
+            StartRed = 0.1
+            StartGreen = 1
+            StartBlue = 1
+            Hue = 0.45833
+        }
+        {
+            Name = "WeaponFusion_MorriganPip2_Green"
+            InheritFrom = "MorriganPip2"
+            CreateAnimation = "WeaponFusion_MorriganPipStartFlare2_Cyan"
+            StartRed = 0.1
+            StartGreen = 1
+            StartBlue = 1
+            Hue = 0.45833
+        }
+        {
+            Name = "WeaponFusion_MorriganPip3_Green"
+            InheritFrom = "MorriganPip3"
+            CreateAnimation = "WeaponFusion_MorriganPipStartFlare3_Cyan"
+            StartRed = 0.1
+            StartGreen = 1
+            StartBlue = 1
+            Hue = 0.45833
+        }
+        {
+            Name = "WeaponFusion_MorriganPipStartFlare1_Cyan"
+            InheritFrom = "MorriganPipStartFlare1"
+            Red = 0
+            Green = 1
+            Blue = 0.75
+        }
+        {
+            Name = "WeaponFusion_MorriganPipStartFlare2_Cyan"
+            InheritFrom = "MorriganPipStartFlare2"
+            Red = 0
+            Green = 1
+            Blue = 0.75
+        }
+        {
+            Name = "WeaponFusion_MorriganPipStartFlare3_Cyan"
+            InheritFrom = "MorriganPipStartFlare3"
+            Red = 0
+            Green = 1
+            Blue = 0.75
+        }
+        {
+            Name = "WeaponFusion_MorriganPip1Out_Green"
+            InheritFrom = "WeaponFusion_MorriganPip1_Green"
+            OffsetX = -50
+            OffsetY = -40
+            Loop = false
+            StartScale = 1
+            EndScale = 0
+            Duration = 0.5
+            LoopFramesOnly = true
+            ChainTo = null
+            CreateAnimation = null
+            EaseIn = 0.9
+            EaseOut = 1
+            ChildAnimation = null
+        }
+        {
+            Name = "WeaponFusion_MorriganPip2Out_Green"
+            InheritFrom = "WeaponFusion_MorriganPip1Out_Green"
+            OffsetX = 52
+            OffsetY = -40
+            Angle = 120
+        }
+        {
+            Name = "WeaponFusion_MorriganPip3Out_Green"
+            InheritFrom = "WeaponFusion_MorriganPip1Out_Green"
+            OffsetX = 0
+            OffsetY = -130
+            Angle = 240
         }
     ]
 }

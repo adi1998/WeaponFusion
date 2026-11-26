@@ -967,8 +967,9 @@ function mod.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] or {}
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name] or {}
-		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name][triggerArgs.ProjectileVolley] = true
+		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name][triggerArgs.ProjectileVolley] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]
 		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] + 1) % 4
+		mod.UpdateAmmoPowerAnimation()
 	end
 	return game.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 end
@@ -1116,12 +1117,12 @@ modutil.mod.Path.Wrap("CalculateBaseDamageAdditions", function (base, attacker, 
 			and game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponName][triggerArgs.SourceProjectileVolley] then
 				local traitData = game.GetHeroTrait("LobAmmoBoostAspect_Secondary")
 				local power = traitData.AddOutgoingDamageModifiers.MissingAmmoBaseDamageAddition
-				damageAddition = damageAddition + power * (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0)
+				damageAddition = damageAddition + power * game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponName][triggerArgs.SourceProjectileVolley]
 		end
 		if game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] and game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId] then
 			local traitData = game.GetHeroTrait("LobAmmoBoostAspect_Secondary")
 			local power = traitData.AddOutgoingDamageModifiers.MissingAmmoBaseDamageAddition
-			damageAddition = damageAddition + power * (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0)
+			damageAddition = damageAddition + power * game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId]
 		end
 		return damageAddition
 	end)(base(attacker, victim, triggerArgs))
@@ -1131,7 +1132,20 @@ function mod.LogTorchAutoFire(triggerArgs)
 	if game.HeroHasTrait("TorchAutofireAspect") and triggerArgs.ProjectileId and triggerArgs.ProjectileId > 0 then
 		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0
 		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] or {}
-		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId] = true
+		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]
 		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] + 1) % 4
+		mod.UpdateAmmoPowerAnimation()
 	end
+end
+
+function mod.UpdateAmmoPowerAnimation()
+	local animations = {"WeaponFusion_MorriganPip1_Green", "WeaponFusion_MorriganPip2_Green", "WeaponFusion_MorriganPip3_Green"}
+	local animations_out = {"WeaponFusion_MorriganPip1Out_Green", "WeaponFusion_MorriganPip2Out_Green", "WeaponFusion_MorriganPip3Out_Green"}
+	if game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] == 0 then
+		game.StopAnimation({Names = animations, DestinationId = game.CurrentRun.Hero.ObjectId})
+		for index, value in ipairs(animations_out) do
+			game.CreateAnimation({Name = value, DestinationId = game.CurrentRun.Hero.ObjectId})
+		end
+	end
+	game.CreateAnimation({Name = animations[game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]], DestinationId = game.CurrentRun.Hero.ObjectId})
 end
