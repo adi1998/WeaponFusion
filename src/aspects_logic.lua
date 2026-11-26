@@ -949,16 +949,21 @@ modutil.mod.Path.Wrap("MarkDaggerTarget", function (base, triggerArgs, weaponDat
 end)
 
 function mod.RemoveWeaponAmmoFire(triggerArgs)
-	if (game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"]) and triggerArgs.WeaponName and triggerArgs.ProjectileVolley and triggerArgs.ProjectileVolley then
+	if (game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"]) and triggerArgs.WeaponName and triggerArgs.ProjectileVolley and triggerArgs.ProjectileVolley > 0 then
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] or {}
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName] or {}
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName][triggerArgs.ProjectileVolley] = nil
+	end
+	if game.HeroHasTrait("TorchAutofireAspect") and triggerArgs.ProjectileId and triggerArgs.ProjectileId > 0 then
+		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0
+		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] or {}
+		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId] = nil
 	end
 	return game.RemoveWeaponAmmoFire(triggerArgs)
 end
 
 function mod.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
-	if game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"] then
+	if game.HeroHasTrait("LobGunAspect") or not game.CurrentRun.Hero.Weapons["WeaponLob"] and triggerArgs.ProjectileVolley and triggerArgs.ProjectileVolley > 0 then
 		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] or {}
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name] or {}
@@ -1112,7 +1117,21 @@ modutil.mod.Path.Wrap("CalculateBaseDamageAdditions", function (base, attacker, 
 				local traitData = game.GetHeroTrait("LobAmmoBoostAspect_Secondary")
 				local power = traitData.AddOutgoingDamageModifiers.MissingAmmoBaseDamageAddition
 				damageAddition = damageAddition + power * (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0)
-			end
+		end
+		if game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] and game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId] then
+			local traitData = game.GetHeroTrait("LobAmmoBoostAspect_Secondary")
+			local power = traitData.AddOutgoingDamageModifiers.MissingAmmoBaseDamageAddition
+			damageAddition = damageAddition + power * (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0)
+		end
 		return damageAddition
 	end)(base(attacker, victim, triggerArgs))
 end)
+
+function mod.LogTorchAutoFire(triggerArgs)
+	if game.HeroHasTrait("TorchAutofireAspect") and triggerArgs.ProjectileId and triggerArgs.ProjectileId > 0 then
+		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0
+		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] or {}
+		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId] = true
+		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] + 1) % 4
+	end
+end

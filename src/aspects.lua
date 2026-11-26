@@ -3240,6 +3240,11 @@ mod.AspectTraitData = {
 			ValidWeapons = game.WeaponSets.HeroPrimaryWeapons,
 			FunctionName = _PLUGIN.guid .. ".".. "CheckWeaponAmmoFire",
 		},
+		OnProjectileCreationFunction =
+		{
+			ValidProjectiles = { "ProjectileTorchSupayBallEx", "ProjectileTorchBall" },
+			Name = _PLUGIN.guid .. "." .. "LogTorchAutoFire",
+		},
 		StatLines =
 		{
 			"AmmoDamageStatDisplay1",
