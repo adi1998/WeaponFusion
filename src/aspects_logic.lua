@@ -775,6 +775,10 @@ modutil.mod.Path.Wrap("FireDaggerSpecial", function (base, weaponData, traitArgs
 			spread = 90
 		end
 
+		if chosenProjectile == "ProjectileLobSpecialBounce" then
+			derivedValues.PropertyChanges.MaxAdjustRate = 1
+		end
+
 		for i=1, traitArgs.Projectiles do
 			local projectileId = game.CreateProjectileFromUnit({ WeaponName = secondWeapon, Name = chosenProjectile, Id = game.CurrentRun.Hero.ObjectId, DisableEffects = disableEffects,
 				Angle = startAngle - spread/2 + (i - 1) * spread/(traitArgs.Projectiles - 1 ), DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges })
@@ -1152,5 +1156,4 @@ function mod.UpdateAmmoPowerAnimation()
 	else
 		game.CreateAnimation({Name = animations[game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]], DestinationId = game.CurrentRun.Hero.ObjectId})
 	end
-	
 end
