@@ -953,11 +953,13 @@ function mod.RemoveWeaponAmmoFire(triggerArgs)
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"] or {}
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName] = game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName] or {}
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][triggerArgs.WeaponName][triggerArgs.ProjectileVolley] = nil
+		return
 	end
 	if game.HeroHasTrait("TorchAutofireAspect") and triggerArgs.ProjectileId and triggerArgs.ProjectileId > 0 then
 		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] or 0
 		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] = game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"] or {}
 		game.SessionMapState[_PLUGIN.guid .. "AmmoProjectileIdMap"][triggerArgs.ProjectileId] = nil
+		return
 	end
 	return game.RemoveWeaponAmmoFire(triggerArgs)
 end
@@ -970,6 +972,7 @@ function mod.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 		game.SessionMapState[_PLUGIN.guid .. "AmmoVolleyMap"][weaponData.Name][triggerArgs.ProjectileVolley] = game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]
 		game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] = (game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] + 1) % 4
 		mod.UpdateAmmoPowerAnimation()
+		return
 	end
 	return game.CheckWeaponAmmoFire( weaponData, functionArgs, triggerArgs )
 end
@@ -1146,6 +1149,8 @@ function mod.UpdateAmmoPowerAnimation()
 		for index, value in ipairs(animations_out) do
 			game.CreateAnimation({Name = value, DestinationId = game.CurrentRun.Hero.ObjectId})
 		end
+	else
+		game.CreateAnimation({Name = animations[game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]], DestinationId = game.CurrentRun.Hero.ObjectId})
 	end
-	game.CreateAnimation({Name = animations[game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"]], DestinationId = game.CurrentRun.Hero.ObjectId})
+	
 end

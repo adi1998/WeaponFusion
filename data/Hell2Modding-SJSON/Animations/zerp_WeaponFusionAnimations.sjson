@@ -22,6 +22,7 @@
             StartGreen = 1
             StartBlue = 1
             Hue = 0.45833
+            ChildAnimation = null
         }
         {
             Name = "WeaponFusion_MorriganPip2_Green"
@@ -31,6 +32,7 @@
             StartGreen = 1
             StartBlue = 1
             Hue = 0.45833
+            ChildAnimation = null
         }
         {
             Name = "WeaponFusion_MorriganPip3_Green"
@@ -40,6 +42,7 @@
             StartGreen = 1
             StartBlue = 1
             Hue = 0.45833
+            ChildAnimation = null
         }
         {
             Name = "WeaponFusion_MorriganPipStartFlare1_Cyan"
