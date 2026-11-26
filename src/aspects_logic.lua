@@ -1142,8 +1142,8 @@ function mod.LogTorchAutoFire(triggerArgs)
 end
 
 function mod.UpdateAmmoPowerAnimation()
-	local animations = {"WeaponFusion_MorriganPip1_Green", "WeaponFusion_MorriganPip2_Green", "WeaponFusion_MorriganPip3_Green"}
-	local animations_out = {"WeaponFusion_MorriganPip1Out_Green", "WeaponFusion_MorriganPip2Out_Green", "WeaponFusion_MorriganPip3Out_Green"}
+	local animations = {"WeaponFusion_MorriganPip1_Cyan", "WeaponFusion_MorriganPip2_Cyan", "WeaponFusion_MorriganPip3_Cyan"}
+	local animations_out = {"WeaponFusion_MorriganPip1Out_Cyan", "WeaponFusion_MorriganPip2Out_Cyan", "WeaponFusion_MorriganPip3Out_Cyan"}
 	if game.SessionMapState[_PLUGIN.guid .. "AmmoBoostCount"] == 0 then
 		game.StopAnimation({Names = animations, DestinationId = game.CurrentRun.Hero.ObjectId})
 		for index, value in ipairs(animations_out) do

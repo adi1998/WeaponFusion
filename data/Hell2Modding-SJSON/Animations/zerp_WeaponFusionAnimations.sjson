@@ -15,7 +15,7 @@
             EndScale = 0.27
         }
         {
-            Name = "WeaponFusion_MorriganPip1_Green"
+            Name = "WeaponFusion_MorriganPip1_Cyan"
             InheritFrom = "MorriganPip1"
             CreateAnimation = "WeaponFusion_MorriganPipStartFlare1_Cyan"
             StartRed = 0.1
@@ -25,7 +25,7 @@
             ChildAnimation = null
         }
         {
-            Name = "WeaponFusion_MorriganPip2_Green"
+            Name = "WeaponFusion_MorriganPip2_Cyan"
             InheritFrom = "MorriganPip2"
             CreateAnimation = "WeaponFusion_MorriganPipStartFlare2_Cyan"
             StartRed = 0.1
@@ -35,7 +35,7 @@
             ChildAnimation = null
         }
         {
-            Name = "WeaponFusion_MorriganPip3_Green"
+            Name = "WeaponFusion_MorriganPip3_Cyan"
             InheritFrom = "MorriganPip3"
             CreateAnimation = "WeaponFusion_MorriganPipStartFlare3_Cyan"
             StartRed = 0.1
@@ -66,8 +66,8 @@
             Blue = 0.75
         }
         {
-            Name = "WeaponFusion_MorriganPip1Out_Green"
-            InheritFrom = "WeaponFusion_MorriganPip1_Green"
+            Name = "WeaponFusion_MorriganPip1Out_Cyan"
+            InheritFrom = "WeaponFusion_MorriganPip1_Cyan"
             OffsetX = -50
             OffsetY = -40
             Loop = false
@@ -82,15 +82,15 @@
             ChildAnimation = null
         }
         {
-            Name = "WeaponFusion_MorriganPip2Out_Green"
-            InheritFrom = "WeaponFusion_MorriganPip1Out_Green"
+            Name = "WeaponFusion_MorriganPip2Out_Cyan"
+            InheritFrom = "WeaponFusion_MorriganPip1Out_Cyan"
             OffsetX = 52
             OffsetY = -40
             Angle = 120
         }
         {
-            Name = "WeaponFusion_MorriganPip3Out_Green"
-            InheritFrom = "WeaponFusion_MorriganPip1Out_Green"
+            Name = "WeaponFusion_MorriganPip3Out_Cyan"
+            InheritFrom = "WeaponFusion_MorriganPip1Out_Cyan"
             OffsetX = 0
             OffsetY = -130
             Angle = 240
